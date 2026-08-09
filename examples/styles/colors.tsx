@@ -1,13 +1,5 @@
 import * as React from "react"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-
 const colorGroups: { title: string; tokens: string[] }[] = [
   {
     title: "Core",
@@ -70,28 +62,19 @@ function Swatch({ token }: { token: string }) {
 
 export function ColorsExample() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Colors</CardTitle>
-        <CardDescription className="line-clamp-2">
-          Every color token defined in styles/globals.css. Swatches follow the
-          active theme.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-5">
-        {colorGroups.map((group) => (
-          <div key={group.title} className="flex flex-col gap-2">
-            <div className="text-xs font-medium text-muted-foreground">
-              {group.title}
-            </div>
-            <div className="grid grid-cols-6 gap-3">
-              {group.tokens.map((token) => (
-                <Swatch key={token} token={token} />
-              ))}
-            </div>
+    <div className="flex flex-col gap-5">
+      {colorGroups.map((group) => (
+        <div key={group.title} className="flex flex-col gap-2">
+          <div className="text-xs font-medium text-muted-foreground">
+            {group.title}
           </div>
-        ))}
-      </CardContent>
-    </Card>
+          <div className="grid grid-cols-6 gap-3">
+            {group.tokens.map((token) => (
+              <Swatch key={token} token={token} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   )
 }
