@@ -8,7 +8,7 @@ import type { FlatExample } from "@/examples"
 export function ExampleViewer({ example }: { example: FlatExample }) {
   const Example = example.component
   return (
-    <div className="flex min-h-[calc(100svh-5.5rem)] items-center justify-center lg:min-h-[calc(100svh-6.5rem)]">
+    <div className="bg-background bg-dotted flex min-h-[calc(100svh-5.5rem)] items-center justify-center lg:min-h-[calc(100svh-6.5rem)]">
       <div className="w-full max-w-3xl border-none! shadow-none! shadow-none">
           <Example />
         </div>
