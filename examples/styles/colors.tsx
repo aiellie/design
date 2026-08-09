@@ -22,6 +22,8 @@ const colorGroups: { title: string; tokens: string[] }[] = [
       "--border",
       "--input",
       "--ring",
+      "--selection",
+      "--selection-foreground",
     ],
   },
   {
