@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { DashboardOverview } from "@/app/components/dashboard-overview"
 import { ExampleViewer } from "@/app/components/example-viewer"
+import { NavUser } from "@/app/components/nav-user"
 import { StatusDot } from "@/app/components/status-badge"
 import {
   StatusProvider,
@@ -27,6 +28,7 @@ import { Separator } from "@/components/ui/separator"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -159,6 +161,15 @@ function DashboardShell() {
             )
           })}
         </SidebarContent>
+        <SidebarFooter>
+          <NavUser
+            user={{
+              name: "aiellie",
+              email: "hello@aiellie.dev",
+              avatar: "https://avatar.aiellie.dev/aielliedev",
+            }}
+          />
+        </SidebarFooter>
         <SidebarRail />
       </Sidebar>
       <SidebarInset>

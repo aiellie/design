@@ -1,63 +1,106 @@
 /*
  * Glass + destructive overrides for dropdown menus.
  * Keeps components/ui/dropdown-menu.tsx closer to stock shadcn.
- * Unlayered so these beat utility classes on items (e.g. focus:bg-accent).
+ *
+ * Glass / focus: unlayered !important beats normal (non-!) utilities
+ * like focus:bg-accent on items.
+ *
+ * Destructive: Content also ships
+ *   **:data-[variant=destructive]:text-accent-foreground!
+ * Those are !important inside @layer utilities, which beat unlayered
+ * !important. So destructive must live in @layer utilities with higher
+ * specificity than that Content rule.
  */
 
- [data-slot="dropdown-menu-content"],
- [data-slot="dropdown-menu-sub-content"] {
-   @apply relative animate-none! bg-popover/70;
- 
-   &::before {
-     content: "";
-     @apply pointer-events-none absolute inset-0 -z-1 rounded-[inherit] backdrop-blur-2xl backdrop-saturate-150;
-   }
- 
-   [data-slot$="-item"],
-   [data-slot$="-trigger"],
-   [data-slot$="-checkbox-item"],
-   [data-slot$="-radio-item"] {
-     @apply cursor-pointer;
-   }
- 
-   [data-slot$="-item"] svg,
-   [data-slot$="-trigger"] svg,
-   [data-slot$="-checkbox-item"] svg,
-   [data-slot$="-radio-item"] svg {
-     @apply text-muted-foreground!;
-   }
- 
-   [data-slot$="-item"]:focus,
-   [data-slot$="-item"][data-highlighted] {
-     @apply bg-foreground/10!;
-   }
- 
-   [data-slot$="-separator"] {
-     @apply bg-foreground/5!;
-   }
- 
-   [data-slot$="-trigger"]:focus,
-   [data-slot$="-trigger"][aria-expanded="true"] {
-     @apply bg-foreground/10!;
-   }
- 
-   [data-variant="destructive"] {
-     @apply text-destructive!;
-   }
- 
-   [data-variant="destructive"]:focus {
-     @apply bg-destructive/5! text-destructive!;
-   }
- 
-   [data-variant="destructive"] svg {
-     @apply text-destructive!;
-   }
- }
- 
- [data-slot="dropdown-menu-item"][data-variant="destructive"]:focus
-   [data-slot="dropdown-menu-shortcut"] {
-   @apply text-destructive!;
- }
-button:not(:disabled), [role="button"]:not(:disabled) {
-    cursor: pointer;
-    }
+[data-slot="dropdown-menu-content"],
+[data-slot="dropdown-menu-sub-content"] {
+  @apply relative animate-none! bg-popover/70;
+
+  &::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 -z-1 rounded-[inherit] backdrop-blur-2xl backdrop-saturate-150;
+  }
+
+  [data-slot$="-item"],
+  [data-slot$="-trigger"],
+  [data-slot$="-checkbox-item"],
+  [data-slot$="-radio-item"] {
+    @apply cursor-pointer;
+  }
+
+  [data-slot$="-item"] svg,
+  [data-slot$="-trigger"] svg,
+  [data-slot$="-checkbox-item"] svg,
+  [data-slot$="-radio-item"] svg {
+    @apply text-muted-foreground!;
+  }
+
+  [data-slot$="-item"]:focus,
+  [data-slot$="-item"][data-highlighted] {
+    @apply bg-foreground/10!;
+  }
+
+  [data-slot$="-separator"] {
+    @apply bg-foreground/5!;
+  }
+
+  [data-slot$="-trigger"]:focus,
+  [data-slot$="-trigger"][aria-expanded="true"] {
+    @apply bg-foreground/10!;
+  }
+}
+
+@layer utilities {
+  :is(
+    [data-slot="dropdown-menu-content"],
+    [data-slot="dropdown-menu-sub-content"]
+  )
+    [data-slot$="-item"][data-variant="destructive"],
+  :is(
+    [data-slot="dropdown-menu-content"],
+    [data-slot="dropdown-menu-sub-content"]
+  )
+    [data-slot$="-item"][data-variant="destructive"]
+    * {
+    color: var(--destructive) !important;
+  }
+
+  :is(
+    [data-slot="dropdown-menu-content"],
+    [data-slot="dropdown-menu-sub-content"]
+  )
+    [data-slot$="-item"][data-variant="destructive"]:focus,
+  :is(
+    [data-slot="dropdown-menu-content"],
+    [data-slot="dropdown-menu-sub-content"]
+  )
+    [data-slot$="-item"][data-variant="destructive"][data-highlighted] {
+    background-color: color-mix(
+      in oklab,
+      var(--destructive) 5%,
+      transparent
+    ) !important;
+    color: var(--destructive) !important;
+  }
+
+  :is(
+    [data-slot="dropdown-menu-content"],
+    [data-slot="dropdown-menu-sub-content"]
+  )
+    [data-slot$="-item"][data-variant="destructive"]
+    svg {
+    color: var(--destructive) !important;
+  }
+
+  [data-slot="dropdown-menu-item"][data-variant="destructive"]:focus
+    [data-slot="dropdown-menu-shortcut"],
+  [data-slot="dropdown-menu-item"][data-variant="destructive"][data-highlighted]
+    [data-slot="dropdown-menu-shortcut"] {
+    color: var(--destructive) !important;
+  }
+}
+
+button:not(:disabled),
+[role="button"]:not(:disabled) {
+  cursor: pointer;
+}
