@@ -9,7 +9,7 @@ import type { FlatExample } from "@/examples"
 export function ExampleViewer({ example }: { example: FlatExample }) {
   const Example = example.component
   return (
-    <div className="flex min-h-full items-center justify-center">
+    <div className="flex min-h-[calc(100svh-5.5rem)] items-center justify-center lg:min-h-[calc(100svh-6.5rem)]">
       <Card className="w-full max-w-3xl">
         <CardContent>
           <Example />

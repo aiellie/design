@@ -5,6 +5,14 @@ import * as React from "react"
 import { DashboardOverview } from "@/app/components/dashboard-overview"
 import { ExampleViewer } from "@/app/components/example-viewer"
 import { StatusBadge, StatusDot } from "@/app/components/status-badge"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
 import { Progress } from "@/components/ui/progress"
@@ -132,24 +140,49 @@ export function Dashboard() {
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
+        <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b bg-background/70 px-4 backdrop-blur-md">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="h-4" />
-          <div className="flex min-w-0 flex-1 items-center gap-2 text-sm">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <Breadcrumb>
+              <BreadcrumbList className="flex-nowrap">
+                {selected ? (
+                  <>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink
+                        render={
+                          <button
+                            type="button"
+                            onClick={() => setSelectedSlug(null)}
+                          >
+                            Overview
+                          </button>
+                        }
+                      />
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem className="hidden whitespace-nowrap sm:inline-flex">
+                      {selected.categoryTitle}
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="hidden sm:inline-flex" />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage className="whitespace-nowrap">
+                        {selected.name}
+                      </BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </>
+                ) : (
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>Overview</BreadcrumbPage>
+                  </BreadcrumbItem>
+                )}
+              </BreadcrumbList>
+            </Breadcrumb>
             {selected ? (
-              <>
-                <span className="truncate text-muted-foreground">
-                  {selected.categoryTitle}
-                </span>
-                <span className="text-muted-foreground">/</span>
-                <span className="truncate font-medium">{selected.name}</span>
-                <span className="hidden truncate font-mono text-xs text-muted-foreground xl:inline">
-                  {selected.file}
-                </span>
-              </>
-            ) : (
-              <span className="font-medium">Overview</span>
-            )}
+              <span className="hidden truncate font-mono text-xs text-muted-foreground xl:inline">
+                {selected.file}
+              </span>
+            ) : null}
           </div>
           {selected ? (
             <div className="flex shrink-0 items-center gap-3">
@@ -180,7 +213,7 @@ export function Dashboard() {
             </div>
           ) : null}
         </header>
-        <div className="flex-1 overflow-y-auto p-4 lg:p-6">
+        <div className="flex-1 p-4 lg:p-6">
           {selected ? (
             <ExampleViewer key={selected.slug} example={selected} />
           ) : (
