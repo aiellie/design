@@ -1,5 +1,3 @@
-"use client"
-
 import {
   ResizableHandle,
   ResizablePanel,
@@ -10,25 +8,25 @@ export function ResizableExample() {
   return (
     <ResizablePanelGroup
       orientation="horizontal"
-      className="h-40 w-full rounded-lg border"
+      className="max-w-sm rounded-lg border"
     >
-      <ResizablePanel defaultSize={30} minSize={20}>
-        <div className="flex h-full items-center justify-center p-4">
-          <span className="text-sm font-medium">Sidebar</span>
+      <ResizablePanel defaultSize="50%">
+        <div className="flex h-[200px] items-center justify-center p-6">
+          <span className="font-semibold text-sm">Sidebar</span>
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={70}>
+      <ResizablePanel defaultSize="50%">
         <ResizablePanelGroup orientation="vertical">
-          <ResizablePanel defaultSize={60}>
-            <div className="flex h-full items-center justify-center p-4">
-              <span className="text-sm font-medium">Editor</span>
+          <ResizablePanel defaultSize="25%">
+            <div className="flex h-full items-center justify-center p-6">
+              <span className="font-semibold text-sm">Editor</span>
             </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={40}>
-            <div className="flex h-full items-center justify-center p-4">
-              <span className="text-sm font-medium">Console</span>
+          <ResizablePanel defaultSize="75%">
+            <div className="flex h-full items-center justify-center p-6">
+              <span className="font-semibold text-sm">Console</span>
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -36,3 +34,4 @@ export function ResizableExample() {
     </ResizablePanelGroup>
   )
 }
+
