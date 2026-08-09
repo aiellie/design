@@ -2,7 +2,8 @@
 
 import * as React from "react"
 
-import { StatusBadge } from "@/app/components/status-badge"
+import { statusOf, useStatuses } from "@/app/components/status-provider"
+import { StatusSelect } from "@/app/components/status-select"
 import {
   Card,
   CardContent,
@@ -28,11 +29,13 @@ export function DashboardOverview({
 }: {
   onSelect: (slug: string) => void
 }) {
+  const { statuses } = useStatuses()
   const total = allExamples.length
   const counts = exampleStatuses.map((status) => ({
     ...status,
-    count: allExamples.filter((example) => example.status === status.id)
-      .length,
+    count: allExamples.filter(
+      (example) => statusOf(statuses, example.slug) === status.id
+    ).length,
   }))
   const shipped = counts.find((status) => status.id === "shipped")?.count ?? 0
   const completion = Math.round((shipped / total) * 100)
@@ -92,7 +95,7 @@ export function DashboardOverview({
         <CardContent className="flex flex-col gap-4">
           {exampleCategories.map((category) => {
             const done = category.examples.filter(
-              (example) => example.status === "shipped"
+              (example) => statusOf(statuses, example.slug) === "shipped"
             ).length
             const pct = Math.round((done / category.examples.length) * 100)
             return (
@@ -150,7 +153,12 @@ export function DashboardOverview({
                     {example.categoryTitle}
                   </TableCell>
                   <TableCell className="text-right">
-                    <StatusBadge status={example.status} />
+                    <div
+                      className="inline-flex"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      <StatusSelect slug={example.slug} />
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

@@ -26,13 +26,13 @@ export const exampleStatuses: ExampleStatusMeta[] = [
     id: "planned",
     label: "Planned",
     description: "Has a generated draft, queued for real work.",
-    color: "bg-violet-500",
+    color: "bg-amber-500",
   },
   {
     id: "building",
     label: "Building",
     description: "Actively being designed and edited.",
-    color: "bg-amber-500",
+    color: "bg-violet-500",
   },
   {
     id: "reviewing",

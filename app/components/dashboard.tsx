@@ -4,7 +4,14 @@ import * as React from "react"
 
 import { DashboardOverview } from "@/app/components/dashboard-overview"
 import { ExampleViewer } from "@/app/components/example-viewer"
-import { StatusBadge, StatusDot } from "@/app/components/status-badge"
+import { StatusDot } from "@/app/components/status-badge"
+import {
+  StatusProvider,
+  statusOf,
+  useStatuses,
+  type StatusMap,
+} from "@/app/components/status-provider"
+import { StatusSelect } from "@/app/components/status-select"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -36,7 +43,20 @@ import {
 import { allExamples, exampleCategories } from "@/examples"
 import { Icon, Icons } from "@/icons/icons"
 
-export function Dashboard() {
+export function Dashboard({
+  initialStatuses,
+}: {
+  initialStatuses: StatusMap
+}) {
+  return (
+    <StatusProvider initialStatuses={initialStatuses}>
+      <DashboardShell />
+    </StatusProvider>
+  )
+}
+
+function DashboardShell() {
+  const { statuses } = useStatuses()
   const [selectedSlug, setSelectedSlug] = React.useState<string | null>(null)
   const index = allExamples.findIndex(
     (example) => example.slug === selectedSlug
@@ -48,7 +68,7 @@ export function Dashboard() {
 
   const total = allExamples.length
   const shipped = allExamples.filter(
-    (example) => example.status === "shipped"
+    (example) => statusOf(statuses, example.slug) === "shipped"
   ).length
   const completion = Math.round((shipped / total) * 100)
 
@@ -105,7 +125,7 @@ export function Dashboard() {
           </SidebarGroup>
           {exampleCategories.map((category) => {
             const done = category.examples.filter(
-              (example) => example.status === "shipped"
+              (example) => statusOf(statuses, example.slug) === "shipped"
             ).length
             return (
               <SidebarGroup key={category.title}>
@@ -127,7 +147,9 @@ export function Dashboard() {
                           <span>{example.name}</span>
                         </SidebarMenuButton>
                         <SidebarMenuBadge>
-                          <StatusDot status={example.status} />
+                          <StatusDot
+                            status={statusOf(statuses, example.slug)}
+                          />
                         </SidebarMenuBadge>
                       </SidebarMenuItem>
                     ))}
@@ -186,7 +208,7 @@ export function Dashboard() {
           </div>
           {selected ? (
             <div className="flex shrink-0 items-center gap-3">
-              <StatusBadge status={selected.status} />
+              <StatusSelect slug={selected.slug} />
               <span className="hidden font-mono text-xs text-muted-foreground sm:inline">
                 {index + 1} / {total}
               </span>
