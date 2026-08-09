@@ -135,6 +135,25 @@ body {
   @apply bg-background text-foreground;
 }
 }
+/*
+ * Weight knobs for typeset surfaces. typeset.css hardcodes its weights
+ * (headings and strong at 450, links/th/dt/kbd at 500), so these rules
+ * re-express them as variables with those same defaults. A preset opts in
+ * by setting --typeset-weight-normal/-medium/-semibold.
+ */
+.typeset {
+  font-weight: var(--typeset-weight-normal, 400);
+}
+.typeset :where(h1, h2, h3, h4, h5, h6, strong, b) {
+  font-weight: var(--typeset-weight-semibold, 450);
+}
+.typeset :where(a, th, dt, kbd, summary) {
+  font-weight: var(--typeset-weight-medium, 500);
+}
+.typeset :where(:is(h1, h2, h3, h4, h5, h6) :is(a, strong, b)) {
+  font-weight: inherit;
+}
+
 .typeset-docs {
   --typeset-font-body: var(--font-geist);
   --typeset-font-heading: var(--font-geist);
@@ -142,4 +161,7 @@ body {
   --typeset-size: 14px;
   --typeset-leading: 1.75;
   --typeset-flow: 1em;
+  --typeset-weight-normal: 400;
+  --typeset-weight-medium: 500;
+  --typeset-weight-semibold: 600;
 }
