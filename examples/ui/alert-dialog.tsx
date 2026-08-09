@@ -14,15 +14,28 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Delete02Icon } from "@hugeicons/core-free-icons"
+import { Delete02Icon, Trash } from "@hugeicons/core-free-icons"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 export function AlertDialogExample() {
   return (
     <div className="flex w-full flex-wrap items-center justify-center gap-2">
       <AlertDialog>
-        <AlertDialogTrigger
-          render={<Button variant="destructive">Delete project</Button>}
-        />
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <AlertDialogTrigger
+                render={
+                  <Button variant="destructive" size="icon" className="rounded-full">
+                    <HugeiconsIcon icon={Trash} strokeWidth={2} />
+                    <span className="sr-only">Delete</span>
+                  </Button>
+                }
+              />
+            }
+          />
+          <TooltipContent>Delete</TooltipContent>
+        </Tooltip>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogMedia className="bg-destructive/10 text-destructive">

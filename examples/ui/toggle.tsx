@@ -188,6 +188,7 @@ function FormattingToggles() {
       </div>
       <p
         className={cn(
+          "text-default",
           "text-muted-foreground",
           bold && "font-medium text-foreground",
           italic && "italic",

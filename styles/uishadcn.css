@@ -13,7 +13,8 @@
  */
 
 [data-slot="dropdown-menu-content"],
-[data-slot="dropdown-menu-sub-content"] {
+[data-slot="dropdown-menu-sub-content"],
+[data-slot="select-content"] {
   @apply relative animate-none! bg-popover/70;
 
   &::before {
@@ -98,6 +99,55 @@
     [data-slot="dropdown-menu-shortcut"] {
     color: var(--destructive) !important;
   }
+}
+
+[data-slot="textarea"],
+[data-slot="input"]
+{
+  @apply text-sm!;
+}
+
+/*{[data-slot="label"] {
+  @apply font-normal!;
+}*/
+
+:is(
+  [data-slot="accordion-trigger"],
+  [data-slot="button"],
+  [data-slot="bubble-content"]:is(button, a),
+  [data-slot="checkbox"],
+  [data-slot="input"],
+  [data-slot="native-select"],
+  [data-slot="navigation-menu-trigger"],
+  [data-slot="navigation-menu-link"],
+  [data-slot="questionnaire-input"],
+  [data-slot="radio-group-item"],
+  [data-slot="select-trigger"],
+  [data-slot="slider-thumb"],
+  [data-slot="switch"],
+  [data-slot="textarea"]
+):focus-visible,
+:is(
+  [data-slot="button"],
+  [data-slot="checkbox"],
+  [data-slot="input"],
+  [data-slot="native-select"],
+  [data-slot="questionnaire-input"],
+  [data-slot="radio-group-item"],
+  [data-slot="select-trigger"],
+  [data-slot="switch"],
+  [data-slot="textarea"],
+  [data-slot="input-otp-slot"]
+)[aria-invalid="true"],
+[data-slot="combobox-chips"]:focus-within,
+[data-slot="combobox-chips"]:has([aria-invalid="true"]),
+[data-slot="input-group"]:has([data-slot="input-group-control"]:focus-visible),
+[data-slot="input-group"]:has([data-slot][aria-invalid="true"]),
+[data-slot="input-otp"]:has([aria-invalid="true"]),
+[data-slot="questionnaire-choice"]:has(> input:focus-visible),
+[data-slot="input-otp-slot"][data-active="true"],
+[data-slot="slider-thumb"]:is(:hover, :active) {
+  @apply ring-1!;
 }
 
 button:not(:disabled),

@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-
+import { Field, FieldLabel, FieldDescription } from "@/components/ui/field"
 const MAX_LENGTH = 200
 
 export function TextareaExample() {
@@ -40,6 +40,15 @@ export function TextareaExample() {
           defaultValue="Editing is locked while the release is being published."
         />
       </div>
+      <Field data-invalid>
+      <FieldLabel htmlFor="textarea-invalid">Message</FieldLabel>
+      <Textarea
+        id="textarea-invalid"
+        placeholder="Type your message here."
+        aria-invalid
+      />
+      <FieldDescription>Please enter a valid message.</FieldDescription>
+    </Field>
     </div>
   )
 }
