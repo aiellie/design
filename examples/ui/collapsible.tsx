@@ -1,0 +1,59 @@
+"use client"
+
+import * as React from "react"
+
+import { Button } from "@/components/ui/button"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ArrowDown01Icon, ArrowUp01Icon } from "@hugeicons/core-free-icons"
+
+const repos = [
+  "@aiellie/design-tokens",
+  "@aiellie/icon-forge",
+  "@aiellie/motion-primitives",
+]
+
+export function CollapsibleExample() {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <Collapsible
+      open={open}
+      onOpenChange={setOpen}
+      className="flex w-full flex-col gap-2"
+    >
+      <div className="flex items-center justify-between gap-4 px-1">
+        <h4 className="text-sm font-semibold">
+          @aiellie starred 4 repositories
+        </h4>
+        <CollapsibleTrigger
+          render={
+            <Button variant="ghost" size="icon-sm" aria-label="Toggle list">
+              <HugeiconsIcon
+                icon={open ? ArrowUp01Icon : ArrowDown01Icon}
+                strokeWidth={2}
+              />
+            </Button>
+          }
+        />
+      </div>
+      <div className="rounded-md border px-4 py-2 font-mono text-sm">
+        @aiellie/ui-primitives
+      </div>
+      <CollapsibleContent className="flex flex-col gap-2">
+        {repos.map((repo) => (
+          <div
+            key={repo}
+            className="rounded-md border px-4 py-2 font-mono text-sm"
+          >
+            {repo}
+          </div>
+        ))}
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}
