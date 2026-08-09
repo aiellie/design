@@ -83,6 +83,11 @@ export interface ExampleCategory {
   examples: ComponentExample[]
 }
 
+export interface FlatExample extends ComponentExample {
+  /** Title of the category this example belongs to. */
+  categoryTitle: string
+}
+
 export const exampleCategories: ExampleCategory[] = [
   {
     title: "Foundations",
@@ -573,3 +578,12 @@ export const exampleCategories: ExampleCategory[] = [
     ],
   },
 ]
+
+/** Every example in display order, annotated with its category title. */
+export const allExamples: FlatExample[] = exampleCategories.flatMap(
+  (category) =>
+    category.examples.map((example) => ({
+      ...example,
+      categoryTitle: category.title,
+    }))
+)
