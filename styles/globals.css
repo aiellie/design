@@ -60,6 +60,22 @@
 --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/*
+ * Two-tier weight scale: every utility at or below font-normal renders 350,
+ * everything from font-medium up renders 450.
+ */
+@theme {
+  --font-weight-thin: 350;
+  --font-weight-extralight: 350;
+  --font-weight-light: 350;
+  --font-weight-normal: 350;
+  --font-weight-medium: 450;
+  --font-weight-semibold: 450;
+  --font-weight-bold: 450;
+  --font-weight-extrabold: 450;
+  --font-weight-black: 450;
+}
+
 :root {
   --background: oklch(1 0 0);
 --foreground: oklch(0.145 0 0);
@@ -150,6 +166,12 @@ html {
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
   }
+  body {
+    font-weight: 350;
+  }
+  :where(strong, b, h1, h2, h3, h4, h5, h6) {
+    font-weight: 450;
+  }
 }
 /*
  * Weight knobs for typeset surfaces. typeset.css hardcodes its weights
@@ -177,7 +199,7 @@ html {
   --typeset-size: 14px;
   --typeset-leading: 1.75;
   --typeset-flow: 1em;
-  --typeset-weight-normal: 400;
-  --typeset-weight-medium: 500;
-  --typeset-weight-semibold: 600;
+  --typeset-weight-normal: 350;
+  --typeset-weight-medium: 450;
+  --typeset-weight-semibold: 450;
 }
