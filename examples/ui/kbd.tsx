@@ -4,7 +4,7 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd"
 
 const shortcuts = [
   { action: "Open command palette", keys: ["⌘", "K"] },
-  { action: "Search files", keys: ["⌘", "P"] },
+  { action: "Search files", keys: ["⌘", "J"] },
   { action: "Toggle sidebar", keys: ["⌘", "B"] },
   { action: "Save all changes", keys: ["⌘", "⇧", "S"] },
 ]
