@@ -60,20 +60,12 @@
 --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/*
- * Two-tier weight scale: every utility at or below font-normal renders 350,
- * everything from font-medium up renders 450.
- */
+/* Two-tier type weights: normal text is 350, anything heavier is 450. */
 @theme {
-  --font-weight-thin: 350;
-  --font-weight-extralight: 350;
-  --font-weight-light: 350;
   --font-weight-normal: 350;
   --font-weight-medium: 450;
   --font-weight-semibold: 450;
   --font-weight-bold: 450;
-  --font-weight-extrabold: 450;
-  --font-weight-black: 450;
 }
 
 :root {
@@ -167,26 +159,21 @@ html {
     scrollbar-color: var(--border) transparent;
   }
   body {
-    font-weight: 350;
+    font-weight: var(--font-weight-normal);
   }
   :where(strong, b, h1, h2, h3, h4, h5, h6) {
-    font-weight: 450;
+    font-weight: var(--font-weight-semibold);
   }
 }
-/*
- * Weight knobs for typeset surfaces. typeset.css hardcodes its weights
- * (headings and strong at 450, links/th/dt/kbd at 500), so these rules
- * re-express them as variables with those same defaults. A preset opts in
- * by setting --typeset-weight-normal/-medium/-semibold.
- */
+/* Typeset weights come straight from the theme scale above. */
 .typeset {
-  font-weight: var(--typeset-weight-normal, 400);
+  font-weight: var(--font-weight-normal);
 }
 .typeset :where(h1, h2, h3, h4, h5, h6, strong, b) {
-  font-weight: var(--typeset-weight-semibold, 450);
+  font-weight: var(--font-weight-semibold);
 }
 .typeset :where(a, th, dt, kbd, summary) {
-  font-weight: var(--typeset-weight-medium, 500);
+  font-weight: var(--font-weight-medium);
 }
 .typeset :where(:is(h1, h2, h3, h4, h5, h6) :is(a, strong, b)) {
   font-weight: inherit;
@@ -199,7 +186,4 @@ html {
   --typeset-size: 14px;
   --typeset-leading: 1.75;
   --typeset-flow: 1em;
-  --typeset-weight-normal: 350;
-  --typeset-weight-medium: 450;
-  --typeset-weight-semibold: 450;
 }
