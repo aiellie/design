@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { StatusBadge, statusConfig, statusOrder } from "@/components/status-badge"
+import { StatusBadge } from "@/app/components/status-badge"
 import {
   Card,
   CardContent,
@@ -20,6 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { allExamples, exampleCategories } from "@/examples"
+import { exampleStatuses } from "@/examples/status"
 import { Icon } from "@/icons/icons"
 
 export function DashboardOverview({
@@ -28,62 +29,70 @@ export function DashboardOverview({
   onSelect: (slug: string) => void
 }) {
   const total = allExamples.length
-  const counts = Object.fromEntries(
-    statusOrder.map((status) => [
-      status,
-      allExamples.filter((example) => example.status === status).length,
-    ])
-  ) as Record<(typeof statusOrder)[number], number>
-  const completion = Math.round((counts.approved / total) * 100)
+  const counts = exampleStatuses.map((status) => ({
+    ...status,
+    count: allExamples.filter((example) => example.status === status.id)
+      .length,
+  }))
+  const shipped = counts.find((status) => status.id === "shipped")?.count ?? 0
+  const completion = Math.round((shipped / total) * 100)
+  // Latest workflow stages first, so completed work sits on the left.
+  const distribution = [...counts].reverse().filter((s) => s.count > 0)
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>Completion</CardTitle>
+          <CardTitle>Progress</CardTitle>
           <CardDescription>
-            {counts.approved} of {total} examples approved
+            {shipped} of {total} examples shipped
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-3">
+        <CardContent className="flex flex-col gap-4">
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-semibold tracking-tight">
               {completion}%
             </span>
-            <span className="text-sm text-muted-foreground">complete</span>
+            <span className="text-sm text-muted-foreground">shipped</span>
           </div>
-          <Progress value={completion} aria-label="Overall completion" />
-        </CardContent>
-      </Card>
-
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-        {[...statusOrder].reverse().map((status) => (
-          <Card key={status}>
-            <CardContent className="flex flex-col gap-1">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex h-2 w-full overflow-hidden rounded-full bg-muted">
+            {distribution.map((status) => (
+              <div
+                key={status.id}
+                className={status.color}
+                style={{ width: `${(status.count / total) * 100}%` }}
+                title={`${status.label}: ${status.count}`}
+              />
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
+            {[...counts].reverse().map((status) => (
+              <div
+                key={status.id}
+                className="flex items-center gap-1.5 text-sm text-muted-foreground"
+                title={status.description}
+              >
                 <span
-                  className={`size-2 rounded-full ${statusConfig[status].dot}`}
+                  className={`size-2 rounded-full ${status.color}`}
                   aria-hidden
                 />
-                {statusConfig[status].label}
+                {status.label}
+                <span className="font-mono text-xs">{status.count}</span>
               </div>
-              <div className="text-2xl font-semibold tracking-tight">
-                {counts[status]}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
           <CardTitle>Categories</CardTitle>
-          <CardDescription>Approved examples per category.</CardDescription>
+          <CardDescription>Shipped examples per category.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {exampleCategories.map((category) => {
             const done = category.examples.filter(
-              (example) => example.status === "approved"
+              (example) => example.status === "shipped"
             ).length
             const pct = Math.round((done / category.examples.length) * 100)
             return (

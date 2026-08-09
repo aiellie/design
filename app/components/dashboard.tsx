@@ -2,9 +2,11 @@
 
 import * as React from "react"
 
-import { DashboardOverview } from "@/components/dashboard-overview"
-import { ExampleViewer } from "@/components/example-viewer"
-import { StatusDot } from "@/components/status-badge"
+import { DashboardOverview } from "@/app/components/dashboard-overview"
+import { ExampleViewer } from "@/app/components/example-viewer"
+import { StatusBadge, StatusDot } from "@/app/components/status-badge"
+import { Button } from "@/components/ui/button"
+import { ButtonGroup } from "@/components/ui/button-group"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -28,14 +30,40 @@ import { Icon, Icons } from "@/icons/icons"
 
 export function Dashboard() {
   const [selectedSlug, setSelectedSlug] = React.useState<string | null>(null)
-  const selected =
-    allExamples.find((example) => example.slug === selectedSlug) ?? null
+  const index = allExamples.findIndex(
+    (example) => example.slug === selectedSlug
+  )
+  const selected = index >= 0 ? allExamples[index] : null
+  const previous = index > 0 ? allExamples[index - 1] : null
+  const next =
+    selected && index < allExamples.length - 1 ? allExamples[index + 1] : null
 
   const total = allExamples.length
-  const approved = allExamples.filter(
-    (example) => example.status === "approved"
+  const shipped = allExamples.filter(
+    (example) => example.status === "shipped"
   ).length
-  const completion = Math.round((approved / total) * 100)
+  const completion = Math.round((shipped / total) * 100)
+
+  React.useEffect(() => {
+    if (!selected) {
+      return
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.defaultPrevented || event.target !== document.body) {
+        return
+      }
+      if (event.key === "ArrowLeft" && previous) {
+        setSelectedSlug(previous.slug)
+      }
+      if (event.key === "ArrowRight" && next) {
+        setSelectedSlug(next.slug)
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [selected, previous, next])
 
   return (
     <SidebarProvider>
@@ -45,7 +73,7 @@ export function Dashboard() {
             <div>
               <div className="text-sm font-semibold">Design System</div>
               <div className="text-xs text-muted-foreground">
-                {approved} of {total} approved
+                {shipped} of {total} shipped
               </div>
             </div>
             <Progress value={completion} aria-label="Overall completion" />
@@ -69,7 +97,7 @@ export function Dashboard() {
           </SidebarGroup>
           {exampleCategories.map((category) => {
             const done = category.examples.filter(
-              (example) => example.status === "approved"
+              (example) => example.status === "shipped"
             ).length
             return (
               <SidebarGroup key={category.title}>
@@ -107,23 +135,54 @@ export function Dashboard() {
         <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="h-4" />
-          <div className="text-sm text-muted-foreground">
+          <div className="flex min-w-0 flex-1 items-center gap-2 text-sm">
             {selected ? (
               <>
-                {selected.categoryTitle}
-                <span className="mx-1.5">/</span>
-                <span className="font-medium text-foreground">
-                  {selected.name}
+                <span className="truncate text-muted-foreground">
+                  {selected.categoryTitle}
+                </span>
+                <span className="text-muted-foreground">/</span>
+                <span className="truncate font-medium">{selected.name}</span>
+                <span className="hidden truncate font-mono text-xs text-muted-foreground xl:inline">
+                  {selected.file}
                 </span>
               </>
             ) : (
-              <span className="font-medium text-foreground">Overview</span>
+              <span className="font-medium">Overview</span>
             )}
           </div>
+          {selected ? (
+            <div className="flex shrink-0 items-center gap-3">
+              <StatusBadge status={selected.status} />
+              <span className="hidden font-mono text-xs text-muted-foreground sm:inline">
+                {index + 1} / {total}
+              </span>
+              <ButtonGroup>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  disabled={!previous}
+                  onClick={() => previous && setSelectedSlug(previous.slug)}
+                  aria-label="Previous example"
+                >
+                  <Icon icon={Icons.arrowLeft} />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  disabled={!next}
+                  onClick={() => next && setSelectedSlug(next.slug)}
+                  aria-label="Next example"
+                >
+                  <Icon icon={Icons.arrowRight} />
+                </Button>
+              </ButtonGroup>
+            </div>
+          ) : null}
         </header>
         <div className="flex-1 overflow-y-auto p-4 lg:p-6">
           {selected ? (
-            <ExampleViewer example={selected} onSelect={setSelectedSlug} />
+            <ExampleViewer key={selected.slug} example={selected} />
           ) : (
             <DashboardOverview onSelect={setSelectedSlug} />
           )}
