@@ -73,6 +73,7 @@ import {
   Tag01Icon,
   Tap01Icon,
   TextFontIcon,
+  TextIcon,
   TextSquareIcon,
   Tick02Icon,
   ToggleOffIcon,
@@ -162,6 +163,7 @@ export const Icons = {
   table: Table01Icon,
   tag: Tag01Icon,
   tap: Tap01Icon,
+  text: TextIcon,
   textFont: TextFontIcon,
   textSquare: TextSquareIcon,
   toggleOff: ToggleOffIcon,
@@ -259,6 +261,7 @@ export const iconRegistry: RegisteredIcon[] = [
   // Media & Design
   { name: "paintBoard", label: "Paint Board", icon: Icons.paintBoard, category: "media" },
   { name: "textFont", label: "Text Font", icon: Icons.textFont, category: "media" },
+  { name: "text", label: "Text", icon: Icons.text, category: "media" },
   { name: "blur", label: "Blur", icon: Icons.blur, category: "media" },
   { name: "crop", label: "Crop", icon: Icons.crop, category: "media" },
   { name: "carouselHorizontal", label: "Carousel", icon: Icons.carouselHorizontal, category: "media" },

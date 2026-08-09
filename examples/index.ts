@@ -2,6 +2,7 @@ import type * as React from "react"
 
 import { IconsExample } from "@/examples/icons/icons"
 import { ColorsExample } from "@/examples/styles/colors"
+import { TypesetExample } from "@/examples/styles/typeset"
 import { AccordionExample } from "@/examples/ui/accordion"
 import { AlertExample } from "@/examples/ui/alert"
 import { AlertDialogExample } from "@/examples/ui/alert-dialog"
@@ -93,6 +94,7 @@ export interface FlatExample extends ComponentExample {
 /** Repo-relative source path for an example slug. */
 export function exampleFilePath(slug: string): string {
   if (slug === "colors") return "examples/styles/colors.tsx"
+  if (slug === "typeset") return "examples/styles/typeset.tsx"
   if (slug === "icons") return "examples/icons/icons.tsx"
   return `examples/ui/${slug}.tsx`
 }
@@ -106,6 +108,12 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Colors",
         component: ColorsExample,
         icon: Icons.paintBoard,
+      },
+      {
+        slug: "typeset",
+        name: "Typeset",
+        component: TypesetExample,
+        icon: Icons.text,
       },
       {
         slug: "icons",
