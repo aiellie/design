@@ -66,8 +66,8 @@ export function TypesetExample() {
       </pre>
       <hr />
       <p>
-        Embedded components can opt out with the <code>not-typeset</code>{" "}
-        class.
+        Press <kbd>⌘</kbd> <kbd>K</kbd> to search the docs. Embedded
+        components can opt out with the <code>not-typeset</code> class.
       </p>
     </div>
   )

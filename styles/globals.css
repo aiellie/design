@@ -165,20 +165,6 @@ html {
     font-weight: var(--font-weight-semibold);
   }
 }
-/* Typeset weights come straight from the theme scale above. */
-.typeset {
-  font-weight: var(--font-weight-normal);
-}
-.typeset :where(h1, h2, h3, h4, h5, h6, strong, b) {
-  font-weight: var(--font-weight-semibold);
-}
-.typeset :where(a, th, dt, kbd, summary) {
-  font-weight: var(--font-weight-medium);
-}
-.typeset :where(:is(h1, h2, h3, h4, h5, h6) :is(a, strong, b)) {
-  font-weight: inherit;
-}
-
 .typeset-docs {
   --typeset-font-body: var(--font-geist);
   --typeset-font-heading: var(--font-geist);
