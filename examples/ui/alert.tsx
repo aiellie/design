@@ -57,7 +57,7 @@ const solid = {
 
 export function AlertExample() {
   return (
-    <div className="grid w-full max-w-md items-start gap-4">
+    <div className="grid w-full max-w-md gap-4 items-center justify-center">
       {/* The action cluster is absolutely positioned in the top-end corner, so
           each alert reserves enough end padding for it to clear the title. The
           `!` is there to beat the component's own `has-[alert-action]:pe-18`,
@@ -65,15 +65,13 @@ export function AlertExample() {
       {/* Default */}
       <Alert>
         <HugeiconsIcon icon={Megaphone01Icon} strokeWidth={2} />
-        <AlertTitle>Heads up!</AlertTitle>
-        <AlertDescription>
-          You can add components to your app using the CLI.
-        </AlertDescription>
+        <AlertTitle>You can add components to your app using the CLI.</AlertTitle>
+
       </Alert>
       {/* Code — the command is the payload, so the alert wears mono and copy
           is the action that matters. */}
       <Alert>
-        <HugeiconsIcon icon={TerminalIcon} strokeWidth={2} />
+        <HugeiconsIcon icon={TerminalIcon} strokeWidth={2} className="text-muted-foreground!" />
         <AlertTitle className="text-sm text-muted-foreground font-mono">
           npx shadcn@latest add alert
         </AlertTitle>

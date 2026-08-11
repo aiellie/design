@@ -12,6 +12,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Add01Icon,
   Bookmark01Icon,
+  Search01Icon,
   Share03Icon,
 } from "@hugeicons/core-free-icons"
 
@@ -22,7 +23,7 @@ export function TooltipExample() {
         <Tooltip>
           <TooltipTrigger
             render={
-              <Button variant="outline" size="icon" aria-label="New item">
+              <Button variant="outline" size="icon-sm" className="rounded-full text-muted-foreground hover:text-foreground" aria-label="New item">
                 <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
               </Button>
             }
@@ -32,7 +33,7 @@ export function TooltipExample() {
         <Tooltip>
           <TooltipTrigger
             render={
-              <Button variant="outline" size="icon" aria-label="Bookmark">
+              <Button variant="outline" size="icon-sm" className="rounded-full text-muted-foreground hover:text-foreground" aria-label="Bookmark">
                 <HugeiconsIcon icon={Bookmark01Icon} strokeWidth={2} />
               </Button>
             }
@@ -42,7 +43,7 @@ export function TooltipExample() {
         <Tooltip>
           <TooltipTrigger
             render={
-              <Button variant="outline" size="icon" aria-label="Share">
+              <Button variant="outline" size="icon-sm" className="rounded-full text-muted-foreground hover:text-foreground" aria-label="Share">
                 <HugeiconsIcon icon={Share03Icon} strokeWidth={2} />
               </Button>
             }
@@ -50,7 +51,17 @@ export function TooltipExample() {
           <TooltipContent side="bottom">Share this page</TooltipContent>
         </Tooltip>
         <Tooltip>
-          <TooltipTrigger render={<Button variant="outline">Save</Button>} />
+          <TooltipTrigger
+            render={
+              <Button variant="outline" size="icon-sm" className="rounded-full text-muted-foreground hover:text-foreground" aria-label="Search">
+                <HugeiconsIcon icon={Search01Icon} strokeWidth={2} />
+              </Button>
+            }
+          />
+          <TooltipContent side="top">Search <Kbd>⌘ + J</Kbd></TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger render={<Button variant="outline" size="sm">Save</Button>} />
           <TooltipContent>
             Save changes <Kbd>⌘S</Kbd>
           </TooltipContent>

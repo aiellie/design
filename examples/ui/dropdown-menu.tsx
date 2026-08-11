@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
+  ArrowUpBigIcon,
   CloudIcon,
   CreditCardIcon,
   Logout01Icon,
@@ -38,7 +39,7 @@ export function DropdownMenuExample() {
             <DropdownMenuItem>
               <HugeiconsIcon icon={User02Icon} strokeWidth={2} />
               Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              <DropdownMenuShortcut className="flex items-center"><HugeiconsIcon icon={ArrowUpBigIcon} className="size-3" strokeWidth={1.5} />⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <HugeiconsIcon icon={CreditCardIcon} strokeWidth={2} />
@@ -53,12 +54,12 @@ export function DropdownMenuExample() {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuSub>
+            <DropdownMenuSub >
               <DropdownMenuSubTrigger>
                 <HugeiconsIcon icon={UserAdd01Icon} strokeWidth={2} />
                 Invite users
               </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
+              <DropdownMenuSubContent className="w-32">
                 <DropdownMenuItem>
                   <HugeiconsIcon icon={Mail01Icon} strokeWidth={2} />
                   Email
@@ -84,7 +85,7 @@ export function DropdownMenuExample() {
           <DropdownMenuItem variant="destructive">
             <HugeiconsIcon icon={Logout01Icon} strokeWidth={2} />
             Log out
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+            <DropdownMenuShortcut className="flex items-center"><HugeiconsIcon icon={ArrowUpBigIcon} className="size-3" strokeWidth={1.5} />⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

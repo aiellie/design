@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Delete02Icon, Trash } from "@hugeicons/core-free-icons"
+import { Trash } from "@hugeicons/core-free-icons"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 export function AlertDialogExample() {
@@ -26,7 +26,7 @@ export function AlertDialogExample() {
             render={
               <AlertDialogTrigger
                 render={
-                  <Button variant="destructive" size="icon" className="rounded-full">
+                  <Button variant="destructive" size="icon-sm" className="rounded-full bg-destructive/5 text-destructive hover:bg-destructive/10">
                     <HugeiconsIcon icon={Trash} strokeWidth={2} />
                     <span className="sr-only">Delete</span>
                   </Button>
@@ -38,11 +38,11 @@ export function AlertDialogExample() {
         </Tooltip>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogMedia className="bg-destructive/10 text-destructive">
-              <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} />
+            <AlertDialogMedia className="bg-destructive/5text-destructive">
+              <HugeiconsIcon icon={Trash} strokeWidth={2} />
             </AlertDialogMedia>
             <AlertDialogTitle>
-              Delete &ldquo;Acme Storefront&rdquo;?
+              Delete &ldquo;AIEllie Storefront&rdquo;?
             </AlertDialogTitle>
             <AlertDialogDescription>
               This permanently removes the project, its deployments, and all
@@ -50,15 +50,15 @@ export function AlertDialogExample() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction variant="destructive">
+            <AlertDialogCancel className="rounded-full">Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" className="rounded-full bg-destructive/5 text-destructive hover:bg-destructive/10">
               Delete project
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
       <AlertDialog>
-        <AlertDialogTrigger render={<Button variant="outline">Sign out</Button>} />
+        <AlertDialogTrigger render={<Button variant="outline" size="sm">Sign out</Button>} />
         <AlertDialogContent size="sm">
           <AlertDialogHeader>
             <AlertDialogTitle>Sign out of all devices?</AlertDialogTitle>

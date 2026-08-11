@@ -1,5 +1,7 @@
 "use client"
 
+import * as React from "react"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,11 +15,28 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import { Toaster, toast } from "@/components/ui/toast"
+
+const DEFAULT_PROFILE = { name: "Alex Rivera", email: "alex@acme.com" }
 
 export function SheetExample() {
+  const [open, setOpen] = React.useState(false)
+  const [profile, setProfile] = React.useState(DEFAULT_PROFILE)
+  const [draft, setDraft] = React.useState(DEFAULT_PROFILE)
+
+  const isDirty =
+    draft.name !== profile.name || draft.email !== profile.email
+
   return (
-    <div className="flex w-full flex-wrap items-center justify-center gap-2">
-      <Sheet>
+    <div className="flex w-full flex-wrap items-center justify-center">
+      <Sheet
+        open={open}
+        onOpenChange={(nextOpen) => {
+          setOpen(nextOpen)
+          // Discard unsaved edits when the sheet closes.
+          if (!nextOpen) setDraft(profile)
+        }}
+      >
         <SheetTrigger render={<Button variant="outline">Edit profile</Button>} />
         <SheetContent side="right">
           <SheetHeader>
@@ -29,38 +48,51 @@ export function SheetExample() {
           <div className="grid flex-1 auto-rows-min gap-4 px-4">
             <div className="grid gap-2">
               <Label htmlFor="sheet-example-name">Name</Label>
-              <Input id="sheet-example-name" defaultValue="Alex Rivera" />
+              <Input
+                id="sheet-example-name"
+                value={draft.name}
+                onChange={(event) =>
+                  setDraft((current) => ({
+                    ...current,
+                    name: event.target.value,
+                  }))
+                }
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="sheet-example-email">Email</Label>
               <Input
                 id="sheet-example-email"
                 type="email"
-                defaultValue="alex@acme.com"
+                value={draft.email}
+                onChange={(event) =>
+                  setDraft((current) => ({
+                    ...current,
+                    email: event.target.value,
+                  }))
+                }
               />
             </div>
           </div>
           <SheetFooter>
-            <Button>Save changes</Button>
+            <Button
+              disabled={!isDirty}
+              onClick={() => {
+                setProfile(draft)
+                setOpen(false)
+                toast.add({
+                  type: "success",
+                  title: "Profile updated",
+                })
+              }}
+            >
+              Save changes
+            </Button>
             <SheetClose render={<Button variant="outline">Cancel</Button>} />
           </SheetFooter>
         </SheetContent>
       </Sheet>
-      <Sheet>
-        <SheetTrigger render={<Button variant="outline">Notifications</Button>} />
-        <SheetContent side="bottom">
-          <SheetHeader>
-            <SheetTitle>Notification preferences</SheetTitle>
-            <SheetDescription>
-              Choose how you want to hear about activity in your projects.
-            </SheetDescription>
-          </SheetHeader>
-          <SheetFooter className="sm:flex-row sm:justify-end">
-            <SheetClose render={<Button variant="outline">Not now</Button>} />
-            <Button>Enable notifications</Button>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
+      <Toaster />
     </div>
   )
 }

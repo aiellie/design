@@ -1,7 +1,12 @@
+"use client"
+
+import * as React from "react"
 import {
   ArrowUp02Icon,
+  Copy01Icon,
   GitBranchIcon,
   Notification01Icon,
+  Tick01Icon,
   Trash,
   Undo03Icon,
 } from "@hugeicons/core-free-icons"
@@ -9,6 +14,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
+import { Toaster, toast } from "@/components/ui/toast"
 import {
   Tooltip,
   TooltipContent,
@@ -27,12 +33,16 @@ function IconButton({
   tooltip,
   variant = "outline",
   className,
+  strokeWidth,
+  onClick,
 }: {
   icon: typeof ArrowUp02Icon
   label: string
   tooltip?: string
   variant?: React.ComponentProps<typeof Button>["variant"]
   className?: string
+  strokeWidth?: number
+  onClick?: React.ComponentProps<typeof Button>["onClick"]
 }) {
   return (
     <Tooltip>
@@ -42,14 +52,37 @@ function IconButton({
             variant={variant}
             size="icon-sm"
             aria-label={label}
-            className={cn("rounded-full", className)}
+            className={cn("", className)}
+            onClick={onClick}
           >
-            <HugeiconsIcon icon={icon} />
+            <HugeiconsIcon icon={icon} strokeWidth={strokeWidth} />
           </Button>
         }
       />
       <TooltipContent>{tooltip ?? label}</TooltipContent>
     </Tooltip>
+  )
+}
+
+function CopyIconButton() {
+  const [copied, setCopied] = React.useState(false)
+
+  return (
+    <IconButton
+      icon={copied ? Tick01Icon : Copy01Icon}
+      label={copied ? "Copied" : "Copy"}
+      variant="outline"
+      className="text-muted-foreground hover:text-foreground"
+      strokeWidth={2}
+      onClick={() => {
+        setCopied(true)
+        toast.add({
+          type: "success",
+          title: "Copied to clipboard",
+        })
+        window.setTimeout(() => setCopied(false), 2000)
+      }}
+    />
   )
 }
 
@@ -109,7 +142,7 @@ export function ButtonExample() {
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <IconButton icon={ArrowUp02Icon} label="Submit" />
+        <IconButton icon={ArrowUp02Icon} label="Submit" className="rounded-full" />
         <IconButton icon={Trash} label="Delete" variant="destructive" className="bg-destructive/5 text-destructive hover:bg-destructive/10" />
         <IconButton
           icon={Notification01Icon}
@@ -123,7 +156,10 @@ export function ButtonExample() {
           label="Undo changes"
           className="border-dashed"
         />
+        <CopyIconButton />
       </div>
+
+      <Toaster />
     </div>
   )
 }

@@ -25,7 +25,8 @@
   [data-slot$="-item"],
   [data-slot$="-trigger"],
   [data-slot$="-checkbox-item"],
-  [data-slot$="-radio-item"] {
+  [data-slot$="-radio-item"]
+  {
     @apply cursor-pointer;
   }
 
@@ -151,6 +152,12 @@
 }
 
 button:not(:disabled),
-[role="button"]:not(:disabled) {
+[role="button"]:not(:disabled),
+[data-slot="switch"]:not(:disabled) {
   cursor: pointer;
+}
+
+[data-slot="dialog-content"] [data-slot="dialog-close"].absolute,
+[data-slot="sheet-content"] [data-slot="sheet-close"].absolute {
+  @apply text-muted-foreground!;
 }
