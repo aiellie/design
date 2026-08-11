@@ -206,10 +206,15 @@
  }
  
  [data-slot="textarea"],
- [data-slot="input"]
- {
+ [data-slot="input"],
+ [data-slot="input-group-control"]
+   {
    @apply text-sm!;
  }
+ [data-slot="input-group"] [data-slot="button"] {
+  @apply text-xs!;
+  @apply font-normal!;
+}
  
  /*{[data-slot="label"] {
    @apply font-normal!;
@@ -241,7 +246,7 @@
    [data-slot="select-trigger"],
    [data-slot="switch"],
    [data-slot="textarea"],
-   [data-slot="input-otp-slot"]
+  /* [data-slot="input-otp-slot"] */
  )[aria-invalid="true"],
  [data-slot="combobox-chips"]:focus-within,
  [data-slot="combobox-chips"]:has([aria-invalid="true"]),
@@ -254,14 +259,41 @@
    @apply ring-1!;
  }
  
- button:not(:disabled),
- [role="button"]:not(:disabled),
- [data-slot="switch"]:not(:disabled) {
-   cursor: pointer;
- }
+button:not(:disabled, [data-disabled]),
+[role="button"]:not(:disabled, [data-disabled]),
+[data-slot="checkbox"]:not(:disabled, [data-disabled]),
+[data-slot="radio-group-item"]:not(:disabled, [data-disabled]),
+[data-slot="switch"]:not(:disabled, [data-disabled]),
+[data-slot="native-select"]:not(:disabled, [data-disabled]),
+[data-slot="input"][type="file"]:not(:disabled, [data-disabled]) {
+  cursor: pointer;
+}
+
+[data-slot="checkbox"][aria-invalid="true"][data-checked],
+[data-slot="radio-group-item"][aria-invalid="true"][data-checked] {
+  @apply border-destructive! bg-destructive! text-white!;
+}
+
+[data-slot="radio-group-item"][aria-invalid="true"][data-checked]
+  [data-slot="radio-group-indicator"]
+  span {
+  @apply bg-white!;
+}
  
  [data-slot="dialog-content"] [data-slot="dialog-close"].absolute,
  [data-slot="sheet-content"] [data-slot="sheet-close"].absolute {
    @apply text-muted-foreground!;
+ }
+
+ [data-slot="toast-content"] {
+   @apply py-2! px-3!;
+ }
+
+ [data-slot="toast-action"] {
+   @apply h-6! gap-1! rounded-[min(var(--radius-md),10px)]! px-2! text-xs! [&_svg:not([class*='size-'])]:size-3!;
+ }
+
+ [data-slot="toast-close"] {
+   @apply size-6! rounded-[min(var(--radius-md),10px)]! [&_svg:not([class*='size-'])]:size-3!;
  }
  

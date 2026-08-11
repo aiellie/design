@@ -92,7 +92,7 @@ function ReactionToggle({ reaction }: { reaction: Reaction }) {
             aria-label={name}
             size="sm"
             variant="outline"
-            className={cn("rounded-full p-1", reaction.className)}
+            className={cn("rounded-full p-1 text-muted-foreground", reaction.className)}
             pressed={pressed}
             onPressedChange={setPressed}
           >
@@ -131,7 +131,7 @@ function CountToggle({
       aria-label={label}
       size="sm"
       variant="outline"
-      className={cn("rounded-full", className)}
+      className={cn("rounded-full text-muted-foreground", className)}
       pressed={pressed}
       onPressedChange={setPressed}
     >
@@ -174,7 +174,7 @@ function FormattingToggles() {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
         {marks.map((mark) => (
           <Toggle
             key={mark.label}
@@ -189,6 +189,7 @@ function FormattingToggles() {
       <p
         className={cn(
           "text-default",
+          "text-sm",
           "text-muted-foreground",
           bold && "font-medium text-foreground",
           italic && "italic",

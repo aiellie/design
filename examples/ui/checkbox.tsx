@@ -1,30 +1,66 @@
 "use client"
 
 import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldTitle,
+} from "@/components/ui/field"
 import { Label } from "@/components/ui/label"
 
 export function CheckboxExample() {
   return (
-    <div className="flex w-full flex-col gap-5">
-      <div className="flex items-start gap-3">
-        <Checkbox id="checkbox-terms" defaultChecked className="mt-0.5" />
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="checkbox-terms">Accept terms and conditions</Label>
-          <p className="text-sm text-muted-foreground">
-            You agree to our Terms of Service and Privacy Policy.
-          </p>
-        </div>
-      </div>
-      <div className="flex items-center gap-3">
-        <Checkbox id="checkbox-newsletter" />
-        <Label htmlFor="checkbox-newsletter">Subscribe to the newsletter</Label>
-      </div>
-      <div className="flex items-center gap-3">
-        <Checkbox id="checkbox-security" defaultChecked disabled />
-        <Label htmlFor="checkbox-security">
-          Security alerts (always on)
-        </Label>
-      </div>
-    </div>
+    <>
+    <FieldGroup className="max-w-sm">
+      <Field orientation="horizontal">
+        <Checkbox id="terms-checkbox" name="terms-checkbox" />
+        <Label htmlFor="terms-checkbox">Accept terms and conditions</Label>
+      </Field>
+      <Field orientation="horizontal">
+        <Checkbox
+          id="terms-checkbox-2"
+          name="terms-checkbox-2"
+          defaultChecked
+        />
+        <FieldContent>
+          <FieldLabel htmlFor="terms-checkbox-2">
+            Accept terms and conditions
+          </FieldLabel>
+          <FieldDescription>
+            By clicking this checkbox, you agree to the terms.
+          </FieldDescription>
+        </FieldContent>
+      </Field>
+      <Field orientation="horizontal" data-disabled>
+        <Checkbox id="toggle-checkbox" name="toggle-checkbox" disabled />
+        <FieldLabel htmlFor="toggle-checkbox">Enable notifications</FieldLabel>
+      </Field>
+      <FieldLabel>
+        <Field orientation="horizontal">
+          <Checkbox id="toggle-checkbox-2" name="toggle-checkbox-2" />
+          <FieldContent>
+            <FieldTitle>Enable notifications</FieldTitle>
+            <FieldDescription>
+              You can enable or disable notifications at any time.
+            </FieldDescription>
+          </FieldContent>
+        </Field>
+      </FieldLabel>
+      <Field orientation="horizontal" data-invalid>
+        <Checkbox
+          id="terms-checkbox-invalid"
+          name="terms-checkbox-invalid"
+          defaultChecked
+          aria-invalid
+        />
+        <FieldLabel htmlFor="terms-checkbox-invalid">
+          Accept terms and conditions
+        </FieldLabel>
+      </Field>
+      </FieldGroup>
+    </>
   )
 }

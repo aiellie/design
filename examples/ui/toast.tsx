@@ -8,11 +8,16 @@ export function ToastExample() {
     <div className="flex w-full flex-wrap items-center justify-center gap-2">
       <Button
         variant="outline"
+        onClick={() => toast.add({ description: "Event has been created." })}
+      >
+        Default
+      </Button>
+      <Button
+        variant="outline"
         onClick={() =>
           toast.add({
             type: "success",
-            title: "Event created",
-            description: "Friday, August 14 at 4:30 PM",
+            description: "Event has been created.",
           })
         }
       >
@@ -22,9 +27,31 @@ export function ToastExample() {
         variant="outline"
         onClick={() =>
           toast.add({
+            type: "info",
+            description: "Arrive 10 minutes before the event.",
+          })
+        }
+      >
+        Info
+      </Button>
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast.add({
+            type: "warning",
+            description: "The event cannot start before 8:00 AM.",
+          })
+        }
+      >
+        Warning
+      </Button>
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast.add({
             type: "error",
-            title: "Payment failed",
-            description: "Your card was declined. Try another method.",
+            description: "The event could not be created.",
+            priority: "high",
           })
         }
       >

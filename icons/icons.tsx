@@ -20,6 +20,7 @@ import {
   Chatting01Icon,
   CheckListIcon,
   CheckmarkSquare02Icon,
+  ChevronDownIcon,
   Comment01Icon,
   CommandIcon,
   Copy01Icon,
@@ -78,7 +79,6 @@ import {
   ToggleOffIcon,
   ToggleOnIcon,
   Trash,
-  UnfoldMoreIcon,
   UserCircleIcon,
 } from "@hugeicons/core-free-icons"
 
@@ -169,7 +169,7 @@ export const Icons = {
   textSquare: TextSquareIcon,
   toggleOff: ToggleOffIcon,
   toggleOn: ToggleOnIcon,
-  unfoldMore: UnfoldMoreIcon,
+  chevronDown: ChevronDownIcon,
   userCircle: UserCircleIcon,
 } as const
 
@@ -201,7 +201,7 @@ export const iconRegistry: RegisteredIcon[] = [
   { name: "arrowLeftRight", label: "Arrow Left Right", icon: Icons.arrowLeftRight, category: "arrows" },
   { name: "arrowExpand", label: "Expand", icon: Icons.arrowExpand, category: "arrows" },
   { name: "minimize", label: "Minimize", icon: Icons.minimize, category: "arrows" },
-  { name: "unfoldMore", label: "Unfold More", icon: Icons.unfoldMore, category: "arrows" },
+  { name: "chevronDown", label: "Chevron Down", icon: Icons.chevronDown, category: "arrows" },
   { name: "navigation", label: "Navigation", icon: Icons.navigation, category: "arrows" },
   { name: "route", label: "Route", icon: Icons.route, category: "arrows" },
   // Commerce

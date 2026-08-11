@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Copy01Icon, Edit01Icon, Share08Icon, Tick01Icon } from "@hugeicons/core-free-icons"
+import { Copy01Icon, Edit01Icon, Share08Icon, Tick02Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
 import { Button } from "@/components/ui/button"
@@ -56,7 +56,7 @@ function ShareLinkCopyButton() {
             }}
           >
             <HugeiconsIcon
-              icon={copied ? Tick01Icon : Copy01Icon}
+              icon={copied ? Tick02Icon : Copy01Icon}
               strokeWidth={2}
             />
           </InputGroupButton>

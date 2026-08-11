@@ -71,11 +71,10 @@ export function AlertExample() {
       {/* Code — the command is the payload, so the alert wears mono and copy
           is the action that matters. */}
       <Alert>
-        <HugeiconsIcon icon={TerminalIcon} strokeWidth={2} className="text-muted-foreground!" />
-        <AlertTitle className="text-sm text-muted-foreground font-mono">
+        <HugeiconsIcon icon={TerminalIcon} strokeWidth={1.5} className="text-muted-foreground!" />
+        <AlertDescription className="font-mono">
           npx shadcn@latest add alert
-        </AlertTitle>
-       
+        </AlertDescription>   
         <AlertAction className="flex items-center gap-1">
           <Tooltip>
             <TooltipTrigger
@@ -98,6 +97,36 @@ export function AlertExample() {
               }
             />
             <TooltipContent className="font-mono">Dismiss</TooltipContent>
+          </Tooltip>
+        </AlertAction>
+      </Alert>
+      <Alert className="border-border bg-muted-foreground/3 text-muted-foreground dark:bg-muted-foreground/10 dark:text-muted-foreground">
+        <HugeiconsIcon icon={Cancel01Icon} strokeWidth={1.5} />
+        <AlertDescription>
+          Deployment was cancelled.
+        </AlertDescription>
+        <AlertAction className="flex items-center gap-1">
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button variant="ghost" size="icon-xs" className={ghost.neutral}>
+                  <HugeiconsIcon icon={RefreshIcon} strokeWidth={2} />
+                  <span className="sr-only">Redeploy</span>
+                </Button>
+              }
+            />
+            <TooltipContent>Redeploy</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button variant="ghost" size="icon-xs" className={ghost.neutral}>
+                  <HugeiconsIcon icon={File01Icon} strokeWidth={2} />
+                  <span className="sr-only">View build logs</span>
+                </Button>
+              }
+            />
+            <TooltipContent>View build logs</TooltipContent>
           </Tooltip>
         </AlertAction>
       </Alert>
@@ -214,37 +243,6 @@ export function AlertExample() {
               }
             />
             <TooltipContent>Dismiss</TooltipContent>
-          </Tooltip>
-        </AlertAction>
-      </Alert>
-      <Alert className="border-border bg-muted-foreground/3 text-muted-foreground dark:bg-muted-foreground/10 dark:text-muted-foreground">
-        <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
-        <AlertTitle>Deployment was cancelled.</AlertTitle>
-        <AlertDescription>
-          No changes were applied.
-        </AlertDescription>
-        <AlertAction className="flex items-center gap-1">
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button variant="ghost" size="icon-xs" className={ghost.neutral}>
-                  <HugeiconsIcon icon={RefreshIcon} strokeWidth={2} />
-                  <span className="sr-only">Redeploy</span>
-                </Button>
-              }
-            />
-            <TooltipContent>Redeploy</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button variant="ghost" size="icon-xs" className={ghost.neutral}>
-                  <HugeiconsIcon icon={File01Icon} strokeWidth={2} />
-                  <span className="sr-only">View build logs</span>
-                </Button>
-              }
-            />
-            <TooltipContent>View build logs</TooltipContent>
           </Tooltip>
         </AlertAction>
       </Alert>

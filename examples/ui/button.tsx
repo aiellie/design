@@ -6,7 +6,7 @@ import {
   Copy01Icon,
   GitBranchIcon,
   Notification01Icon,
-  Tick01Icon,
+  Tick02Icon,
   Trash,
   Undo03Icon,
 } from "@hugeicons/core-free-icons"
@@ -69,7 +69,7 @@ function CopyIconButton() {
 
   return (
     <IconButton
-      icon={copied ? Tick01Icon : Copy01Icon}
+      icon={copied ? Tick02Icon : Copy01Icon}
       label={copied ? "Copied" : "Copy"}
       variant="outline"
       className="text-muted-foreground hover:text-foreground"
@@ -132,6 +132,7 @@ export function ButtonExample() {
             icon={GitBranchIcon}
             data-icon="inline-start"
             strokeWidth={2}
+            className="text-muted-foreground"
           />
           New Branch
         </Button>

@@ -1,73 +1,145 @@
 "use client"
 
-import { Label } from "@/components/ui/label"
+import * as React from "react"
+
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectLabel,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 
-const produceItems = {
-  apple: "Apple",
-  banana: "Banana",
-  blueberry: "Blueberry",
-  carrot: "Carrot",
-  spinach: "Spinach",
-}
+const northAmerica = [
+  { label: "Eastern Standard Time", value: "est" },
+  { label: "Central Standard Time", value: "cst" },
+  { label: "Mountain Standard Time", value: "mst" },
+  { label: "Pacific Standard Time", value: "pst" },
+  { label: "Alaska Standard Time", value: "akst" },
+  { label: "Hawaii Standard Time", value: "hst" },
+]
 
-const priorityItems = {
-  low: "Low",
-  medium: "Medium",
-  high: "High",
-  urgent: "Urgent",
-}
+const europeAfrica = [
+  { label: "Greenwich Mean Time", value: "gmt" },
+  { label: "Central European Time", value: "cet" },
+  { label: "Eastern European Time", value: "eet" },
+  { label: "Western European Summer Time", value: "west" },
+  { label: "Central Africa Time", value: "cat" },
+  { label: "East Africa Time", value: "eat" },
+]
+
+const asia = [
+  { label: "Moscow Time", value: "msk" },
+  { label: "India Standard Time", value: "ist" },
+  { label: "China Standard Time", value: "cst_china" },
+  { label: "Japan Standard Time", value: "jst" },
+  { label: "Korea Standard Time", value: "kst" },
+  { label: "Indonesia Central Standard Time", value: "ist_indonesia" },
+]
+
+const australiaPacific = [
+  { label: "Australian Western Standard Time", value: "awst" },
+  { label: "Australian Central Standard Time", value: "acst" },
+  { label: "Australian Eastern Standard Time", value: "aest" },
+  { label: "New Zealand Standard Time", value: "nzst" },
+  { label: "Fiji Time", value: "fjt" },
+]
+
+const southAmerica = [
+  { label: "Argentina Time", value: "art" },
+  { label: "Bolivia Time", value: "bot" },
+  { label: "Brasilia Time", value: "brt" },
+  { label: "Chile Standard Time", value: "clt" },
+]
+
+const items = [
+  { label: "Select a timezone", value: null },
+  ...northAmerica,
+  ...europeAfrica,
+  ...asia,
+  ...australiaPacific,
+  ...southAmerica,
+]
 
 export function SelectExample() {
+  const [alignItemWithTrigger, setAlignItemWithTrigger] = React.useState(false)
+
   return (
-    <div className="flex w-full flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="select-produce">Favorite produce</Label>
-        <Select items={produceItems} defaultValue="banana">
-          <SelectTrigger id="select-produce" className="w-full">
+    <div className="flex w-full max-w-lg flex-col items-start gap-5">
+    <FieldGroup>
+      <Field orientation="horizontal">
+        <FieldContent>
+          <FieldLabel htmlFor="align-item">Align Item</FieldLabel>
+          <FieldDescription>
+            Toggle to align the item with the trigger.
+          </FieldDescription>
+        </FieldContent>
+        <Switch
+          id="align-item"
+          checked={alignItemWithTrigger}
+          onCheckedChange={setAlignItemWithTrigger}
+        />
+      </Field>
+      <Field>
+        <Select items={items}>
+          <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent alignItemWithTrigger={alignItemWithTrigger}>
             <SelectGroup>
-              <SelectLabel>Fruits</SelectLabel>
-              <SelectItem value="apple">Apple</SelectItem>
-              <SelectItem value="banana">Banana</SelectItem>
-              <SelectItem value="blueberry">Blueberry</SelectItem>
+              <SelectLabel>North America</SelectLabel>
+              {northAmerica.map((item) => (
+                <SelectItem className="cursor-pointer" key={item.value} value={item.value}>
+                  {item.label}
+                </SelectItem>
+              ))}
             </SelectGroup>
-            <SelectSeparator />
             <SelectGroup>
-              <SelectLabel>Vegetables</SelectLabel>
-              <SelectItem value="carrot">Carrot</SelectItem>
-              <SelectItem value="spinach">Spinach</SelectItem>
+              <SelectLabel>Europe & Africa</SelectLabel>
+              {europeAfrica.map((item) => (
+                <SelectItem className="cursor-pointer" key={item.value} value={item.value}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+            <SelectGroup>
+              <SelectLabel>Asia</SelectLabel>
+              {asia.map((item) => (
+                <SelectItem className="cursor-pointer" key={item.value} value={item.value}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+            <SelectGroup>
+              <SelectLabel>Australia & Pacific</SelectLabel>
+              {australiaPacific.map((item) => (
+                <SelectItem className="cursor-pointer" key={item.value} value={item.value}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+            <SelectGroup>
+              <SelectLabel>South America</SelectLabel>
+              {southAmerica.map((item) => (
+                <SelectItem className="cursor-pointer" key={item.value} value={item.value}>
+                  {item.label}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
-      </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="select-priority">Priority (small)</Label>
-        <Select items={priorityItems}>
-          <SelectTrigger id="select-priority" size="sm" className="w-full">
-            <SelectValue placeholder="Select a priority" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="low">Low</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="high">High</SelectItem>
-              <SelectItem value="urgent">Urgent</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
+      </Field>
+    </FieldGroup>
     </div>
   )
 }

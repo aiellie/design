@@ -16,7 +16,7 @@ export function PopoverExample() {
   return (
     <div className="flex w-full items-center justify-center">
       <Popover>
-        <PopoverTrigger render={<Button variant="outline">Open popover</Button>} />
+        <PopoverTrigger render={<Button variant="outline" size="sm">Open popover</Button>} />
         <PopoverContent align="end" className="w-72">
           <PopoverHeader>
             <PopoverTitle>Dimensions</PopoverTitle>

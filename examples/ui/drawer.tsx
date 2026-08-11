@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { toast } from "sonner"
+import { toast } from "@/components/ui/toast"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
@@ -36,7 +36,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Toaster } from "@/components/ui/sonner"
 import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/use-media-query"
 const deliveryTimes = [
@@ -86,7 +85,9 @@ function DeliveryTimeDrawer() {
     }
 
     setOpen(false)
-    toast("Delivery time confirmed", {
+    toast.add({
+      type: "success",
+      title: "Delivery time confirmed",
       description: selected.label,
     })
   }
@@ -297,7 +298,6 @@ export function DrawerExample() {
       <DeliveryTimeDrawer />
       <NestedDrawer />
       <ResponsiveDrawer />
-      <Toaster />
     </div>
   )
 }

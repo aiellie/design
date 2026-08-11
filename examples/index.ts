@@ -55,7 +55,6 @@ import { SheetExample } from "@/examples/ui/sheet"
 import { SidebarExample } from "@/examples/ui/sidebar"
 import { SkeletonExample } from "@/examples/ui/skeleton"
 import { SliderExample } from "@/examples/ui/slider"
-import { SonnerExample } from "@/examples/ui/sonner"
 import { SpinnerExample } from "@/examples/ui/spinner"
 import { SwitchExample } from "@/examples/ui/switch"
 import { TableExample } from "@/examples/ui/table"
@@ -215,7 +214,7 @@ export const exampleCategories: ExampleCategory[] = [
         slug: "select",
         name: "Select",
         component: SelectExample,
-        icon: Icons.unfoldMore,
+        icon: Icons.chevronDown,
       },
       {
         slug: "combobox",
@@ -375,12 +374,6 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Toast",
         component: ToastExample,
         icon: Icons.notification,
-      },
-      {
-        slug: "sonner",
-        name: "Sonner",
-        component: SonnerExample,
-        icon: Icons.sent,
       },
       {
         slug: "progress",
