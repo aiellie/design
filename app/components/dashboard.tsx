@@ -1,5 +1,6 @@
 "use client"
 
+import { usePathname } from "next/navigation"
 import * as React from "react"
 
 import { DashboardHeader } from "@/app/components/dashboard-header"
@@ -26,7 +27,24 @@ export function Dashboard({
 }
 
 function DashboardShell() {
-  const [selectedSlug, setSelectedSlug] = React.useState<string | null>(null)
+  const pathname = usePathname()
+  const slugFromPath = pathname.replace(/^\//, "") || null
+  const selectedSlug = allExamples.some(
+    (example) => example.slug === slugFromPath
+  )
+    ? slugFromPath
+    : null
+
+  const setSelectedSlug = React.useCallback(
+    (slug: string | null) => {
+      if (slug === selectedSlug) {
+        return
+      }
+      window.history.pushState(null, "", slug ? `/${slug}` : "/")
+    },
+    [selectedSlug]
+  )
+
   const index = allExamples.findIndex(
     (example) => example.slug === selectedSlug
   )
