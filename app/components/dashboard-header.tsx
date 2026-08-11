@@ -1,5 +1,6 @@
 "use client"
 
+import { SearchCommand } from "@/app/components/search-command"
 import { StatusSelect } from "@/app/components/status-select"
 import {
   Breadcrumb,
@@ -80,6 +81,7 @@ export function DashboardHeader({
           </span>
         ) : null}
       </div>
+      <SearchCommand onSelect={onSelect} />
       {selected ? (
         <div className="flex shrink-0 items-center gap-3">
           <StatusSelect slug={selected.slug} />

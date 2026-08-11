@@ -31,7 +31,7 @@ export function StatusSelect({ slug }: { slug: string }) {
           </button>
         }
       />
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent align="end" className="w-full">
         {exampleStatuses.map((status) => (
           <DropdownMenuItem
             key={status.id}
