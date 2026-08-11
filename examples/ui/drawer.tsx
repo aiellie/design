@@ -141,6 +141,21 @@ function DeliveryTimeDrawer() {
   )
 }
 
+function NestedDrawerPreview({ src }: { src: string }) {
+  return (
+    <div className="relative overflow-hidden rounded-lg bg-muted group-data-[swipe-axis=x]/drawer-popup:size-full group-data-[swipe-axis=y]/drawer-popup:aspect-video group-data-[swipe-axis=y]/drawer-popup:w-full">
+      <div
+        className="absolute inset-0 hidden bg-cover bg-center group-data-[swipe-axis=y]/drawer-popup:block"
+        style={{ backgroundImage: `url(${src}?ratio=16:9)` }}
+      />
+      <div
+        className="absolute inset-0 hidden bg-cover bg-center group-data-[swipe-axis=x]/drawer-popup:block"
+        style={{ backgroundImage: `url(${src}?ratio=4:3)` }}
+      />
+    </div>
+  )
+}
+
 function NestedDrawer() {
   const isMobile = useIsMobile()
 
@@ -157,7 +172,7 @@ function NestedDrawer() {
           </DrawerDescription>
         </DrawerHeader>
         <div className="flex-1 p-4">
-          <div className="bg-muted group-data-[swipe-axis=x]/drawer-popup:size-full group-data-[swipe-axis=y]/drawer-popup:aspect-video group-data-[swipe-axis=y]/drawer-popup:w-full" />
+          <NestedDrawerPreview src="https://avatar.aiellie.dev/drawer.svg" />
         </div>
         <DrawerFooter>
           <Drawer showSwipeHandle={isMobile} swipeDirection={swipeDirection}>
@@ -170,7 +185,7 @@ function NestedDrawer() {
                 </DrawerDescription>
               </DrawerHeader>
               <div className="flex-1 p-4">
-                <div className="bg-muted group-data-[swipe-axis=x]/drawer-popup:size-full group-data-[swipe-axis=y]/drawer-popup:aspect-video group-data-[swipe-axis=y]/drawer-popup:w-full" />
+                <NestedDrawerPreview src="https://avatar.aiellie.dev/drawer2.svg" />
               </div>
               <DrawerFooter>
                 <Drawer
@@ -186,7 +201,7 @@ function NestedDrawer() {
                       </DrawerDescription>
                     </DrawerHeader>
                     <div className="flex-1 p-4">
-                      <div className="bg-muted group-data-[swipe-axis=x]/drawer-popup:size-full group-data-[swipe-axis=y]/drawer-popup:aspect-video group-data-[swipe-axis=y]/drawer-popup:w-full" />
+                      <NestedDrawerPreview src="https://avatar.aiellie.dev/drawer3.svg" />
                     </div>
                     <DrawerFooter>
                       <Drawer
@@ -202,7 +217,7 @@ function NestedDrawer() {
                             </DrawerDescription>
                           </DrawerHeader>
                           <div className="flex-1 p-4">
-                            <div className="bg-muted group-data-[swipe-axis=x]/drawer-popup:size-full group-data-[swipe-axis=y]/drawer-popup:aspect-video group-data-[swipe-axis=y]/drawer-popup:w-full" />
+                            <NestedDrawerPreview src="https://avatar.aiellie.dev/drawer4.svg" />
                           </div>
                           <DrawerFooter>
                             <DrawerClose render={<Button variant="outline">Close</Button>} />

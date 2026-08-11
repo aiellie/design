@@ -89,24 +89,42 @@ export function DashboardHeader({
           </span> */}
                 <SearchCommand onSelect={onSelect} />
           <ButtonGroup>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              disabled={!previous}
-              onClick={() => previous && onSelect(previous.slug)}
-              aria-label="Previous example"
-            >
-              <Icon icon={Icons.arrowLeft} className="text-muted-foreground" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              disabled={!next}
-              onClick={() => next && onSelect(next.slug)}
-              aria-label="Next example"
-            >
-              <Icon icon={Icons.arrowRight} className="text-muted-foreground" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="icon-sm"
+                    disabled={!previous}
+                    onClick={() => previous && onSelect(previous.slug)}
+                    aria-label="Previous example"
+                  >
+                    <Icon icon={Icons.arrowLeft} className="text-muted-foreground" />
+                  </Button>
+                }
+              />
+              <TooltipContent>
+                {previous ? `Previous: ${previous.name}` : "Previous"}
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="icon-sm"
+                    disabled={!next}
+                    onClick={() => next && onSelect(next.slug)}
+                    aria-label="Next example"
+                  >
+                    <Icon icon={Icons.arrowRight} className="text-muted-foreground" />
+                  </Button>
+                }
+              />
+              <TooltipContent>
+                {next ? `Next: ${next.name}` : "Next"}
+              </TooltipContent>
+            </Tooltip>
           </ButtonGroup>
         </div>
       ) : null}

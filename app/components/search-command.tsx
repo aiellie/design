@@ -16,6 +16,12 @@ import {
   CommandShortcut,
 } from "@/components/ui/command"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { allExamples, exampleCategories } from "@/examples"
 import { Icon, Icons } from "@/icons/icons"
 
@@ -125,16 +131,26 @@ export function SearchCommand({
 
   return (
     <>
-      <Button
-        variant="outline"
-        size="icon-sm"
-        onClick={() => setOpen(true)}
-        aria-label="Search"
-        className="rounded-full"
-      >
-        <Icon icon={Icons.search} />
-       
-      </Button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="outline"
+                size="icon-sm"
+                onClick={() => setOpen(true)}
+                aria-label="Search"
+                className="rounded-full"
+              >
+                <Icon icon={Icons.search} />
+              </Button>
+            }
+          />
+          <TooltipContent>
+            Search <Kbd>⌘K</Kbd>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <CommandDialog
         open={open}
         onOpenChange={(next) => {
