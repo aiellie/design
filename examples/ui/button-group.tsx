@@ -93,22 +93,22 @@ export function ButtonGroupExample() {
       <ButtonGroup>
         <Button
           variant="outline"
-          size="icon"
+          size="icon-sm"
           aria-label="Zoom out"
           onClick={() => setZoom((z) => Math.max(25, z - 25))}
         >
-          <HugeiconsIcon icon={MinusSignIcon} strokeWidth={2} />
+          <HugeiconsIcon icon={MinusSignIcon} />
         </Button>
-        <ButtonGroupText className="min-w-16 justify-center tabular-nums">
+        <ButtonGroupText className="min-w-16 justify-center tabular-nums text-sm">
           {zoom}%
         </ButtonGroupText>
         <Button
           variant="outline"
-          size="icon"
+          size="icon-sm"
           aria-label="Zoom in"
           onClick={() => setZoom((z) => Math.min(200, z + 25))}
         >
-          <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} />
+          <HugeiconsIcon icon={PlusSignIcon} />
         </Button>
       </ButtonGroup>
 
@@ -164,12 +164,12 @@ export function ButtonGroupExample() {
       {/* Menu triggers replace the button's own data-slot, but the group's
           selectors only test that the attribute is present, so the seam holds. */}
       <ButtonGroup>
-        <Button variant="outline">Follow</Button>
+        <Button variant="outline" size="sm">Follow</Button>
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button variant="outline" size="icon" aria-label="More actions">
-                <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} />
+              <Button variant="outline" size="icon-sm" aria-label="More actions">
+                <HugeiconsIcon icon={ArrowDown01Icon} />
               </Button>
             }
           />

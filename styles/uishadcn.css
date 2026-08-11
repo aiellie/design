@@ -215,6 +215,10 @@
   @apply text-xs!;
   @apply font-normal!;
 }
+
+ [data-slot="button-group-text"] {
+  @apply font-normal!;
+}
  
  /*{[data-slot="label"] {
    @apply font-normal!;

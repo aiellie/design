@@ -40,7 +40,7 @@ export function DashboardHeader({
 }) {
   return (
     <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b bg-background/70 px-4 backdrop-blur-md">
-      <SidebarTrigger className="-ml-1" />
+      <SidebarTrigger className="-ml-1 text-muted-foreground"/>
       <Separator orientation="vertical" className="h-4 my-auto" />
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <Breadcrumb>
@@ -55,7 +55,7 @@ export function DashboardHeader({
                       aria-label="Home"
                       onClick={() => onSelect(null)}
                     >
-                      <HugeiconsIcon icon={Home01Icon} strokeWidth={2} />
+                      <HugeiconsIcon icon={Home01Icon} />
                     </Button>
                   }
                 />

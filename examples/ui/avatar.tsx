@@ -22,16 +22,16 @@ export function AvatarExample() {
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        <Avatar size="lg">
+        <Avatar size="default">
           <AvatarFallback>JD</AvatarFallback>
           <AvatarBadge className="bg-emerald-500">
             <span className="sr-only">Online</span>
           </AvatarBadge>
         </Avatar>
-        <Avatar size="lg">
-          <AvatarImage src="https://github.com/vercel.png" alt="@vercel" />
+        <Avatar size="default">
+          <AvatarImage src="https://avatar.aiellie.dev/verified" alt="@vercel" />
           <AvatarFallback>VC</AvatarFallback>
-          <AvatarBadge>
+          <AvatarBadge className="bg-blue-500 text-blue-50 border-blue-200">
             <HugeiconsIcon icon={Tick02Icon} strokeWidth={2} />
             <span className="sr-only">Verified</span>
           </AvatarBadge>
