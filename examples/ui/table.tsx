@@ -12,18 +12,25 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+/**
+ * Same colour recipe as the badge statuses: `border-{c}-500/20 bg-{c}-50
+ * text-{c}-700` with dark stepping the border/text down a stop and the
+ * surface to 950. Written out in full — Tailwind only picks up literals.
+ */
+const statusStyles = {
+  Paid: "border-emerald-500/20 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-950 dark:text-emerald-300",
+  Pending:
+    "border-amber-500/20 bg-amber-50 text-amber-700 dark:border-amber-400/20 dark:bg-amber-950 dark:text-amber-300",
+  Overdue:
+    "border-red-500/20 bg-red-50 text-red-700 dark:border-red-400/20 dark:bg-red-950 dark:text-red-300",
+} as const
+
 const invoices = [
   { id: "INV-001", status: "Paid", amount: "$250.00" },
   { id: "INV-002", status: "Pending", amount: "$150.00" },
   { id: "INV-003", status: "Paid", amount: "$350.00" },
   { id: "INV-004", status: "Overdue", amount: "$450.00" },
 ] as const
-
-function statusVariant(status: (typeof invoices)[number]["status"]) {
-  if (status === "Paid") return "secondary"
-  if (status === "Overdue") return "destructive"
-  return "outline"
-}
 
 export function TableExample() {
   return (
@@ -41,7 +48,7 @@ export function TableExample() {
           <TableRow key={invoice.id}>
             <TableCell className="font-medium">{invoice.id}</TableCell>
             <TableCell>
-              <Badge variant={statusVariant(invoice.status)}>
+              <Badge className={statusStyles[invoice.status]}>
                 {invoice.status}
               </Badge>
             </TableCell>

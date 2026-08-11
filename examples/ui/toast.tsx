@@ -1,5 +1,8 @@
 "use client"
 
+import { Archive02Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
+
 import { Button } from '@/components/ui/button'
 import { Toaster, toast } from '@/components/ui/toast'
 
@@ -61,13 +64,25 @@ export function ToastExample() {
         variant="outline"
         onClick={() =>
           toast.add({
-            title: "Conversation archived",
+            // Untyped toasts render no icon slot, but title takes a ReactNode,
+            // so the icon rides inline — gap-3 matches the slot's spacing.
+            description: (
+              <span className="flex items-center gap-3">
+                <HugeiconsIcon
+                  icon={Archive02Icon}
+                  strokeWidth={2}
+                  className="size-4 shrink-0"
+                  aria-hidden="true"
+                />
+                Conversation archived
+              </span>
+            ),
             actionProps: {
               children: "Undo",
               onClick: () =>
                 toast.add({
                   type: "info",
-                  title: "Conversation restored",
+                  description: "Conversation restored",
                 }),
             },
           })
