@@ -81,13 +81,13 @@ export function DashboardHeader({
           </span>
         ) : null}
       </div>
-      <SearchCommand onSelect={onSelect} />
       {selected ? (
         <div className="flex shrink-0 items-center gap-3">
           <StatusSelect slug={selected.slug} />
-          <span className="hidden font-mono text-xs text-muted-foreground sm:inline">
+        {/*  <span className="hidden font-mono text-xs text-muted-foreground sm:inline">
             {index + 1} / {total}
-          </span>
+          </span> */}
+                <SearchCommand onSelect={onSelect} />
           <ButtonGroup>
             <Button
               variant="outline"

@@ -127,16 +127,13 @@ export function SearchCommand({
     <>
       <Button
         variant="outline"
-        size="sm"
-        className="text-muted-foreground w-fit justify-start gap-4 font-normal"
+        size="icon-sm"
         onClick={() => setOpen(true)}
+        aria-label="Search"
+        className="rounded-full"
       >
         <Icon icon={Icons.search} />
-        <span>Search…</span>
-        <KbdGroup className="ml-auto">
-          <Kbd>⌘</Kbd>
-          <Kbd>K</Kbd>
-        </KbdGroup>
+       
       </Button>
       <CommandDialog
         open={open}

@@ -98,7 +98,7 @@ function DeliveryTimeDrawer() {
       showSwipeHandle={isMobile}
       swipeDirection={isMobile ? "down" : "right"}
     >
-      <DrawerTrigger render={<Button variant="secondary" size="sm" className="rounded-full">Open Drawer</Button>} />
+      <DrawerTrigger render={<Button variant="outline" size="sm" className="rounded-full">Open Drawer</Button>} />
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Pick a delivery time</DrawerTitle>
@@ -141,21 +141,6 @@ function DeliveryTimeDrawer() {
   )
 }
 
-function NestedDrawerPreview({ src }: { src: string }) {
-  return (
-    <div className="relative overflow-hidden rounded-lg bg-muted group-data-[swipe-axis=x]/drawer-popup:size-full group-data-[swipe-axis=y]/drawer-popup:aspect-[3/4] group-data-[swipe-axis=y]/drawer-popup:w-full">
-      <div
-        className="absolute inset-0 hidden bg-cover bg-center group-data-[swipe-axis=y]/drawer-popup:block"
-        style={{ backgroundImage: `url(${src}?ratio=3:4)` }}
-      />
-      <div
-        className="absolute inset-0 hidden bg-cover bg-center group-data-[swipe-axis=x]/drawer-popup:block"
-        style={{ backgroundImage: `url(${src}?ratio=4:3)` }}
-      />
-    </div>
-  )
-}
-
 function NestedDrawer() {
   const isMobile = useIsMobile()
 
@@ -163,7 +148,7 @@ function NestedDrawer() {
 
   return (
     <Drawer showSwipeHandle={isMobile} swipeDirection={swipeDirection}>
-      <DrawerTrigger render={<Button variant="outline">Nested Drawer</Button>} />
+      <DrawerTrigger render={<Button variant="outline" size="sm" className="rounded-full">Nested Drawer</Button>} />
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Drawer</DrawerTitle>
@@ -172,7 +157,7 @@ function NestedDrawer() {
           </DrawerDescription>
         </DrawerHeader>
         <div className="flex-1 p-4">
-          <NestedDrawerPreview src="https://avatar.aiellie.dev/drawer.svg" />
+          <div className="bg-muted group-data-[swipe-axis=x]/drawer-popup:size-full group-data-[swipe-axis=y]/drawer-popup:aspect-video group-data-[swipe-axis=y]/drawer-popup:w-full" />
         </div>
         <DrawerFooter>
           <Drawer showSwipeHandle={isMobile} swipeDirection={swipeDirection}>
@@ -185,7 +170,7 @@ function NestedDrawer() {
                 </DrawerDescription>
               </DrawerHeader>
               <div className="flex-1 p-4">
-                <NestedDrawerPreview src="https://avatar.aiellie.dev/drawer2.svg" />
+                <div className="bg-muted group-data-[swipe-axis=x]/drawer-popup:size-full group-data-[swipe-axis=y]/drawer-popup:aspect-video group-data-[swipe-axis=y]/drawer-popup:w-full" />
               </div>
               <DrawerFooter>
                 <Drawer
@@ -201,7 +186,7 @@ function NestedDrawer() {
                       </DrawerDescription>
                     </DrawerHeader>
                     <div className="flex-1 p-4">
-                      <NestedDrawerPreview src="https://avatar.aiellie.dev/drawer3.svg" />
+                      <div className="bg-muted group-data-[swipe-axis=x]/drawer-popup:size-full group-data-[swipe-axis=y]/drawer-popup:aspect-video group-data-[swipe-axis=y]/drawer-popup:w-full" />
                     </div>
                     <DrawerFooter>
                       <Drawer
@@ -217,7 +202,7 @@ function NestedDrawer() {
                             </DrawerDescription>
                           </DrawerHeader>
                           <div className="flex-1 p-4">
-                            <NestedDrawerPreview src="https://avatar.aiellie.dev/drawer4.svg" />
+                            <div className="bg-muted group-data-[swipe-axis=x]/drawer-popup:size-full group-data-[swipe-axis=y]/drawer-popup:aspect-video group-data-[swipe-axis=y]/drawer-popup:w-full" />
                           </div>
                           <DrawerFooter>
                             <DrawerClose render={<Button variant="outline">Close</Button>} />
@@ -245,7 +230,7 @@ export function ResponsiveDrawer() {
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger render={<Button variant="outline">Responsive Drawer</Button>} />
+        <DialogTrigger render={<Button variant="outline" size="sm" className="rounded-full">Responsive Drawer</Button>} />
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Edit profile</DialogTitle>
@@ -261,7 +246,7 @@ export function ResponsiveDrawer() {
   }
   return (
     <Drawer showSwipeHandle open={open} onOpenChange={setOpen}>
-      <DrawerTrigger render={<Button variant="outline">Responsive Drawer</Button>} />
+      <DrawerTrigger render={<Button variant="outline" size="sm" className="rounded-full">Responsive Drawer</Button>} />
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>Edit profile</DrawerTitle>
