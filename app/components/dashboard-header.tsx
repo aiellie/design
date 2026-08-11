@@ -89,7 +89,7 @@ export function DashboardHeader({
           <ButtonGroup>
             <Button
               variant="outline"
-              size="icon"
+              size="icon-sm"
               disabled={!previous}
               onClick={() => previous && onSelect(previous.slug)}
               aria-label="Previous example"
@@ -98,7 +98,7 @@ export function DashboardHeader({
             </Button>
             <Button
               variant="outline"
-              size="icon"
+              size="icon-sm"
               disabled={!next}
               onClick={() => next && onSelect(next.slug)}
               aria-label="Next example"
