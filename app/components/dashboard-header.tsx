@@ -66,7 +66,7 @@ export function DashboardHeader({
                 <BreadcrumbSeparator className="hidden sm:inline-flex" />
                 <BreadcrumbItem>
                   <BreadcrumbPage className="flex items-center gap-2 whitespace-nowrap">
-                    <Icon icon={selected.icon} size={14} strokeWidth={2}/>
+                    <Icon icon={selected.icon} className="size-4" />
                     {selected.name}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
@@ -94,7 +94,7 @@ export function DashboardHeader({
               onClick={() => previous && onSelect(previous.slug)}
               aria-label="Previous example"
             >
-              <Icon icon={Icons.arrowLeft} />
+              <Icon icon={Icons.arrowLeft} className="text-muted-foreground" />
             </Button>
             <Button
               variant="outline"
@@ -103,7 +103,7 @@ export function DashboardHeader({
               onClick={() => next && onSelect(next.slug)}
               aria-label="Next example"
             >
-              <Icon icon={Icons.arrowRight} />
+              <Icon icon={Icons.arrowRight} className="text-muted-foreground" />
             </Button>
           </ButtonGroup>
         </div>

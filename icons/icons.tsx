@@ -84,6 +84,7 @@ import {
 
 import type { IconCategoryId } from "./icon-categories"
 import type * as React from "react"
+import { cn } from "@/lib/utils"
 
 /**
  * Central icon definitions for the app. Add new icons here so every usage
@@ -280,6 +281,6 @@ export const iconRegistry: RegisteredIcon[] = [
 type IconProps = React.ComponentProps<typeof HugeiconsIcon>
 
 /** HugeiconsIcon with the app-wide default stroke width. */
-export function Icon({ strokeWidth = 2, ...props }: IconProps) {
-  return <HugeiconsIcon strokeWidth={strokeWidth} {...props} />
+export function Icon({ strokeWidth, className, ...props }: IconProps) {
+  return <HugeiconsIcon strokeWidth={strokeWidth} className={cn("text-muted-foreground hover:text-foreground transition-colors", className)} {...props} />
 }

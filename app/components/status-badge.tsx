@@ -12,12 +12,15 @@ export function StatusDot({
   return (
     <span
       className={cn(
-        "size-1.5 rounded-full",
-        statusMeta[status].color,
+        "relative flex size-1.5 shrink-0 items-center justify-center",
+        statusMeta[status].textColor,
         className
       )}
       aria-hidden
-    />
+    >
+      <span className="absolute inline-flex size-full rounded-full border border-current/30" />
+      <span className="relative inline-flex size-1 rounded-full bg-current" />
+    </span>
   )
 }
 
