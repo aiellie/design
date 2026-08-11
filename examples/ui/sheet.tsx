@@ -37,7 +37,7 @@ export function SheetExample() {
           if (!nextOpen) setDraft(profile)
         }}
       >
-        <SheetTrigger render={<Button variant="outline">Edit profile</Button>} />
+        <SheetTrigger render={<Button variant="outline" size="sm">Edit profile</Button>} />
         <SheetContent side="right">
           <SheetHeader>
             <SheetTitle>Edit profile</SheetTitle>

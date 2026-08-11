@@ -38,15 +38,14 @@ export function AlertDialogExample() {
         </Tooltip>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogMedia className="bg-destructive/5text-destructive">
+            <AlertDialogMedia className="bg-destructive/5 text-destructive">
               <HugeiconsIcon icon={Trash} strokeWidth={2} />
             </AlertDialogMedia>
             <AlertDialogTitle>
-              Delete &ldquo;AIEllie Storefront&rdquo;?
+            Delete chat?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This permanently removes the project, its deployments, and all
-              usage data. This action cannot be undone.
+            This will permanently delete this chat conversation. 
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
