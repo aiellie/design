@@ -1,60 +1,84 @@
-"use client"
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { HugeiconsIcon } from "@hugeicons/react"
 import {
-  Analytics01Icon,
-  Notification01Icon,
-  Settings01Icon,
-} from "@hugeicons/core-free-icons"
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 
 export function TabsExample() {
   return (
-    <div className="flex w-full flex-col gap-6">
-      <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="w-full">
-          <TabsTrigger value="overview">
-            <HugeiconsIcon icon={Analytics01Icon} strokeWidth={2} />
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="alerts">
-            <HugeiconsIcon icon={Notification01Icon} strokeWidth={2} />
-            Alerts
-          </TabsTrigger>
-          <TabsTrigger value="settings">
-            <HugeiconsIcon icon={Settings01Icon} strokeWidth={2} />
-            Settings
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview" className="text-muted-foreground">
-          Traffic is up 12% this week, with 4,820 unique visitors across all
-          projects.
-        </TabsContent>
-        <TabsContent value="alerts" className="text-muted-foreground">
-          2 unread alerts: a deploy finished on production and a domain
-          renewal is due next month.
-        </TabsContent>
-        <TabsContent value="settings" className="text-muted-foreground">
-          Manage workspace name, members, and notification preferences.
-        </TabsContent>
-      </Tabs>
-      <Tabs defaultValue="preview" className="w-full">
-        <TabsList variant="line">
-          <TabsTrigger value="preview">Preview</TabsTrigger>
-          <TabsTrigger value="code">Code</TabsTrigger>
-          <TabsTrigger value="export" disabled>
-            Export
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="preview" className="text-muted-foreground">
-          The line variant keeps tabs flush with the surrounding layout.
-        </TabsContent>
-        <TabsContent value="code" className="text-muted-foreground">
-          <code className="font-mono text-xs">
-            &lt;TabsList variant=&quot;line&quot;&gt;
-          </code>
-        </TabsContent>
-      </Tabs>
+    <div className="flex w-full items-center justify-center">
+    <Tabs defaultValue="overview" className="w-[400px]">
+      <TabsList>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        <TabsTrigger value="reports">Reports</TabsTrigger>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">
+        <Card>
+          <CardHeader>
+            <CardTitle>Overview</CardTitle>
+            <CardDescription>
+              View your key metrics and recent project activity. Track progress
+              across all your active projects.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            You have 12 active projects and 3 pending tasks.
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="analytics">
+        <Card>
+          <CardHeader>
+            <CardTitle>Analytics</CardTitle>
+            <CardDescription>
+              Track performance and user engagement metrics. Monitor trends and
+              identify growth opportunities.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            Page views are up 25% compared to last month.
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="reports">
+        <Card>
+          <CardHeader>
+            <CardTitle>Reports</CardTitle>
+            <CardDescription>
+              Generate and download your detailed reports. Export data in
+              multiple formats for analysis.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            You have 5 reports ready and available to export.
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="settings">
+        <Card>
+          <CardHeader>
+            <CardTitle>Settings</CardTitle>
+            <CardDescription>
+              Manage your account preferences and options. Customize your
+              experience to fit your needs.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            Configure notifications, security, and themes.
+          </CardContent>
+        </Card>
+      </TabsContent>
+    </Tabs>
     </div>
   )
 }
