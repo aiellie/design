@@ -89,6 +89,8 @@ export interface FlatExample extends ComponentExample {
   categoryTitle: string
   /** Repo-relative path of the example's source file. */
   file: string
+  /** Class name for the example container. */
+  className?: string
 }
 
 /** Repo-relative source path for an example slug. */
@@ -124,7 +126,7 @@ export const exampleCategories: ExampleCategory[] = [
     ],
   },
   {
-    title: "Buttons & Actions",
+    title: "Actions",
     examples: [
       {
         slug: "button",
@@ -360,7 +362,7 @@ export const exampleCategories: ExampleCategory[] = [
     ],
   },
   {
-    title: "Feedback & Status",
+    title: "Status",
     examples: [
       {
         slug: "alert",
@@ -484,7 +486,7 @@ export const exampleCategories: ExampleCategory[] = [
     ],
   },
   {
-    title: "Chat & AI",
+    title: "Chat",
     examples: [
       {
         slug: "message",
