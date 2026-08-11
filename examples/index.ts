@@ -109,7 +109,7 @@ export const exampleCategories: ExampleCategory[] = [
         slug: "colors",
         name: "Colors",
         component: ColorsExample,
-        icon: Icons.paintBoard,
+        icon: Icons.colors,
       },
       {
         slug: "typeset",
