@@ -40,7 +40,7 @@
   "sidebar": "planned",
   "alert": "shipped",
   "toast": "shipped",
-  "progress": "planned",
+  "progress": "shipped",
   "skeleton": "shipped",
   "spinner": "shipped",
   "empty": "shipped",

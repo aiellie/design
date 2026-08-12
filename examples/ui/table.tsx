@@ -13,6 +13,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -79,50 +80,66 @@ const paymentMethodIcons = {
 type PaymentStatus = keyof typeof statusStyles
 type PaymentMethod = keyof typeof paymentMethodIcons
 
-const invoices: {
-  invoice: string
+function customerAvatarUrl(name: string, icon: string) {
+  return `https://avatar.aiellie.dev/${encodeURIComponent(name)}?icon=${encodeURIComponent(icon)}`
+}
+
+function customerInitials(name: string) {
+  return name.slice(0, 2).toUpperCase()
+}
+
+const customers: {
+  name: string
+  icon: string
   paymentStatus: PaymentStatus
   totalAmount: string
   paymentMethod: PaymentMethod
 }[] = [
   {
-    invoice: "INV001",
+    name: "perkynaner",
+    icon: "banana",
     paymentStatus: "Paid",
     totalAmount: "$250.00",
     paymentMethod: "Credit Card",
   },
   {
-    invoice: "INV002",
+    name: "sophie",
+    icon: "coffee-01",
     paymentStatus: "Pending",
     totalAmount: "$150.00",
     paymentMethod: "PayPal",
   },
   {
-    invoice: "INV003",
+    name: "milo",
+    icon: "cat",
     paymentStatus: "Unpaid",
     totalAmount: "$350.00",
     paymentMethod: "Bank Transfer",
   },
   {
-    invoice: "INV004",
+    name: "nova",
+    icon: "sparkles",
     paymentStatus: "Paid",
     totalAmount: "$450.00",
     paymentMethod: "Credit Card",
   },
   {
-    invoice: "INV005",
+    name: "reef",
+    icon: "fish",
     paymentStatus: "Paid",
     totalAmount: "$550.00",
     paymentMethod: "PayPal",
   },
   {
-    invoice: "INV006",
+    name: "cinder",
+    icon: "fire",
     paymentStatus: "Pending",
     totalAmount: "$200.00",
     paymentMethod: "Bank Transfer",
   },
   {
-    invoice: "INV007",
+    name: "orbit",
+    icon: "planet",
     paymentStatus: "Unpaid",
     totalAmount: "$300.00",
     paymentMethod: "Credit Card",
@@ -132,10 +149,10 @@ const invoices: {
 export function TableExample() {
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>A list of your recent customers.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
+          <TableHead>Customer</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Method</TableHead>
           <TableHead className="text-right">Amount</TableHead>
@@ -145,16 +162,29 @@ export function TableExample() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => {
-          const MethodIcon = paymentMethodIcons[invoice.paymentMethod]
+        {customers.map((customer) => {
+          const MethodIcon = paymentMethodIcons[customer.paymentMethod]
 
           return (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-normal">{invoice.invoice}</TableCell>
+            <TableRow key={customer.name}>
               <TableCell>
-                <Badge className={statusStyles[invoice.paymentStatus]}>
-                  <BadgeDot pulse={invoice.paymentStatus !== "Unpaid"} />
-                  {invoice.paymentStatus}
+                <span className="inline-flex items-center gap-2.5">
+                  <Avatar size="sm">
+                    <AvatarImage
+                      src={customerAvatarUrl(customer.name, customer.icon)}
+                      alt={customer.name}
+                    />
+                    <AvatarFallback>
+                      {customerInitials(customer.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="font-normal">{customer.name}</span>
+                </span>
+              </TableCell>
+              <TableCell>
+                <Badge className={statusStyles[customer.paymentStatus]}>
+                  <BadgeDot pulse={customer.paymentStatus !== "Unpaid"} />
+                  {customer.paymentStatus}
                 </Badge>
               </TableCell>
               <TableCell>
@@ -164,10 +194,10 @@ export function TableExample() {
                     strokeWidth={2}
                     className="size-3.5 text-muted-foreground"
                   />
-                  {invoice.paymentMethod}
+                  {customer.paymentMethod}
                 </span>
               </TableCell>
-              <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+              <TableCell className="text-right">{customer.totalAmount}</TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger
@@ -175,7 +205,7 @@ export function TableExample() {
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        aria-label={`Actions for ${invoice.invoice}`}
+                        aria-label={`Actions for ${customer.name}`}
                       >
                         <HugeiconsIcon
                           icon={MoreHorizontalIcon}
@@ -240,7 +270,7 @@ export function TableExample() {
       <TableFooter>
         <TableRow>
           <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
+          <TableCell className="text-right">$2,250.00</TableCell>
           <TableCell />
         </TableRow>
       </TableFooter>
