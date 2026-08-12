@@ -136,10 +136,10 @@ export function ComboboxExample() {
 
   return (
     <>
-      <Combobox items={groups} value={capability} onValueChange={setCapability}>
-        <ComboboxTrigger render={<Button variant="outline" className="w-64 justify-between font-normal"><span className="flex items-center gap-2">{capability && (<HugeiconsIcon icon={capability.icon} strokeWidth={2} className="text-muted-foreground" />)}{capability ? capability.label : "Select capability"}</span></Button>} />
+      <Combobox  items={groups} value={capability} onValueChange={setCapability}>
+        <ComboboxTrigger render={<Button variant="outline" className="w-64 justify-between font-normal"><span className="flex items-center gap-2">{capability && (<HugeiconsIcon icon={capability.icon} className="text-muted-foreground" />)}{capability ? capability.label : "Select capability"}</span></Button>} />
         <ComboboxContent>
-          <ComboboxInput className="border-0! bg-transparent! shadow-none ring-0! focus-within:border-0! focus-within:ring-0! has-[[data-slot=input-group-control]:focus-visible]:border-0! has-[[data-slot=input-group-control]:focus-visible]:ring-0!" showTrigger={false} placeholder="Search">
+          <ComboboxInput showClear={true} showTrigger={false} placeholder="Search">
             <InputGroupAddon>
               <Icon icon={Icons.search} strokeWidth={2} className="size-3.5" />
             </InputGroupAddon>
@@ -154,8 +154,6 @@ export function ComboboxExample() {
                     <ComboboxItem key={item.value} value={item}>
                       <HugeiconsIcon
                         icon={item.icon}
-                        strokeWidth={2}
-                        className="text-muted-foreground"
                       />
                       {item.label}
                     </ComboboxItem>

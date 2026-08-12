@@ -1,6 +1,7 @@
 /*
- * Glass + destructive overrides for dropdown / context / menubar menus.
- * Keeps components/ui/{dropdown,context}-menu.tsx and menubar.tsx closer to stock shadcn.
+ * Glass + destructive overrides for dropdown / context / menubar / select / combobox.
+ * Keeps components/ui/{dropdown,context}-menu.tsx, menubar.tsx, select.tsx, and
+ * combobox.tsx closer to stock shadcn.
  *
  * Glass / focus: unlayered !important beats normal (non-!) utilities
  * like focus:bg-accent on items.
@@ -18,7 +19,8 @@
  [data-slot="context-menu-sub-content"],
  [data-slot="menubar-content"],
  [data-slot="menubar-sub-content"],
- [data-slot="select-content"] {
+ [data-slot="select-content"],
+ [data-slot="combobox-content"] {
    @apply relative animate-none! bg-popover/70;
  
    &::before {
@@ -89,13 +91,24 @@
      @apply size-3.5! text-muted-foreground!;
    }
  
-   [data-slot="command-input-wrapper"] {
+   [data-slot="command-input-wrapper"]
+     {
      @apply border-b border-border! pb-1!;
    }
  
    [data-slot="command-input-wrapper"] [data-slot="input-group"] {
      @apply border-none! bg-background!;
    }
+ }
+ 
+ [data-slot="combobox-content"] > [data-slot="input-group"] {
+   @apply border-b border-border! pb-1!;
+   @apply border-x-0! border-t-0! rounded-none! bg-background! shadow-none! ring-0!;
+ }
+
+ [data-slot="combobox-content"] > [data-slot="input-group"]:focus-within,
+ [data-slot="combobox-content"] > [data-slot="input-group"]:has([data-slot="input-group-control"]:focus-visible) {
+   @apply border-border! ring-0!;
  }
  
  /* cmdk sets data-selected / aria-selected as "true"|"false".
