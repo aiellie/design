@@ -12,6 +12,8 @@ const colorGroups: { title: string; tokens: string[] }[] = [
       "--secondary-foreground",
       "--accent",
       "--accent-foreground",
+      "--gradient-from",
+      "--gradient-to",
     ],
   },
   {
@@ -22,8 +24,17 @@ const colorGroups: { title: string; tokens: string[] }[] = [
       "--border",
       "--input",
       "--ring",
+      "--overlay",
+    ],
+  },
+  {
+    title: "Text",
+    tokens: [
+      "--link",
       "--selection",
       "--selection-foreground",
+      "--highlight",
+      "--highlight-foreground",
     ],
   },
   {
@@ -84,6 +95,20 @@ function Swatch({ token }: { token: string }) {
   )
 }
 
+function GradientSwatch() {
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div className="relative aspect-square w-full rounded-lg bg-brand-gradient after:absolute after:inset-0 after:rounded-lg after:border after:border-border after:mix-blend-darken dark:after:mix-blend-lighten" />
+      <div
+        title="brand-gradient"
+        className="w-full truncate text-center font-mono text-[0.60rem] text-muted-foreground"
+      >
+        brand-gradient
+      </div>
+    </div>
+  )
+}
+
 export function ColorsExample() {
   return (
     <div className="flex flex-col gap-5">
@@ -96,6 +121,7 @@ export function ColorsExample() {
             {group.tokens.map((token) => (
               <Swatch key={token} token={token} />
             ))}
+            {group.title === "Brand" && <GradientSwatch />}
           </div>
         </div>
       ))}

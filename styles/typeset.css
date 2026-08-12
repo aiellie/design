@@ -240,7 +240,7 @@
     }
 
     /* Keyboard keys. */
-    &:where(kbd) {
+    &:where(.kbd) {
       font-family: inherit;
       font-size: 0.85em;
       font-weight: var(--font-weight-medium);
@@ -283,8 +283,9 @@
 
     /* Code blocks. */
     &:where(pre) {
+      border: 1px solid var(--typeset-rule);
       background-color: var(
-        --color-muted,
+        --color-background,
         color-mix(in oklab, currentColor 8%, transparent)
       );
       font-family: var(--typeset-font-mono);
@@ -305,6 +306,7 @@
       padding: 0;
       border-radius: 0;
     }
+
 
     /* Blockquote. */
     &:where(blockquote) {
@@ -446,6 +448,40 @@
         border: 1px solid;
       }
     }
+  }
+
+  /* Shiki-highlighted code blocks (see lib/highlight-code.ts). Shiki emits
+     both themes' colors inline via --shiki-light/--shiki-dark custom
+     properties; flip to the dark set under our class-based dark mode. The
+     highlighter's own <pre> takes over from the plain-markdown styles
+     above, so it gets the same border/radius/flow treatment here. */
+  .typeset .typeset-shiki pre {
+    border: 1px solid var(--typeset-rule);
+    border-radius: var(--radius, 0.5em);
+    margin-block-start: calc(var(--typeset-flow) / 0.875);
+    margin-block-end: 0;
+  }
+  .dark .typeset .typeset-shiki pre,
+  .dark .typeset .typeset-shiki pre span {
+    color: var(--shiki-dark) !important;
+  }
+
+  /* Line numbers, when the highlighter marks lines with data-line. */
+  .typeset .typeset-shiki code[data-line-numbers] {
+    counter-reset: line;
+    display: grid;
+  }
+  .typeset .typeset-shiki code[data-line-numbers] [data-line] {
+    counter-increment: line;
+  }
+  .typeset .typeset-shiki code[data-line-numbers] [data-line]::before {
+    content: counter(line);
+    display: inline-block;
+    width: 1.5em;
+    margin-inline-end: 1em;
+    text-align: right;
+    color: var(--typeset-muted);
+    user-select: none;
   }
 
   /* First child adds no space above. Last so it wins ties. */

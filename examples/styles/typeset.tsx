@@ -1,4 +1,31 @@
+"use client"
+
+import * as React from "react"
+
+import { Kbd } from "@/components/ui/kbd"
+import { getHighlightedCode } from "@/lib/highlight-code-action"
+
+const usageCode = `<div className="typeset typeset-docs max-w-[33em]">
+  {content}
+</div>`
+
 export function TypesetExample() {
+  const [html, setHtml] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    let cancelled = false
+
+    getHighlightedCode(usageCode, "tsx").then((result) => {
+      if (!cancelled) {
+        setHtml(result)
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   return (
     <div className="typeset typeset-docs max-w-[33em]">
       <h1>Writing component docs</h1>
@@ -59,14 +86,16 @@ export function TypesetExample() {
         variables like <code>--typeset-size</code> and{" "}
         <code>--typeset-flow</code>.
       </p>
-      <pre>
-        <code>{`<div className="typeset typeset-docs max-w-[33em]">
-  {content}
-</div>`}</code>
-      </pre>
+      {html ? (
+        <div className="typeset-shiki" dangerouslySetInnerHTML={{ __html: html }} />
+      ) : (
+        <pre>
+          <code>{usageCode}</code>
+        </pre>
+      )}
       <hr />
       <p>
-        Press <kbd>⌘</kbd> <kbd>K</kbd> to search the docs. Embedded
+        Press <Kbd >⌘</Kbd> <Kbd >K</Kbd> to search the docs. Embedded
         components can opt out with the <code>not-typeset</code> class.
       </p>
     </div>
