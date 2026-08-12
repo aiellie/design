@@ -21,7 +21,6 @@
   "radio-group": "shipped",
   "switch": "shipped",
   "slider": "shipped",
-  "calendar": "shipped",
   "dialog": "shipped",
   "alert-dialog": "shipped",
   "sheet": "shipped",
@@ -46,6 +45,7 @@
   "empty": "shipped",
   "table": "shipped",
   "chart": "planned",
+  "calendar": "shipped",
   "avatar": "planned",
   "card": "planned",
   "item": "planned",
@@ -56,11 +56,11 @@
   "collapsible": "planned",
   "carousel": "shipped",
   "resizable": "shipped",
+  "direction": "shipped",
   "message": "planned",
   "message-scroller": "planned",
   "bubble": "planned",
   "attachment": "planned",
   "marker": "planned",
-  "questionnaire": "planned",
-  "direction": "planned"
+  "questionnaire": "planned"
 }

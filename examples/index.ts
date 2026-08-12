@@ -396,7 +396,7 @@ export const exampleCategories: ExampleCategory[] = [
     ],
   },
   {
-    title: "Data Display",
+    title: "Data",
     examples: [
       {
         slug: "table",
@@ -434,6 +434,11 @@ export const exampleCategories: ExampleCategory[] = [
         component: ItemExample,
         icon: Icons.listView,
       },
+    ],
+  },
+  {
+    title: "Display",
+    examples: [
       {
         slug: "separator",
         name: "Separator",
