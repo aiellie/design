@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import { statusMeta, type ExampleStatus } from "@/examples/status"
+import { Icon } from "@/icons/icons"
 import { cn } from "@/lib/utils"
 
 export function StatusDot({
@@ -20,6 +21,32 @@ export function StatusDot({
     >
       <span className="absolute inline-flex size-full rounded-full border border-current/30" />
       <span className="relative inline-flex size-1 rounded-full bg-current" />
+    </span>
+  )
+}
+
+export function StatusIcon({
+  status,
+  className,
+}: {
+  status: ExampleStatus
+  className?: string
+}) {
+  const meta = statusMeta[status]
+  return (
+    <span
+      className={cn(
+        "inline-flex size-6 shrink-0 items-center justify-center rounded-md",
+        meta.iconBg,
+        meta.textColor,
+        className
+      )}
+      aria-hidden
+    >
+      <Icon
+        icon={meta.icon}
+        className="size-3.5 text-current hover:text-current"
+      />
     </span>
   )
 }
