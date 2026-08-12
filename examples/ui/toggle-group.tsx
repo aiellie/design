@@ -79,7 +79,7 @@ function AlignmentGroup() {
 }
 export function ToggleGroupExample() {
   return (
-    <div className="flex w-full max-w-md flex-col items-start gap-6">
+    <div className="mx-auto flex w-full max-w-md flex-col items-start gap-6">
       <AlignmentGroup />
     </div>
   )

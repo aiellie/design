@@ -88,7 +88,7 @@ function CopyIconButton() {
 
 export function ButtonExample() {
   return (
-    <div className="flex w-full max-w-lg flex-col items-start gap-5">
+    <div className="mx-auto flex w-full max-w-lg flex-col items-start gap-5">
       <div className="flex flex-wrap items-center gap-2">
         <Button size="sm" className="rounded-full">
           Default

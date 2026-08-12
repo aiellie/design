@@ -10,8 +10,13 @@ export function AspectRatioExample() {
     <div className="flex w-full flex-col gap-3">
       <AspectRatio
         ratio={16 / 9}
-        className="w-full overflow-hidden rounded-lg border bg-gradient-to-br from-muted via-muted/60 to-accent"
+        className="w-full overflow-hidden rounded-lg border bg-muted"
       >
+        <img
+          src="https://avatar.aiellie.dev/aspectratio?ratio=16:9"
+          alt="16:9 aspect ratio"
+          className="size-full object-cover"
+        />
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground">
           <HugeiconsIcon
             icon={Image01Icon}
@@ -24,24 +29,6 @@ export function AspectRatioExample() {
           Cover
         </Badge>
       </AspectRatio>
-      <div className="grid grid-cols-2 gap-3">
-        <AspectRatio
-          ratio={1}
-          className="overflow-hidden rounded-lg border bg-muted"
-        >
-          <div className="absolute inset-0 flex items-center justify-center font-mono text-xs text-muted-foreground">
-            1 : 1
-          </div>
-        </AspectRatio>
-        <AspectRatio
-          ratio={4 / 3}
-          className="overflow-hidden rounded-lg border bg-muted"
-        >
-          <div className="absolute inset-0 flex items-center justify-center font-mono text-xs text-muted-foreground">
-            4 : 3
-          </div>
-        </AspectRatio>
-      </div>
     </div>
   )
 }

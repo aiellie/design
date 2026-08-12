@@ -76,7 +76,7 @@ export function ButtonGroupExample() {
   const [currency, setCurrency] = React.useState<string | null>("$")
 
   return (
-    <div className="flex w-full max-w-lg flex-col items-start gap-6">
+    <div className="mx-auto flex w-full max-w-lg flex-col items-start gap-6">
       <ButtonGroup>
         <Button variant="outline" size="icon" aria-label="Previous month">
           <HugeiconsIcon icon={ArrowLeft02Icon} strokeWidth={2} />
@@ -108,7 +108,7 @@ export function ButtonGroupExample() {
           aria-label="Zoom in"
           onClick={() => setZoom((z) => Math.min(200, z + 25))}
         >
-          <HugeiconsIcon icon={PlusSignIcon} />
+          <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} />
         </Button>
       </ButtonGroup>
 
@@ -128,7 +128,7 @@ export function ButtonGroupExample() {
           `rounded-lg` below it, which is what turns the set into pills. */}
       <ButtonGroup className="w-full max-w-sm [--radius:9999rem]">
         <ButtonGroup>
-          <Button variant="outline" size="icon" aria-label="Attach">
+          <Button variant="outline" size="icon-sm" aria-label="Attach">
             <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} />
           </Button>
         </ButtonGroup>
@@ -148,7 +148,7 @@ export function ButtonGroupExample() {
                       aria-label="Voice mode"
                       aria-pressed={voice}
                       onClick={() => setVoice(!voice)}
-                      className="aria-pressed:bg-primary/10 aria-pressed:text-primary"
+                      className="aria-pressed:bg-destructive/5 aria-pressed:text-destructive"
                     >
                       <HugeiconsIcon icon={AudioWave01Icon} strokeWidth={2} />
                     </InputGroupButton>
@@ -278,14 +278,14 @@ export function ButtonGroupExample() {
           <Input placeholder="10.00" pattern="[0-9]*" aria-label="Amount" />
         </ButtonGroup>
         <ButtonGroup>
-          <Button variant="outline" size="icon" aria-label="Send">
+          <Button variant="outline" size="icon-sm" aria-label="Send">
             <HugeiconsIcon icon={ArrowRight02Icon} strokeWidth={2} />
           </Button>
         </ButtonGroup>
       </ButtonGroup>
 
       <ButtonGroup>
-        <Button variant="outline">
+        <Button variant="outline" size="sm">
           <HugeiconsIcon
             icon={BotIcon}
             data-icon="inline-start"
@@ -296,7 +296,7 @@ export function ButtonGroupExample() {
         <Popover>
           <PopoverTrigger
             render={
-              <Button variant="outline" size="icon" aria-label="Start a task">
+              <Button variant="outline" size="icon-sm" aria-label="Start a task">
                 <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} />
               </Button>
             }

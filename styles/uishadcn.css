@@ -218,6 +218,7 @@
 
  [data-slot="button-group-text"] {
   @apply font-normal!;
+  @apply bg-background!;
 }
  
  /*{[data-slot="label"] {

@@ -170,7 +170,7 @@ const achievements: Achievement[] = [
 
 export function BadgeExample() {
   return (
-    <div className="flex w-full max-w-lg flex-col items-start gap-5">
+    <div className="mx-auto flex w-full max-w-lg flex-col items-start gap-5">
       <div className="flex flex-wrap gap-2">
         <Badge>Default</Badge>
         <Badge className="bg-primary/5 text-primary">Brand</Badge>
@@ -564,7 +564,7 @@ const colors: { name: string; className: string }[] = [
 
 export function BadgeColorsDemo() {
   return (
-    <div className="flex w-full max-w-lg flex-wrap justify-center gap-2">
+    <div className="mx-auto flex w-full max-w-lg flex-wrap justify-center gap-2">
       {colors.map((color) => (
         <Badge key={color.name} className={color.className}>
           {color.name}

@@ -205,7 +205,7 @@ function FormattingToggles() {
 export function ToggleExample() {
 
   return (
-    <div className="flex w-full max-w-md flex-col items-start gap-6">
+    <div className="mx-auto flex w-full max-w-md flex-col items-start gap-6">
       <div className="flex flex-wrap items-center gap-2">
         {reactions.map((reaction) => (
           <ReactionToggle key={reaction.label} reaction={reaction} />
