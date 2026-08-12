@@ -12,8 +12,6 @@ const colorGroups: { title: string; tokens: string[] }[] = [
       "--secondary-foreground",
       "--accent",
       "--accent-foreground",
-      "--gradient-from",
-      "--gradient-to",
     ],
   },
   {
@@ -117,7 +115,7 @@ export function ColorsExample() {
           <div className="text-xs font-medium text-muted-foreground">
             {group.title}
           </div>
-          <div className="grid grid-cols-8 gap-3">
+          <div className="grid grid-cols-9 gap-3">
             {group.tokens.map((token) => (
               <Swatch key={token} token={token} />
             ))}

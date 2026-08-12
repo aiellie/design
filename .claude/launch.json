@@ -4,15 +4,32 @@
     {
       "name": "dev",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"],
+      "runtimeArgs": [
+        "dev"
+      ],
       "port": 3000,
       "autoPort": true
     },
     {
       "name": "prod",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["start", "--port", "3100"],
+      "runtimeArgs": [
+        "start",
+        "--port",
+        "3100"
+      ],
       "port": 3100
+    },
+    {
+      "name": "dev-alt",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "NEXT_DIST_DIR=.next-dev-alt",
+        "pnpm",
+        "dev"
+      ],
+      "port": 3000,
+      "autoPort": true
     }
   ]
 }
