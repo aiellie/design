@@ -2,6 +2,7 @@
 
 import * as React from "react"
 
+import { CountriesSelect } from "@/components/countries-select"
 import {
   Field,
   FieldContent,
@@ -150,6 +151,11 @@ export function SelectExample() {
         <FieldDescription>
           Pick the device you want to register.
         </FieldDescription>
+      </Field>
+      <Field>
+        <FieldLabel htmlFor="select-country">Country</FieldLabel>
+        <CountriesSelect id="select-country" />
+        <FieldDescription>Grouped by continent.</FieldDescription>
       </Field>
     </FieldGroup>
     </div>

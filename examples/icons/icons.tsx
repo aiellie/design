@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { CodeIcons } from "@/icons/code-icons"
+import { Emoji, flagEmojiGroups } from "@/icons/emojis"
 import { iconCategories } from "@/icons/icon-categories"
 import { Icon, iconRegistry } from "@/icons/icons"
 
@@ -142,6 +143,29 @@ export function IconsExample() {
                         render={
                           <Card className="flex size-8 items-center justify-center p-0 shadow-none *:[svg]:size-4 text-muted-foreground hover:text-foreground transition-colors">
                             <IconComponent />
+                          </Card>
+                        }
+                      />
+                      <TooltipContent>{label}</TooltipContent>
+                    </Tooltip>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+          if (category.id === "emojis") {
+            return flagEmojiGroups.map((group) => (
+              <div key={group.label} className="flex flex-col gap-2">
+                <div className="text-xs font-medium text-muted-foreground">
+                  {group.label}
+                </div>
+                <div className="grid grid-cols-8 gap-3">
+                  {group.items.map(({ code, label, flag }) => (
+                    <Tooltip key={code}>
+                      <TooltipTrigger
+                        render={
+                          <Card className="flex size-8 items-center justify-center p-0 shadow-none">
+                            <Emoji emoji={flag} className="text-base" />
                           </Card>
                         }
                       />

@@ -97,7 +97,8 @@ export function PaginationExample() {
       setPage(Math.min(Math.max(target, 1), totalPages))
     }
 
-  const changeRows = (value: string) => {
+  const changeRows = (value: string | null) => {
+    if (value === null) return
     setRows(value)
     // Keep the current page in range when the page count shrinks.
     setPage((current) =>
