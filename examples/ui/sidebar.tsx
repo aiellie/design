@@ -404,7 +404,7 @@ export function SidebarExample() {
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>Log out</DropdownMenuItem>
+                    <DropdownMenuItem variant="destructive">Log out</DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>

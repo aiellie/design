@@ -104,8 +104,8 @@ export function MessageExample() {
               Done. Here&apos;s the PDF with the image added as the cover page.
             </BubbleContent>
           </Bubble>
-          <Attachment>
-            <AttachmentMedia className="text-red-500 bg-red-500/5">
+          <Attachment size="sm">
+            <AttachmentMedia  className="text-red-500 bg-red-500/5">
               <HugeiconsIcon icon={Pdf02Icon} />
             </AttachmentMedia>
             <AttachmentContent>
@@ -116,8 +116,8 @@ export function MessageExample() {
               <AttachmentAction
                 type="button"
                 aria-label="Download"
-                size="icon-sm"
-                variant="secondary"
+                size="icon-xs"
+                variant="ghost"
               >
                 <HugeiconsIcon icon={DownloadIcon} />
               </AttachmentAction>
