@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/sidebar"
 import { allExamples, exampleCategories } from "@/examples"
 import { Icon, Icons } from "@/icons/icons"
+import * as React from "react"
 
 export function DashboardSidebar({
   selectedSlug,
@@ -29,6 +30,30 @@ export function DashboardSidebar({
   onSelect: (slug: string | null) => void
 }) {
   const { statuses } = useStatuses()
+  const activeItemRef = React.useRef<HTMLButtonElement>(null)
+
+  // Initial load is handled by the inline script below, before first paint.
+  // This covers in-app navigation (clicks, arrow keys): center the active
+  // item when it moves outside the visible sidebar, leave it alone otherwise.
+  React.useLayoutEffect(() => {
+    const item = activeItemRef.current
+    if (!item) {
+      return
+    }
+    const container = item.closest('[data-sidebar="content"]')
+    if (container) {
+      const itemRect = item.getBoundingClientRect()
+      const containerRect = container.getBoundingClientRect()
+      if (
+        containerRect.height > 0 &&
+        itemRect.top >= containerRect.top &&
+        itemRect.bottom <= containerRect.bottom
+      ) {
+        return
+      }
+    }
+    item.scrollIntoView({ block: "center" })
+  }, [selectedSlug])
 
   const total = allExamples.length
   const shipped = allExamples.filter(
@@ -82,6 +107,11 @@ export function DashboardSidebar({
                   {category.examples.map((example) => (
                     <SidebarMenuItem key={example.slug}>
                       <SidebarMenuButton
+                        ref={
+                          selectedSlug === example.slug
+                            ? activeItemRef
+                            : undefined
+                        }
                         isActive={selectedSlug === example.slug}
                         onClick={() => onSelect(example.slug)}
                       >
@@ -100,6 +130,13 @@ export function DashboardSidebar({
             </SidebarGroup>
           )
         })}
+        {/* Runs while the server HTML is parsing, before first paint, so a
+            deep link opens with the active item already centered — no jump. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var b=document.querySelector('[data-sidebar="menu-button"][data-active]');if(!b)return;var c=b.closest('[data-sidebar="content"]');if(!c)return;c.scrollTop+=b.getBoundingClientRect().top-c.getBoundingClientRect().top-(c.clientHeight-b.offsetHeight)/2})()`,
+          }}
+        />
       </SidebarContent>
       <SidebarFooter>
         <NavUser
