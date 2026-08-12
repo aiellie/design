@@ -2,28 +2,41 @@ import * as React from "react"
 
 const colorGroups: { title: string; tokens: string[] }[] = [
   {
-    title: "Core",
+    title: "Brand",
     tokens: [
       "--background",
       "--foreground",
-      "--card",
-      "--card-foreground",
-      "--popover",
-      "--popover-foreground",
       "--primary",
       "--primary-foreground",
       "--secondary",
       "--secondary-foreground",
-      "--muted",
-      "--muted-foreground",
       "--accent",
       "--accent-foreground",
-      "--destructive",
+    ],
+  },
+  {
+    title: "Interface",
+    tokens: [
+      "--muted",
+      "--muted-foreground",
       "--border",
       "--input",
       "--ring",
       "--selection",
       "--selection-foreground",
+    ],
+  },
+  {
+    title: "Status",
+    tokens: [
+      "--destructive",
+      "--destructive-foreground",
+      "--success",
+      "--success-foreground",
+      "--warning",
+      "--warning-foreground",
+      "--info",
+      "--info-foreground",
     ],
   },
   {
@@ -43,6 +56,15 @@ const colorGroups: { title: string; tokens: string[] }[] = [
       "--sidebar-ring",
     ],
   },
+    /**{
+    title: "Surfaces",
+    tokens: [
+      "--card",
+      "--card-foreground",
+      "--popover",
+      "--popover-foreground" 
+    ],
+  },  ***/
 ]
 
 function Swatch({ token }: { token: string }) {
@@ -70,7 +92,7 @@ export function ColorsExample() {
           <div className="text-xs font-medium text-muted-foreground">
             {group.title}
           </div>
-          <div className="grid grid-cols-6 gap-3">
+          <div className="grid grid-cols-8 gap-3">
             {group.tokens.map((token) => (
               <Swatch key={token} token={token} />
             ))}

@@ -13,6 +13,7 @@ export const iconCategories = [
   { id: "layout", label: "Layout" },
   { id: "media", label: "Media & Design" },
   { id: "status", label: "Status & Feedback" },
+  { id: "code", label: "Code" },
 ] as const
 
 export type IconCategoryId = (typeof iconCategories)[number]["id"]
