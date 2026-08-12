@@ -109,8 +109,8 @@ export function SelectExample() {
   const [alignItemWithTrigger, setAlignItemWithTrigger] = React.useState(false)
 
   return (
-    <div className="mx-auto flex w-full max-w-lg flex-col items-start gap-5">
-    <FieldGroup>
+    <div className="flex w-full items-center justify-center">
+    <FieldGroup className="w-full max-w-sm">
       <Field orientation="horizontal">
         <FieldContent>
           <FieldLabel htmlFor="align-item">Align Item</FieldLabel>
@@ -125,8 +125,9 @@ export function SelectExample() {
         />
       </Field>
       <Field>
+        <FieldLabel htmlFor="select-device">Device</FieldLabel>
         <Select items={items}>
-          <SelectTrigger>
+          <SelectTrigger id="select-device">
             <SelectValue />
           </SelectTrigger>
           <SelectContent alignItemWithTrigger={alignItemWithTrigger}>
@@ -146,6 +147,9 @@ export function SelectExample() {
             ))}
           </SelectContent>
         </Select>
+        <FieldDescription>
+          Pick the device you want to register.
+        </FieldDescription>
       </Field>
     </FieldGroup>
     </div>

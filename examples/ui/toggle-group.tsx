@@ -32,7 +32,7 @@ function IconItem({
             <HugeiconsIcon
               icon={icon}
               strokeWidth={2}
-              className={springIcon}
+              className={cn(springIcon, "text-muted-foreground")}
             />
           </ToggleGroupItem>
         }

@@ -78,49 +78,89 @@ export function ButtonGroupExample() {
   return (
     <div className="mx-auto flex w-full max-w-lg flex-col items-start gap-6">
       <ButtonGroup>
-        <Button variant="outline" size="icon" aria-label="Previous month">
-          <HugeiconsIcon icon={ArrowLeft02Icon} strokeWidth={2} />
-        </Button>
-        <ButtonGroupText>
-          <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} />
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button variant="outline" size="icon-sm" aria-label="Previous month">
+                <HugeiconsIcon icon={ArrowLeft02Icon} />
+              </Button>
+            }
+          />
+          <TooltipContent>Previous month</TooltipContent>
+        </Tooltip>
+        <ButtonGroupText className="text-muted-foreground">
+          <HugeiconsIcon icon={Calendar03Icon} />
           August 2026
         </ButtonGroupText>
-        <Button variant="outline" size="icon" aria-label="Next month">
-          <HugeiconsIcon icon={ArrowRight02Icon} strokeWidth={2} />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button variant="outline" size="icon-sm" aria-label="Next month">
+                <HugeiconsIcon icon={ArrowRight02Icon} />
+              </Button>
+            }
+          />
+          <TooltipContent>Next month</TooltipContent>
+        </Tooltip>
       </ButtonGroup>
 
       <ButtonGroup>
-        <Button
-          variant="outline"
-          size="icon-sm"
-          aria-label="Zoom out"
-          onClick={() => setZoom((z) => Math.max(25, z - 25))}
-        >
-          <HugeiconsIcon icon={MinusSignIcon} />
-        </Button>
-        <ButtonGroupText className="min-w-16 justify-center tabular-nums text-sm">
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="outline"
+                size="icon-sm"
+                aria-label="Zoom out"
+                onClick={() => setZoom((z) => Math.max(25, z - 25))}
+              >
+                <HugeiconsIcon icon={MinusSignIcon} strokeWidth={2} />
+              </Button>
+            }
+          />
+          <TooltipContent>Zoom out</TooltipContent>
+        </Tooltip>
+        <ButtonGroupText className="min-w-16 justify-center text-muted-foreground tabular-nums">
           {zoom}%
         </ButtonGroupText>
-        <Button
-          variant="outline"
-          size="icon-sm"
-          aria-label="Zoom in"
-          onClick={() => setZoom((z) => Math.min(200, z + 25))}
-        >
-          <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="outline"
+                size="icon-sm"
+                aria-label="Zoom in"
+                onClick={() => setZoom((z) => Math.min(200, z + 25))}
+              >
+                <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} />
+              </Button>
+            }
+          />
+          <TooltipContent>Zoom in</TooltipContent>
+        </Tooltip>
       </ButtonGroup>
 
       {/* A bare Input is a first-class member — it renders the input element
           itself, so the group's `[&>input]:flex-1` reaches it. The width has to
           come from the group, which is otherwise `w-fit`. */}
       <ButtonGroup className="w-full max-w-sm">
-        <ButtonGroupText render={<label htmlFor="find" />}>Find</ButtonGroupText>
+        <ButtonGroupText render={<label htmlFor="find" />} className="text-muted-foreground">Find</ButtonGroupText>
         <Input id="find" placeholder="Search components..." />
-        <Button variant="outline" aria-label="Search">
-          <HugeiconsIcon icon={Search01Icon} strokeWidth={2} />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="outline"
+                size="icon"
+                aria-label="Search"
+                className="text-muted-foreground"
+              >
+                <HugeiconsIcon icon={Search01Icon} />
+              </Button>
+            }
+          />
+          <TooltipContent>Search</TooltipContent>
+        </Tooltip>
       </ButtonGroup>
 
       {/* An InputGroup is a wrapper div, so it can't flex on its own — it gets
@@ -128,9 +168,16 @@ export function ButtonGroupExample() {
           `rounded-lg` below it, which is what turns the set into pills. */}
       <ButtonGroup className="w-full max-w-sm [--radius:9999rem]">
         <ButtonGroup>
-          <Button variant="outline" size="icon-sm" aria-label="Attach">
-            <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button variant="outline" size="icon" aria-label="Attach">
+                  <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} />
+                </Button>
+              }
+            />
+            <TooltipContent>Attach</TooltipContent>
+          </Tooltip>
         </ButtonGroup>
         <ButtonGroup className="flex-1">
           <InputGroup>
@@ -166,16 +213,28 @@ export function ButtonGroupExample() {
       <ButtonGroup>
         <Button variant="outline" size="sm">Follow</Button>
         <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button variant="outline" size="icon-sm" aria-label="More actions">
-                <HugeiconsIcon icon={ArrowDown01Icon} />
-              </Button>
-            }
-          />
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="outline"
+                      size="icon-sm"
+                      aria-label="More actions"
+                      className="text-muted-foreground"
+                    >
+                      <HugeiconsIcon icon={ArrowDown01Icon} />
+                    </Button>
+                  }
+                />
+              }
+            />
+            <TooltipContent>More actions</TooltipContent>
+          </Tooltip>
           <DropdownMenuContent align="end" className="w-44">
             <DropdownMenuGroup>
-              <DropdownMenuItem >
+              <DropdownMenuItem>
                 <HugeiconsIcon
                   icon={VolumeOffIcon}
                   strokeWidth={2}
@@ -183,7 +242,7 @@ export function ButtonGroupExample() {
                 />
                 Mute Conversation
               </DropdownMenuItem>
-              <DropdownMenuItem >
+              <DropdownMenuItem>
                 <HugeiconsIcon
                   icon={CheckmarkCircle02Icon}
                   strokeWidth={2}
@@ -191,7 +250,7 @@ export function ButtonGroupExample() {
                 />
                 Mark as Read
               </DropdownMenuItem>
-              <DropdownMenuItem >
+              <DropdownMenuItem>
                 <HugeiconsIcon
                   icon={Alert02Icon}
                   strokeWidth={2}
@@ -207,7 +266,7 @@ export function ButtonGroupExample() {
                 />
                 Block User
               </DropdownMenuItem>
-              <DropdownMenuItem >
+              <DropdownMenuItem>
                 <HugeiconsIcon
                   icon={Share08Icon}
                   strokeWidth={2}
@@ -215,7 +274,7 @@ export function ButtonGroupExample() {
                 />
                 Share Conversation
               </DropdownMenuItem>
-              <DropdownMenuItem >
+              <DropdownMenuItem>
                 <HugeiconsIcon
                   icon={Copy01Icon}
                   strokeWidth={2}
@@ -226,15 +285,8 @@ export function ButtonGroupExample() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem
-                variant="destructive"
-                
-              >
-                <HugeiconsIcon
-                  icon={Trash}
-                  strokeWidth={2}
-                  className="text-muted-foreground"
-                />
+              <DropdownMenuItem variant="destructive">
+                <HugeiconsIcon icon={Trash} strokeWidth={2} />
                 Delete Conversation
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -263,11 +315,7 @@ export function ButtonGroupExample() {
             >
               <SelectGroup>
                 {currencies.map((item) => (
-                  <SelectItem
-                    
-                    key={item.value}
-                    value={item.value}
-                  >
+                  <SelectItem key={item.value} value={item.value}>
                     {item.value}{" "}
                     <span className="text-muted-foreground">{item.label}</span>
                   </SelectItem>
@@ -278,14 +326,26 @@ export function ButtonGroupExample() {
           <Input placeholder="10.00" pattern="[0-9]*" aria-label="Amount" />
         </ButtonGroup>
         <ButtonGroup>
-          <Button variant="outline" size="icon-sm" aria-label="Send">
-            <HugeiconsIcon icon={ArrowRight02Icon} strokeWidth={2} />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="outline"
+                  size="icon"
+                  aria-label="Send"
+                  className="text-muted-foreground"
+                >
+                  <HugeiconsIcon icon={ArrowRight02Icon} />
+                </Button>
+              }
+            />
+            <TooltipContent>Send</TooltipContent>
+          </Tooltip>
         </ButtonGroup>
       </ButtonGroup>
 
       <ButtonGroup>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className="text-muted-foreground">
           <HugeiconsIcon
             icon={BotIcon}
             data-icon="inline-start"
@@ -294,13 +354,25 @@ export function ButtonGroupExample() {
           Copilot
         </Button>
         <Popover>
-          <PopoverTrigger
-            render={
-              <Button variant="outline" size="icon-sm" aria-label="Start a task">
-                <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} />
-              </Button>
-            }
-          />
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <PopoverTrigger
+                  render={
+                    <Button
+                      variant="outline"
+                      size="icon-sm"
+                      aria-label="Start a task"
+                      className="text-muted-foreground"
+                    >
+                      <HugeiconsIcon icon={ArrowDown01Icon} />
+                    </Button>
+                  }
+                />
+              }
+            />
+            <TooltipContent>Start a task</TooltipContent>
+          </Tooltip>
           <PopoverContent align="end" className="w-80 text-sm">
             <PopoverHeader>
               <PopoverTitle>Start a new task with Copilot</PopoverTitle>

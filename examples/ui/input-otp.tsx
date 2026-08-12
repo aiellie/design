@@ -62,11 +62,15 @@ export function InputOtpExample() {
   }
 
   return (
-      <div className="flex w-full flex-col items-center gap-4">
-        <div className="flex flex-col items-center gap-2">
+    <div className="flex w-full items-center justify-center">
+      <div className="flex w-full max-w-sm flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-1.5 text-center">
           <Label htmlFor="otp-code">Verification code</Label>
           <p className="text-sm text-muted-foreground">
-            Enter the 6-digit code: <span className="font-medium text-foreground tabular-nums">{code}</span>
+            Enter the 6-digit code:{" "}
+            <span className="font-medium text-foreground tabular-nums">
+              {code}
+            </span>
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -115,6 +119,6 @@ export function InputOtpExample() {
         </p>
         <Toaster />
       </div>
-    
+    </div>
   )
 }

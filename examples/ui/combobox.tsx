@@ -16,6 +16,11 @@ import {
   ComboboxSeparator,
   ComboboxTrigger,
 } from "@/components/ui/combobox"
+import {
+  Field,
+  FieldDescription,
+  FieldLabel,
+} from "@/components/ui/field"
 import { InputGroupAddon } from "@/components/ui/input-group"
 import { Icon, Icons } from "@/icons/icons"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -135,9 +140,11 @@ export function ComboboxExample() {
   const [capability, setCapability] = React.useState<Capability | null>(null)
 
   return (
-    <>
-      <Combobox  items={groups} value={capability} onValueChange={setCapability}>
-        <ComboboxTrigger render={<Button variant="outline" className="w-64 justify-between font-normal"><span className="flex items-center gap-2">{capability && (<HugeiconsIcon icon={capability.icon} className="text-muted-foreground" />)}{capability ? capability.label : "Select capability"}</span></Button>} />
+    <div className="flex w-full items-center justify-center">
+      <Field className="w-full max-w-sm">
+        <FieldLabel htmlFor="combobox-capability">Capability</FieldLabel>
+        <Combobox items={groups} value={capability} onValueChange={setCapability}>
+        <ComboboxTrigger render={<Button id="combobox-capability" variant="outline" className="w-full justify-between font-normal"><span className="flex items-center gap-2">{capability && (<HugeiconsIcon icon={capability.icon} className="text-muted-foreground" />)}{capability ? capability.label : "Select capability"}</span></Button>} />
         <ComboboxContent>
           <ComboboxInput showClear={true} showTrigger={false} placeholder="Search">
             <InputGroupAddon>
@@ -164,7 +171,11 @@ export function ComboboxExample() {
             )}
           </ComboboxList>
         </ComboboxContent>
-      </Combobox>
-    </>
+        </Combobox>
+        <FieldDescription>
+          Search and select an AI capability.
+        </FieldDescription>
+      </Field>
+    </div>
   )
 }
