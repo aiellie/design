@@ -1,56 +1,69 @@
 "use client"
 
-import * as React from "react"
+import { Bubble, BubbleContent } from "@/components/ui/bubble"
+import { DirectionProvider } from "@/components/ui/direction"
+import {
+  LanguageSelector,
+  useTranslation,
+  type Translations,
+} from "@/components/language-selector"
 
-import { Bubble, BubbleContent } from '@/components/ui/bubble'
-import { Button } from '@/components/ui/button'
-import { ButtonGroup } from '@/components/ui/button-group'
-import { DirectionProvider } from '@/components/ui/direction'
-import { Slider } from '@/components/ui/slider'
+const translations: Translations<{
+  incoming: string
+  outgoing: string
+  progress: string
+  progressLabel: string
+}> = {
+  en: {
+    dir: "ltr",
+    locale: "en-US",
+    values: {
+      incoming: "Hey — how far along is the transfer?",
+      outgoing: "Almost there, about 70%.",
+      progress: "70%",
+      progressLabel: "Transfer progress",
+    },
+  },
+  ar: {
+    dir: "rtl",
+    locale: "ar-EG",
+    values: {
+      incoming: "مرحبًا — ما مدى تقدم التحويل؟",
+      outgoing: "أوشكنا على الانتهاء، حوالي ٧٠٪.",
+      progress: "٧٠٪",
+      progressLabel: "تقدم التحويل",
+    },
+  },
+  he: {
+    dir: "rtl",
+    locale: "he-IL",
+    values: {
+      incoming: "היי — כמה התקדמה ההעברה?",
+      outgoing: "כמעט שם, בערך 70%.",
+      progress: "70%",
+      progressLabel: "התקדמות ההעברה",
+    },
+  },
+}
 
 export function DirectionExample() {
-  const [direction, setDirection] = React.useState<"ltr" | "rtl">("ltr")
+  const { language, setLanguage, dir, t } = useTranslation(translations)
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <ButtonGroup>
-        <Button
-          variant={direction === "ltr" ? "secondary" : "outline"}
-          size="sm"
-          onClick={() => setDirection("ltr")}
-        >
-          LTR
-        </Button>
-        <Button
-          variant={direction === "rtl" ? "secondary" : "outline"}
-          size="sm"
-          onClick={() => setDirection("rtl")}
-        >
-          RTL
-        </Button>
-      </ButtonGroup>
-      <DirectionProvider direction={direction}>
+      <LanguageSelector value={language} onValueChange={setLanguage} />
+      <DirectionProvider direction={dir}>
         <div
-          dir={direction}
+          dir={dir}
           className="flex flex-col gap-3 rounded-xl border p-3"
         >
           <Bubble variant="muted">
-            <BubbleContent>Hey — how far along is the transfer?</BubbleContent>
+            <BubbleContent>{t.incoming}</BubbleContent>
           </Bubble>
           <Bubble align="end">
-            <BubbleContent>Almost there, about 70%.</BubbleContent>
+            <BubbleContent>{t.outgoing}</BubbleContent>
           </Bubble>
-          <div className="flex items-center gap-3 pt-1">
-            <span className="text-xs font-medium text-muted-foreground">
-              70%
-            </span>
-            <Slider
-              defaultValue={[70]}
-              max={100}
-              aria-label="Transfer progress"
-              className="flex-1"
-            />
-          </div>
+         
         </div>
       </DirectionProvider>
     </div>

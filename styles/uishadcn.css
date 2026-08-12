@@ -319,7 +319,14 @@ button:not(:disabled, [data-disabled]),
 [data-slot="slider-thumb"]:not(:disabled, [data-disabled]),
 [data-slot="switch"]:not(:disabled, [data-disabled]),
 [data-slot="native-select"]:not(:disabled, [data-disabled]),
-[data-slot="input"][type="file"]:not(:disabled, [data-disabled]) {
+[data-slot="input"][type="file"]:not(:disabled, [data-disabled]),
+[data-slot="scroll-area-scrollbar"],
+[data-slot="scroll-area-thumb"] {
+  cursor: pointer;
+}
+
+[data-slot="scroll-area-scrollbar"]:active,
+[data-slot="scroll-area-thumb"]:active {
   cursor: pointer;
 }
 

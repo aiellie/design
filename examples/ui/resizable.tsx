@@ -6,6 +6,7 @@ import {
 
 export function ResizableExample() {
   return (
+    <div className="flex justify-center">
     <ResizablePanelGroup
       orientation="horizontal"
       className="max-w-sm rounded-lg border"
@@ -32,6 +33,7 @@ export function ResizableExample() {
         </ResizablePanelGroup>
       </ResizablePanel>
     </ResizablePanelGroup>
+    </div>
   )
 }
 

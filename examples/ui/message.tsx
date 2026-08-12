@@ -1,56 +1,95 @@
-"use client"
-
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Bubble, BubbleContent } from '@/components/ui/bubble'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
+import {
+  Bubble,
+  BubbleContent,
+  BubbleGroup,
+  BubbleReactions,
+} from "@/components/ui/bubble"
+import { Marker, MarkerContent } from "@/components/ui/marker"
 import {
   Message,
   MessageAvatar,
   MessageContent,
   MessageFooter,
-  MessageGroup,
-  MessageHeader,
-} from '@/components/ui/message'
-import { HugeiconsIcon } from "@hugeicons/react"
-import { TickDouble02Icon } from "@hugeicons/core-free-icons"
+} from "@/components/ui/message"
 
 export function MessageExample() {
   return (
-    <MessageGroup className="w-full">
-      <Message>
+    <div className="flex justify-center">
+    <div className="flex w-full max-w-sm flex-col gap-6 py-12">
+      <Message align="end">
         <MessageAvatar>
           <Avatar>
-            <AvatarFallback>MK</AvatarFallback>
+            <AvatarImage src="/avatars/10.png" alt="@me" />
+            <AvatarFallback>ME</AvatarFallback>
           </Avatar>
         </MessageAvatar>
         <MessageContent>
-          <MessageHeader>Mira Kapoor · 9:41 AM</MessageHeader>
-          <Bubble variant="muted">
-            <BubbleContent>
-              Morning! Did you get a chance to look at the onboarding flow?
-            </BubbleContent>
+          <Bubble>
+            <BubbleContent>Deploying to prod real quick.</BubbleContent>
           </Bubble>
+        </MessageContent>
+      </Message>
+      <Message>
+        <MessageAvatar>
+          <Avatar>
+            <AvatarImage src="/avatars/02.png" alt="@rabbit" />
+            <AvatarFallback>R</AvatarFallback>
+          </Avatar>
+        </MessageAvatar>
+        <MessageContent>
           <Bubble variant="muted">
-            <BubbleContent>No rush — end of day is fine.</BubbleContent>
+            <BubbleContent>It&apos;s 4:55 PM. On a Friday.</BubbleContent>
           </Bubble>
         </MessageContent>
       </Message>
       <Message align="end">
+        <MessageAvatar>
+          <Avatar>
+            <AvatarImage src="/avatars/10.png" alt="@me" />
+            <AvatarFallback>ME</AvatarFallback>
+          </Avatar>
+        </MessageAvatar>
         <MessageContent>
-          <Bubble align="end">
-            <BubbleContent>
-              Just finished. Left a few comments on the empty states.
-            </BubbleContent>
+          <Bubble>
+            <BubbleContent>It&apos;s a one-line change.</BubbleContent>
           </Bubble>
-          <MessageFooter>
-            Delivered
-            <HugeiconsIcon
-              icon={TickDouble02Icon}
-              strokeWidth={2}
-              className="ml-1 size-3.5"
-            />
-          </MessageFooter>
+          <MessageFooter>Delivered</MessageFooter>
         </MessageContent>
       </Message>
-    </MessageGroup>
+      <Message>
+        <MessageAvatar>
+          <Avatar>
+            <AvatarImage src="/avatars/02.png" alt="@rabbit" />
+            <AvatarFallback>R</AvatarFallback>
+          </Avatar>
+        </MessageAvatar>
+        <MessageContent>
+          <BubbleGroup>
+            <Bubble variant="muted">
+              <BubbleContent>
+                It&apos;s always a one-line change 😭.
+              </BubbleContent>
+            </Bubble>
+            <Bubble variant="muted">
+              <BubbleContent>Alright, let me take a look.</BubbleContent>
+              <BubbleReactions aria-label="Reactions: thumbs up">
+                <span>👍</span>
+              </BubbleReactions>
+            </Bubble>
+          </BubbleGroup>
+        </MessageContent>
+      </Message>
+      <Marker role="status">
+        <MarkerContent className="shimmer">
+          <span className="font-medium">Oliver</span> is typing...
+        </MarkerContent>
+      </Marker>
+    </div>
+    </div>
   )
 }

@@ -246,12 +246,6 @@ export const exampleCategories: ExampleCategory[] = [
         component: SliderExample,
         icon: Icons.slidersHorizontal,
       },
-      {
-        slug: "calendar",
-        name: "Calendar",
-        component: CalendarExample,
-        icon: Icons.calendar,
-      },
     ],
   },
   {
@@ -417,6 +411,12 @@ export const exampleCategories: ExampleCategory[] = [
         icon: Icons.analytics,
       },
       {
+        slug: "calendar",
+        name: "Calendar",
+        component: CalendarExample,
+        icon: Icons.calendar,
+      },
+      {
         slug: "avatar",
         name: "Avatar",
         component: AvatarExample,
@@ -476,6 +476,12 @@ export const exampleCategories: ExampleCategory[] = [
         component: ResizableExample,
         icon: Icons.resize,
       },
+      {
+        slug: "direction",
+        name: "Direction",
+        component: DirectionExample,
+        icon: Icons.arrowLeftRight,
+      },
     ],
   },
   {
@@ -516,12 +522,6 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Questionnaire",
         component: QuestionnaireExample,
         icon: Icons.checkList,
-      },
-      {
-        slug: "direction",
-        name: "Direction",
-        component: DirectionExample,
-        icon: Icons.arrowLeftRight,
       },
     ],
   },
