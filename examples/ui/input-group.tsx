@@ -183,7 +183,7 @@ export function InputGroupExample() {
                         strokeWidth={2}
                         className="size-3.5 text-muted-foreground"
                       />
-                      Documentation
+                      Docs
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <HugeiconsIcon
@@ -325,7 +325,7 @@ export function InputGroupExample() {
                 </PopoverContent>
               </Popover>
             </InputGroupAddon>
-            <InputGroupAddon className="pl-1.5 text-muted-foreground">
+            <InputGroupAddon className="pl-1.5 text-muted-foreground font-normal">
               https://
             </InputGroupAddon>
             <InputGroupInput id="input-group-site" defaultValue="ellie.dev" />
@@ -357,8 +357,8 @@ export function InputGroupExample() {
               />
             </InputGroupAddon>
             <InputGroupAddon align="block-start" className="border-b">
-              <InputGroupText className="font-mono font-medium">
-                <HugeiconsIcon icon={JavaScriptIcon} strokeWidth={2} />
+              <InputGroupText className="font-mono font-normal text-xs">
+                <HugeiconsIcon icon={JavaScriptIcon} strokeWidth={2} className="size-3.5" />
                 script.js
               </InputGroupText>
               <div className="ml-auto flex items-center">

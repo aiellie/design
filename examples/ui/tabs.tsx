@@ -64,7 +64,7 @@ const tabs = [
 ]
 
 export function TabsExample() {
-  const [activeTab, setActiveTab] = React.useState<string>("overview")
+  const [activeTab, setActiveTab] = React.useState<string | null>("overview")
 
   return (
     <div className="flex w-full items-center justify-center">
@@ -81,6 +81,11 @@ export function TabsExample() {
                   <TabsTrigger
                     value={tab.value}
                     className="group/trigger flex-none gap-0"
+                    onClick={() => {
+                      if (activeTab === tab.value) {
+                        setActiveTab(null)
+                      }
+                    }}
                   >
                     <HugeiconsIcon icon={tab.icon} strokeWidth={2} />
                     <span className="inline-grid grid-cols-[0fr] transition-[grid-template-columns] duration-300 ease-out group-data-active/trigger:grid-cols-[1fr]">

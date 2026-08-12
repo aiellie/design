@@ -149,7 +149,6 @@ const customers: {
 export function TableExample() {
   return (
     <Table>
-      <TableCaption>A list of your recent customers.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead>Customer</TableHead>

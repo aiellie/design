@@ -1,7 +1,7 @@
 /*
  * Glass + destructive overrides for dropdown / context / menubar / select / combobox.
- * Keeps components/ui/{dropdown,context}-menu.tsx, menubar.tsx, select.tsx, and
- * combobox.tsx closer to stock shadcn.
+ * Also tabs list surface and table container. Keeps components/ui/{dropdown,context}-menu.tsx,
+ * menubar.tsx, select.tsx, combobox.tsx, tabs.tsx, and table.tsx closer to stock shadcn.
  *
  * Glass / focus: unlayered !important beats normal (non-!) utilities
  * like focus:bg-accent on items.
@@ -233,6 +233,25 @@
   @apply font-normal!;
   @apply bg-background!;
 }
+
+ [data-slot="tabs-list"][data-variant="default"] {
+   @apply bg-background!;
+   @apply border!;
+ }
+
+ /* TooltipTrigger render replaces data-slot="tabs-trigger" with tooltip-trigger. */
+ [data-slot="tabs-list"][data-variant="default"] [role="tab"][data-active] {
+   @apply bg-muted!;
+   box-shadow: none !important;
+ }
+
+ [data-slot="tabs-list"][data-variant="default"] [role="tab"]:hover {
+   @apply bg-muted!;
+ }
+
+ [data-slot="table-container"] {
+   @apply border! rounded-lg!;
+ }
  
  [data-slot="label"] {
    @apply font-normal!;

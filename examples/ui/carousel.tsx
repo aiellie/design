@@ -11,6 +11,7 @@ import {
 
 export function CarouselExample() {
   return (
+    <div className="flex justify-center">
     <Carousel
       opts={{
         align: "start",
@@ -35,5 +36,6 @@ export function CarouselExample() {
       <CarouselPrevious />
       <CarouselNext />
     </Carousel>
+    </div>
   )
 }

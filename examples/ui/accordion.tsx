@@ -6,42 +6,76 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Badge } from "@/components/ui/badge"
+import { HugeiconsIcon } from "@hugeicons/react"
+import {
+  HelpCircleIcon,
+  Link01Icon,
+  MessageQuestionIcon,
+} from "@hugeicons/core-free-icons"
 
 export function AccordionExample() {
   return (
+    <div className="flex justify-center">
     <Accordion
       multiple={false}
-      defaultValue={["shipping"]}
-      className="w-full"
+      defaultValue={["sources"]}
+      className="w-full max-w-md gap-2"
     >
-      <AccordionItem value="shipping">
-        <AccordionTrigger>How long does shipping take?</AccordionTrigger>
-        <AccordionContent>
-          Orders placed before 2pm ship the same day. Standard delivery takes
-          3&ndash;5 business days, and express delivery arrives within 48
-          hours.
+      <AccordionItem value="sources" className="px-2 rounded-lg border ">
+        <AccordionTrigger>
+          <span className="flex flex-1 items-center gap-2 pr-2">
+            <HugeiconsIcon
+              icon={Link01Icon}
+              strokeWidth={2}
+              className="size-4 text-muted-foreground"
+            />
+            Sources used
+            <Badge variant="secondary" className="ml-auto">
+              3
+            </Badge>
+          </span>
+        </AccordionTrigger>
+        <AccordionContent className="space-y-1.5 text-muted-foreground">
+          <p>1. nextjs.org — Release Blog: Next.js 16</p>
+          <p>2. react.dev — You Might Not Need an Effect</p>
+          <p>3. internal-architecture.pdf — page 12</p>
         </AccordionContent>
       </AccordionItem>
-      <AccordionItem value="returns">
-        <AccordionTrigger>What is your return policy?</AccordionTrigger>
-        <AccordionContent>
-          <p>
-            Every purchase can be returned within 30 days of delivery for a
-            full refund, no questions asked.
-          </p>
-          <p>
-            Items must be unused and in their original packaging. Return
-            labels are prepaid and included in every box.
-          </p>
+      <AccordionItem value="followups" className="px-2 rounded-lg border ">
+        <AccordionTrigger>
+          <span className="flex items-center gap-2">
+            <HugeiconsIcon
+              icon={MessageQuestionIcon}
+              strokeWidth={2}
+              className="size-4 text-muted-foreground"
+            />
+            Suggested follow-ups
+          </span>
+        </AccordionTrigger>
+        <AccordionContent className="space-y-1.5 text-muted-foreground">
+          <p>· How do I migrate from the Pages Router?</p>
+          <p>· What changed in caching behavior?</p>
+          <p>· Show me a minimal example.</p>
         </AccordionContent>
       </AccordionItem>
-      <AccordionItem value="warranty">
-        <AccordionTrigger>Is there a warranty?</AccordionTrigger>
-        <AccordionContent>
-          Yes. All products include a two-year limited warranty covering
-          manufacturing defects and everyday wear.
+      <AccordionItem value="how" className="px-2 rounded-lg border ">
+        <AccordionTrigger>
+          <span className="flex items-center gap-2">
+            <HugeiconsIcon
+              icon={HelpCircleIcon}
+              strokeWidth={2}
+              className="size-4 text-muted-foreground"
+            />
+            How was this answered?
+          </span>
+        </AccordionTrigger>
+        <AccordionContent className="text-muted-foreground">
+          Retrieved 3 passages, ranked by similarity, then summarized with Claude
+          Opus 4.8 at temperature 0.4.
         </AccordionContent>
       </AccordionItem>
     </Accordion>
+    </div>
   )
 }
