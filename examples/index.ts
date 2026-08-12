@@ -65,6 +65,7 @@ import { ToggleExample } from "@/examples/ui/toggle"
 import { ToggleGroupExample } from "@/examples/ui/toggle-group"
 import { TooltipExample } from "@/examples/ui/tooltip"
 import { Icons, type IconData } from "@/icons/icons"
+import { CountriesSelect } from "@/components/countries-select"
 
 import type { ExampleStatus } from "./status"
 
@@ -527,6 +528,12 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Questionnaire",
         component: QuestionnaireExample,
         icon: Icons.checkList,
+      },
+      {
+        slug: "countries-select",
+        name: "Countries Select",
+        component: CountriesSelect,
+        icon: Icons.sorting,
       },
     ],
   },
