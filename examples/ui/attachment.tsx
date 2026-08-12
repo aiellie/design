@@ -21,7 +21,7 @@ import {
 
 export function AttachmentExample() {
   return (
-    <div className="flex w-full flex-col gap-3">
+    <div className="flex justify-center flex-col gap-3">
       <Attachment className="w-full">
         <AttachmentMedia>
           <HugeiconsIcon icon={Pdf02Icon} strokeWidth={2} />

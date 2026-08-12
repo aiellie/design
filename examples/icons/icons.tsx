@@ -37,6 +37,7 @@ const codeIconLabels: Partial<Record<keyof typeof CodeIcons, string>> = {
   svg: "SVG",
   gitignore: ".gitignore",
   env: ".env",
+  pdf: "PDF",
   baseui: "Base UI",
   lucide: "Lucide",
   hugeicons: "Hugeicons",
@@ -68,7 +69,7 @@ const codeIconCategories: { label: string; names: (keyof typeof CodeIcons)[] }[]
   },
   {
     label: "Files",
-    names: ["json", "md", "svg", "ico", "gitignore", "env"],
+    names: ["json", "md", "svg", "ico", "gitignore", "env", "pdf"],
   },
   {
     label: "UI",

@@ -16,18 +16,14 @@ import {
   MessageContent,
   MessageFooter,
 } from "@/components/ui/message"
-
+import { Attachment, AttachmentMedia, AttachmentContent, AttachmentTitle, AttachmentDescription, AttachmentActions, AttachmentAction } from "@/components/ui/attachment"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { DownloadIcon, Pdf02Icon } from "@hugeicons/core-free-icons"
 export function MessageExample() {
   return (
     <div className="flex justify-center">
     <div className="flex w-full max-w-sm flex-col gap-6 py-12">
       <Message align="end">
-        <MessageAvatar>
-          <Avatar>
-            <AvatarImage src="/avatars/10.png" alt="@me" />
-            <AvatarFallback>ME</AvatarFallback>
-          </Avatar>
-        </MessageAvatar>
         <MessageContent>
           <Bubble>
             <BubbleContent>Deploying to prod real quick.</BubbleContent>
@@ -37,8 +33,8 @@ export function MessageExample() {
       <Message>
         <MessageAvatar>
           <Avatar>
-            <AvatarImage src="/avatars/02.png" alt="@rabbit" />
-            <AvatarFallback>R</AvatarFallback>
+            <AvatarImage src="/agent.png" alt="Agent" />
+            <AvatarFallback>A</AvatarFallback>
           </Avatar>
         </MessageAvatar>
         <MessageContent>
@@ -48,24 +44,17 @@ export function MessageExample() {
         </MessageContent>
       </Message>
       <Message align="end">
-        <MessageAvatar>
-          <Avatar>
-            <AvatarImage src="/avatars/10.png" alt="@me" />
-            <AvatarFallback>ME</AvatarFallback>
-          </Avatar>
-        </MessageAvatar>
         <MessageContent>
           <Bubble>
             <BubbleContent>It&apos;s a one-line change.</BubbleContent>
           </Bubble>
-          <MessageFooter>Delivered</MessageFooter>
         </MessageContent>
       </Message>
       <Message>
         <MessageAvatar>
           <Avatar>
-            <AvatarImage src="/avatars/02.png" alt="@rabbit" />
-            <AvatarFallback>R</AvatarFallback>
+            <AvatarImage src="/agent.png" alt="Agent" />
+            <AvatarFallback>A</AvatarFallback>
           </Avatar>
         </MessageAvatar>
         <MessageContent>
@@ -82,6 +71,66 @@ export function MessageExample() {
               </BubbleReactions>
             </Bubble>
           </BubbleGroup>
+        </MessageContent>
+      </Message>
+      <Message align="end">
+        <MessageContent>
+          <Attachment orientation="vertical">
+            <AttachmentMedia variant="image">
+              <img
+                src="https://avatar.aiellie.dev/workspace"
+                alt="Workspace"
+              />
+            </AttachmentMedia>
+          </Attachment>
+          <Bubble>
+            <BubbleContent>
+              Here&apos;s the image. Can you add it to the PDF? Use it for the
+              cover page.
+            </BubbleContent>
+          </Bubble>
+        </MessageContent>
+      </Message>
+      <Message>
+        <MessageAvatar>
+          <Avatar>
+            <AvatarImage src="/agent.png" alt="Agent" />
+            <AvatarFallback>A</AvatarFallback>
+          </Avatar>
+        </MessageAvatar>
+        <MessageContent>
+          <Bubble variant="muted">
+            <BubbleContent>
+              Done. Here&apos;s the PDF with the image added as the cover page.
+            </BubbleContent>
+          </Bubble>
+          <Attachment>
+            <AttachmentMedia className="text-red-500 bg-red-500/5">
+              <HugeiconsIcon icon={Pdf02Icon} />
+            </AttachmentMedia>
+            <AttachmentContent>
+              <AttachmentTitle>sales-dashboard.pdf</AttachmentTitle>
+              <AttachmentDescription>PDF · 2.4 MB</AttachmentDescription>
+            </AttachmentContent>
+            <AttachmentActions>
+              <AttachmentAction
+                type="button"
+                aria-label="Download"
+                size="icon-sm"
+                variant="secondary"
+              >
+                <HugeiconsIcon icon={DownloadIcon} />
+              </AttachmentAction>
+            </AttachmentActions>
+          </Attachment>
+        </MessageContent>
+      </Message>
+      <Message align="end">
+        <MessageContent>
+          <Bubble>
+            <BubbleContent>Thanks. Looks good.</BubbleContent>
+          </Bubble>
+          <MessageFooter>Delivered</MessageFooter>
         </MessageContent>
       </Message>
       <Marker role="status">
