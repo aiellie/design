@@ -1,77 +1,143 @@
 "use client"
 
+import * as React from "react"
+
 import { Button } from "@/components/ui/button"
 import {
   Combobox,
+  ComboboxCollection,
   ComboboxContent,
   ComboboxEmpty,
+  ComboboxGroup,
   ComboboxInput,
   ComboboxItem,
+  ComboboxLabel,
   ComboboxList,
+  ComboboxSeparator,
   ComboboxTrigger,
-  ComboboxValue,
 } from "@/components/ui/combobox"
 import { InputGroupAddon } from "@/components/ui/input-group"
 import { Icon, Icons } from "@/icons/icons"
+import { HugeiconsIcon } from "@hugeicons/react"
+import {
+  AiAudioIcon,
+  AiBrain01Icon,
+  AiChat02Icon,
+  AiChipIcon,
+  AiCloudIcon,
+  AiContentGenerator01Icon,
+  AiDnaIcon,
+  AiEditingIcon,
+  AiIdeaIcon,
+  AiImageIcon,
+  AiLearningIcon,
+  AiMailIcon,
+  AiMicIcon,
+  AiNetworkIcon,
+  AiProgrammingIcon,
+  AiSchedulingIcon,
+  AiSearchIcon,
+  AiSecurity01Icon,
+  AiVideoIcon,
+  AiVisionRecognitionIcon,
+} from "@hugeicons/core-free-icons"
 
-const countries = [
-  { code: "", value: "", continent: "", label: "Select country" },
+type Capability = {
+  value: string
+  label: string
+  icon: typeof AiChat02Icon
+}
+
+const groups: { value: string; items: Capability[] }[] = [
   {
-    code: "ar",
-    value: "argentina",
-    label: "Argentina",
-    continent: "South America",
-  },
-  { code: "au", value: "australia", label: "Australia", continent: "Oceania" },
-  { code: "br", value: "brazil", label: "Brazil", continent: "South America" },
-  { code: "ca", value: "canada", label: "Canada", continent: "North America" },
-  { code: "cn", value: "china", label: "China", continent: "Asia" },
-  {
-    code: "co",
-    value: "colombia",
-    label: "Colombia",
-    continent: "South America",
-  },
-  { code: "eg", value: "egypt", label: "Egypt", continent: "Africa" },
-  { code: "fr", value: "france", label: "France", continent: "Europe" },
-  { code: "de", value: "germany", label: "Germany", continent: "Europe" },
-  { code: "it", value: "italy", label: "Italy", continent: "Europe" },
-  { code: "jp", value: "japan", label: "Japan", continent: "Asia" },
-  { code: "ke", value: "kenya", label: "Kenya", continent: "Africa" },
-  { code: "mx", value: "mexico", label: "Mexico", continent: "North America" },
-  {
-    code: "nz",
-    value: "new-zealand",
-    label: "New Zealand",
-    continent: "Oceania",
-  },
-  { code: "ng", value: "nigeria", label: "Nigeria", continent: "Africa" },
-  {
-    code: "za",
-    value: "south-africa",
-    label: "South Africa",
-    continent: "Africa",
-  },
-  { code: "kr", value: "south-korea", label: "South Korea", continent: "Asia" },
-  {
-    code: "gb",
-    value: "united-kingdom",
-    label: "United Kingdom",
-    continent: "Europe",
+    value: "Assistants",
+    items: [
+      { value: "chat-assistant", label: "Chat assistant", icon: AiChat02Icon },
+      { value: "email-drafting", label: "Email drafting", icon: AiMailIcon },
+      { value: "idea-generation", label: "Idea generation", icon: AiIdeaIcon },
+      {
+        value: "smart-scheduling",
+        label: "Smart scheduling",
+        icon: AiSchedulingIcon,
+      },
+    ],
   },
   {
-    code: "us",
-    value: "united-states",
-    label: "United States",
-    continent: "North America",
+    value: "Generation",
+    items: [
+      {
+        value: "code-generation",
+        label: "Code generation",
+        icon: AiProgrammingIcon,
+      },
+      {
+        value: "content-writing",
+        label: "Content writing",
+        icon: AiContentGenerator01Icon,
+      },
+      {
+        value: "image-generation",
+        label: "Image generation",
+        icon: AiImageIcon,
+      },
+      { value: "smart-editing", label: "Smart editing", icon: AiEditingIcon },
+      {
+        value: "video-generation",
+        label: "Video generation",
+        icon: AiVideoIcon,
+      },
+      { value: "voice-synthesis", label: "Voice synthesis", icon: AiAudioIcon },
+    ],
+  },
+  {
+    value: "Understanding",
+    items: [
+      { value: "drug-discovery", label: "Drug discovery", icon: AiDnaIcon },
+      { value: "reasoning", label: "Reasoning", icon: AiBrain01Icon },
+      { value: "semantic-search", label: "Semantic search", icon: AiSearchIcon },
+      { value: "speech-to-text", label: "Speech to text", icon: AiMicIcon },
+      {
+        value: "threat-detection",
+        label: "Threat detection",
+        icon: AiSecurity01Icon,
+      },
+      {
+        value: "vision-recognition",
+        label: "Vision recognition",
+        icon: AiVisionRecognitionIcon,
+      },
+    ],
+  },
+  {
+    value: "Infrastructure",
+    items: [
+      { value: "cloud-inference", label: "Cloud inference", icon: AiCloudIcon },
+      {
+        value: "machine-learning",
+        label: "Machine learning",
+        icon: AiLearningIcon,
+      },
+      {
+        value: "neural-networks",
+        label: "Neural networks",
+        icon: AiNetworkIcon,
+      },
+      {
+        value: "on-device-inference",
+        label: "On-device inference",
+        icon: AiChipIcon,
+      },
+    ],
   },
 ]
 
 export function ComboboxExample() {
+  const [capability, setCapability] = React.useState<Capability | null>(null)
+
   return (
     <>
-      <Combobox items={countries} defaultValue={countries[0]}>
-        <ComboboxTrigger render={<Button variant="outline" className="w-64 justify-between font-normal"><ComboboxValue /></Button>} />
+      <Combobox items={groups} value={capability} onValueChange={setCapability}>
+        <ComboboxTrigger render={<Button variant="outline" className="w-64 justify-between font-normal"><span className="flex items-center gap-2">{capability && (<HugeiconsIcon icon={capability.icon} strokeWidth={2} className="text-muted-foreground" />)}{capability ? capability.label : "Select capability"}</span></Button>} />
         <ComboboxContent>
           <ComboboxInput className="border-0! bg-transparent! shadow-none ring-0! focus-within:border-0! focus-within:ring-0! has-[[data-slot=input-group-control]:focus-visible]:border-0! has-[[data-slot=input-group-control]:focus-visible]:ring-0!" showTrigger={false} placeholder="Search">
             <InputGroupAddon>
@@ -80,10 +146,23 @@ export function ComboboxExample() {
           </ComboboxInput>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
-            {(item) => (
-              <ComboboxItem key={item.code} value={item}>
-                {item.label}
-              </ComboboxItem>
+            {(group: (typeof groups)[number], index: number) => (
+              <ComboboxGroup key={group.value} items={group.items}>
+                <ComboboxLabel>{group.value}</ComboboxLabel>
+                <ComboboxCollection>
+                  {(item: Capability) => (
+                    <ComboboxItem key={item.value} value={item}>
+                      <HugeiconsIcon
+                        icon={item.icon}
+                        strokeWidth={2}
+                        className="text-muted-foreground"
+                      />
+                      {item.label}
+                    </ComboboxItem>
+                  )}
+                </ComboboxCollection>
+                {index < groups.length - 1 && <ComboboxSeparator />}
+              </ComboboxGroup>
             )}
           </ComboboxList>
         </ComboboxContent>

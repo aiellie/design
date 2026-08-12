@@ -1,6 +1,11 @@
 "use client"
 
 import * as React from "react"
+import {
+  AlertCircleIcon,
+  InformationCircleIcon,
+} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -28,9 +33,14 @@ export function TextareaExample() {
           value={value}
           onChange={(event) => setValue(event.target.value)}
         />
-        <p className="text-sm text-muted-foreground">
+        <FieldDescription className="inline-flex items-center gap-1">
+          <HugeiconsIcon
+            icon={InformationCircleIcon}
+            strokeWidth={2}
+            className="size-3"
+          />
           Your feedback is shared with the product team.
-        </p>
+        </FieldDescription>
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="textarea-disabled">Release notes</Label>
@@ -47,7 +57,14 @@ export function TextareaExample() {
         placeholder="Type your message here."
         aria-invalid
       />
-      <FieldDescription>Please enter a valid message.</FieldDescription>
+      <FieldDescription className="inline-flex items-center gap-1 text-destructive">
+        <HugeiconsIcon
+          icon={AlertCircleIcon}
+          strokeWidth={2}
+          className="size-3"
+        />
+        Please enter a valid message.
+      </FieldDescription>
     </Field>
     </div>
   )

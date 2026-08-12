@@ -9,9 +9,9 @@ export function InputExample() {
   return (
     <div className="flex w-full max-w-lg flex-col items-start gap-5">
     <Field>
-      <FieldLabel htmlFor="input-demo-api-key">API Key</FieldLabel>
+      <FieldLabel htmlFor="input-demo-api-key" className="font-normal">API Key</FieldLabel>
       <Input id="input-demo-api-key" type="password" placeholder="sk-..." />
-      <FieldDescription>
+      <FieldDescription className="text-xs">
         Your API key is encrypted and stored securely.
       </FieldDescription>
     </Field>

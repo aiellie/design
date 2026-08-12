@@ -221,9 +221,17 @@
   @apply bg-background!;
 }
  
- /*{[data-slot="label"] {
+ [data-slot="label"] {
    @apply font-normal!;
- }*/
+ }
+
+ [data-slot="field-label"] {
+   @apply font-normal! text-sm!;
+ }
+
+ [data-slot="field-description"] {
+   @apply text-xs!;
+ }
  
  :is(
    [data-slot="accordion-trigger"],
@@ -268,10 +276,17 @@ button:not(:disabled, [data-disabled]),
 [role="button"]:not(:disabled, [data-disabled]),
 [data-slot="checkbox"]:not(:disabled, [data-disabled]),
 [data-slot="radio-group-item"]:not(:disabled, [data-disabled]),
+[data-slot="slider-thumb"]:not(:disabled, [data-disabled]),
 [data-slot="switch"]:not(:disabled, [data-disabled]),
 [data-slot="native-select"]:not(:disabled, [data-disabled]),
 [data-slot="input"][type="file"]:not(:disabled, [data-disabled]) {
   cursor: pointer;
+}
+
+/* Card tint for rows whose control is a checked destructive variant —
+ * mirrors FieldLabel's has-data-checked:border-primary/30 + bg-primary/5. */
+[data-slot="field-label"]:has([data-variant="destructive"][data-checked]) {
+  @apply border-destructive/30! bg-destructive/5! dark:border-destructive/20! dark:bg-destructive/10!;
 }
 
 [data-slot="switch"][data-variant="destructive"][data-checked] {
