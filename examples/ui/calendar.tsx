@@ -29,7 +29,7 @@ export function CalendarExample() {
           month={currentMonth}
           onMonthChange={setCurrentMonth}
           fixedWeeks
-          className="p-0 [--cell-size:--spacing(9.5)]"
+          className="p-0"
           disabled={bookedDates}
           captionLayout="dropdown"
           modifiers={{
@@ -44,7 +44,6 @@ export function CalendarExample() {
         {[
           { label: "Today", value: 0 },
           { label: "Tomorrow", value: 1 },
-          { label: "In 3 days", value: 3 },
         ].map((preset) => (
           <Button
             key={preset.value}

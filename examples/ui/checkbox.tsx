@@ -5,62 +5,82 @@ import {
   Field,
   FieldContent,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldTitle,
 } from "@/components/ui/field"
-import { Label } from "@/components/ui/label"
+import { HugeiconsIcon } from "@hugeicons/react"
+import {
+  Trash,
+  Globe02Icon,
+  Mail01Icon,
+} from "@hugeicons/core-free-icons"
 
 export function CheckboxExample() {
   return (
-    <>
-    <FieldGroup className="max-w-sm">
-      <Field orientation="horizontal">
-        <Checkbox id="terms-checkbox" name="terms-checkbox" />
-        <Label htmlFor="terms-checkbox">Accept terms and conditions</Label>
-      </Field>
-      <Field orientation="horizontal">
-        <Checkbox
-          id="terms-checkbox-2"
-          name="terms-checkbox-2"
-          defaultChecked
-        />
-        <FieldContent>
-          <FieldLabel htmlFor="terms-checkbox-2">
-            Accept terms and conditions
-          </FieldLabel>
-          <FieldDescription>
-            By clicking this checkbox, you agree to the terms.
-          </FieldDescription>
-        </FieldContent>
-      </Field>
-      <Field orientation="horizontal" data-disabled>
-        <Checkbox id="toggle-checkbox" name="toggle-checkbox" disabled />
-        <FieldLabel htmlFor="toggle-checkbox">Enable notifications</FieldLabel>
-      </Field>
-      <FieldLabel>
-        <Field orientation="horizontal">
-          <Checkbox id="toggle-checkbox-2" name="toggle-checkbox-2" />
+    <div className="flex w-full items-center justify-center">
+    <FieldGroup className="w-full max-w-sm">
+      <FieldLabel htmlFor="checkbox-profile">
+        <Field orientation="horizontal" className="cursor-pointer">
+          <HugeiconsIcon
+            icon={Globe02Icon}
+            strokeWidth={2}
+            className="size-4 shrink-0 text-muted-foreground"
+          />
           <FieldContent>
-            <FieldTitle>Enable notifications</FieldTitle>
+            <FieldTitle>Public profile</FieldTitle>
             <FieldDescription>
-              You can enable or disable notifications at any time.
+              Anyone with the link can view your profile.
             </FieldDescription>
           </FieldContent>
+          <Checkbox id="checkbox-profile" name="checkbox-profile" />
         </Field>
       </FieldLabel>
-      <Field orientation="horizontal" data-invalid>
-        <Checkbox
-          id="terms-checkbox-invalid"
-          name="terms-checkbox-invalid"
-          defaultChecked
-          aria-invalid
-        />
-        <FieldLabel htmlFor="terms-checkbox-invalid">
-          Accept terms and conditions
-        </FieldLabel>
-      </Field>
-      </FieldGroup>
-    </>
+      <FieldLabel htmlFor="checkbox-digest">
+        <Field orientation="horizontal" className="cursor-pointer">
+          <HugeiconsIcon
+            icon={Mail01Icon}
+            strokeWidth={2}
+            className="size-4 shrink-0 text-muted-foreground"
+          />
+          <FieldContent>
+            <FieldTitle>Weekly digest</FieldTitle>
+            <FieldDescription>
+              A weekly summary of your workspace activity.
+            </FieldDescription>
+          </FieldContent>
+          <Checkbox
+            id="checkbox-digest"
+            name="checkbox-digest"
+            defaultChecked
+          />
+        </Field>
+      </FieldLabel>
+      <FieldLabel htmlFor="checkbox-purge">
+        <Field orientation="horizontal" data-invalid className="cursor-pointer">
+          <HugeiconsIcon
+            icon={Trash}
+            strokeWidth={2}
+            className="size-4 shrink-0 text-destructive"
+          />
+          <FieldContent>
+            <FieldTitle>Erase usage data</FieldTitle>
+            <FieldDescription>
+              Permanently removes your analytics history.
+            </FieldDescription>
+            <FieldError errors={[{ }]} />
+          </FieldContent>
+          <Checkbox
+            id="checkbox-purge"
+            name="checkbox-purge"
+            defaultChecked
+            aria-invalid
+            data-variant="destructive"
+          />
+        </Field>
+      </FieldLabel>
+    </FieldGroup>
+    </div>
   )
 }

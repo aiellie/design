@@ -150,7 +150,7 @@ export function TableExample() {
 
           return (
             <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
+              <TableCell className="font-normal">{invoice.invoice}</TableCell>
               <TableCell>
                 <Badge className={statusStyles[invoice.paymentStatus]}>
                   <BadgeDot pulse={invoice.paymentStatus !== "Unpaid"} />

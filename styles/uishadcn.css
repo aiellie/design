@@ -274,12 +274,21 @@ button:not(:disabled, [data-disabled]),
   cursor: pointer;
 }
 
+[data-slot="switch"][data-variant="destructive"][data-checked] {
+  @apply bg-destructive!;
+}
+
 [data-slot="checkbox"][aria-invalid="true"][data-checked],
-[data-slot="radio-group-item"][aria-invalid="true"][data-checked] {
+[data-slot="radio-group-item"][aria-invalid="true"][data-checked],
+[data-slot="checkbox"][data-variant="destructive"][data-checked],
+[data-slot="radio-group-item"][data-variant="destructive"][data-checked] {
   @apply border-destructive! bg-destructive! text-white!;
 }
 
 [data-slot="radio-group-item"][aria-invalid="true"][data-checked]
+  [data-slot="radio-group-indicator"]
+  span,
+[data-slot="radio-group-item"][data-variant="destructive"][data-checked]
   [data-slot="radio-group-indicator"]
   span {
   @apply bg-white!;
