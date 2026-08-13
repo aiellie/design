@@ -9,7 +9,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ArrowDown01Icon, ArrowUp01Icon } from "@hugeicons/core-free-icons"
+import { ArrowDown01Icon, ArrowRight01Icon, ArrowUp01Icon } from "@hugeicons/core-free-icons"
 
 const repos = [
   "@aiellie/design-tokens",
@@ -35,8 +35,7 @@ export function CollapsibleExample() {
           render={
             <Button variant="ghost" size="icon-sm" aria-label="Toggle list">
               <HugeiconsIcon
-                icon={open ? ArrowUp01Icon : ArrowDown01Icon}
-                strokeWidth={2}
+                icon={open ? ArrowDown01Icon : ArrowRight01Icon}
               />
             </Button>
           }
