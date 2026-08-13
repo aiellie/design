@@ -19,15 +19,14 @@ export function AccordionExample() {
     <div className="flex justify-center">
     <Accordion
       multiple={false}
-      defaultValue={["sources"]}
+      defaultValue={[""]}
       className="w-full max-w-md gap-2"
     >
       <AccordionItem value="sources" className="px-2 rounded-lg border ">
         <AccordionTrigger>
-          <span className="flex flex-1 items-center gap-2 pr-2">
+          <span className="flex flex-1 items-center gap-2 pr-2 font-normal">
             <HugeiconsIcon
               icon={Link01Icon}
-              strokeWidth={2}
               className="size-4 text-muted-foreground"
             />
             Sources used
@@ -44,10 +43,9 @@ export function AccordionExample() {
       </AccordionItem>
       <AccordionItem value="followups" className="px-2 rounded-lg border ">
         <AccordionTrigger>
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2 font-normal">
             <HugeiconsIcon
               icon={MessageQuestionIcon}
-              strokeWidth={2}
               className="size-4 text-muted-foreground"
             />
             Suggested follow-ups
@@ -64,7 +62,6 @@ export function AccordionExample() {
           <span className="flex items-center gap-2">
             <HugeiconsIcon
               icon={HelpCircleIcon}
-              strokeWidth={2}
               className="size-4 text-muted-foreground"
             />
             How was this answered?

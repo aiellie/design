@@ -301,6 +301,10 @@
    @apply font-normal!;
  }
 
+ [data-slot="accordion-trigger"] {
+   @apply font-normal!;
+ }
+
  [data-slot="progress-value"] {
    @apply text-xs!;
  }
