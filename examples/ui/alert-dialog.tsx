@@ -26,7 +26,7 @@ export function AlertDialogExample() {
             render={
               <AlertDialogTrigger
                 render={
-                  <Button variant="destructive" size="icon-sm" className="rounded-full">
+                  <Button variant="destructive" size="icon-sm" className="rounded-full bg-destructive/5 text-destructive">
                     <HugeiconsIcon icon={Trash} strokeWidth={2} />
                     <span className="sr-only">Delete</span>
                   </Button>

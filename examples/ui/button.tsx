@@ -9,10 +9,9 @@ import {
   Tick02Icon,
   Trash,
   Undo03Icon,
-  ArrowLeft01Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
+
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import { Toaster, toast } from "@/components/ui/toast"
@@ -22,16 +21,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { CodeIcons } from "@/icons/code-icons"
+
 /**
  * Icon-only button. With no visible text the label has to live somewhere, so
  * it does double duty as the accessible name and the tooltip — `tooltip` only
@@ -83,6 +73,7 @@ function CopyIconButton() {
       label={copied ? "Copied" : "Copy"}
       variant="outline"
       className="text-muted-foreground hover:text-foreground"
+      strokeWidth={2}
       onClick={() => {
         setCopied(true)
         toast.add({
@@ -97,21 +88,8 @@ function CopyIconButton() {
 
 export function ButtonExample() {
   return (
-    <Card size="sm" className="mx-auto max-w-lg">
-      <CardHeader>
-        <CardTitle className="truncate">Button</CardTitle>
-        <CardDescription className="truncate">
-          Buttons are used to trigger actions.
-        </CardDescription>
-        <CardAction>
-          <Button size="sm" variant="outline">
-            <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} />
-            Back
-          </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-wrap items-center gap-2">
+    <div className="mx-auto flex w-full max-w-lg flex-col items-start gap-5">
+      <div className="flex flex-wrap items-center gap-2">
         <Button size="sm" className="rounded-full">
           Default
         </Button>
@@ -166,7 +144,7 @@ export function ButtonExample() {
 
       <div className="flex flex-wrap items-center gap-2">
         <IconButton icon={ArrowUp02Icon} label="Submit" className="rounded-full" />
-        <IconButton icon={Trash} label="Delete" variant="destructive" className="bg-destructive/5 text-destructive hover:bg-destructive/10" />
+        <IconButton icon={Trash} label="Delete" variant="destructive" />
         <IconButton
           icon={Notification01Icon}
           label="Notifications"
@@ -181,28 +159,8 @@ export function ButtonExample() {
         />
         <CopyIconButton />
       </div>
-      </CardContent>
-      <CardFooter>
-      <Breadcrumb>
-        <BreadcrumbList className="font-mono text-xs">
-          <BreadcrumbItem>
-            <BreadcrumbLink href="#" className="flex items-center gap-1.5">
-              <CodeIcons.tsx className="size-3.5" />
-              examples
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator>/</BreadcrumbSeparator>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="#">ui</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator>/</BreadcrumbSeparator>
-          <BreadcrumbItem>
-            <BreadcrumbPage>breadcrumb.tsx</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      </CardFooter>
+
       <Toaster />
-    </Card>
+    </div>
   )
 }
