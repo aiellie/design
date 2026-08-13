@@ -9,7 +9,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ArrowDown01Icon, ArrowRight01Icon, ArrowUp01Icon } from "@hugeicons/core-free-icons"
+import { ArrowDown01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons"
 
 const repos = [
   "@aiellie/design-tokens",

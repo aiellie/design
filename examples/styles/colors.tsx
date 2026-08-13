@@ -1,8 +1,25 @@
+"use client"
+
 import * as React from "react"
 
-const colorGroups: { title: string; tokens: string[] }[] = [
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Icons, type IconData } from "@/icons/icons"
+
+const colorGroups: { title: string; icon: IconData; tokens: string[] }[] = [
   {
     title: "Brand",
+    icon: Icons.colors,
     tokens: [
       "--background",
       "--foreground",
@@ -16,6 +33,7 @@ const colorGroups: { title: string; tokens: string[] }[] = [
   },
   {
     title: "Interface",
+    icon: Icons.layout,
     tokens: [
       "--muted",
       "--muted-foreground",
@@ -27,6 +45,7 @@ const colorGroups: { title: string; tokens: string[] }[] = [
   },
   {
     title: "Text",
+    icon: Icons.textFont,
     tokens: [
       "--link",
       "--selection",
@@ -37,6 +56,7 @@ const colorGroups: { title: string; tokens: string[] }[] = [
   },
   {
     title: "Status",
+    icon: Icons.alert,
     tokens: [
       "--destructive",
       "--destructive-foreground",
@@ -50,10 +70,12 @@ const colorGroups: { title: string; tokens: string[] }[] = [
   },
   {
     title: "Charts",
+    icon: Icons.analytics,
     tokens: ["--chart-1", "--chart-2", "--chart-3", "--chart-4", "--chart-5"],
   },
   {
     title: "Sidebar",
+    icon: Icons.sidebarLeft,
     tokens: [
       "--sidebar",
       "--sidebar-foreground",
@@ -108,21 +130,51 @@ function GradientSwatch() {
 }
 
 export function ColorsExample() {
+  const [activeTab, setActiveTab] = React.useState<string | null>("Brand")
+
   return (
-    <div className="flex flex-col gap-5">
+    <Tabs
+      value={activeTab}
+      onValueChange={(value) => setActiveTab(value as string)}
+      className="w-full"
+    >
+      <TabsList>
+        {colorGroups.map((group) => (
+          <Tooltip key={group.title} disabled={activeTab === group.title}>
+            <TooltipTrigger
+              render={
+                <TabsTrigger
+                  value={group.title}
+                  className="group/trigger flex-none gap-0"
+                  onClick={() => {
+                    if (activeTab === group.title) {
+                      setActiveTab(null)
+                    }
+                  }}
+                >
+                  <HugeiconsIcon icon={group.icon} strokeWidth={2} />
+                  <span className="inline-grid grid-cols-[0fr] transition-[grid-template-columns] duration-300 ease-out group-data-active/trigger:grid-cols-[1fr]">
+                    <span className="min-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-opacity duration-300 group-data-active/trigger:pl-1.5 group-data-active/trigger:opacity-100">
+                      {group.title}
+                    </span>
+                  </span>
+                </TabsTrigger>
+              }
+            />
+            <TooltipContent>{group.title}</TooltipContent>
+          </Tooltip>
+        ))}
+      </TabsList>
       {colorGroups.map((group) => (
-        <div key={group.title} className="flex flex-col gap-2">
-          <div className="text-xs font-medium text-muted-foreground">
-            {group.title}
-          </div>
+        <TabsContent key={group.title} value={group.title}>
           <div className="grid grid-cols-9 gap-3">
             {group.tokens.map((token) => (
               <Swatch key={token} token={token} />
             ))}
             {group.title === "Brand" && <GradientSwatch />}
           </div>
-        </div>
+        </TabsContent>
       ))}
-    </div>
+    </Tabs>
   )
 }
