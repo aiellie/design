@@ -6,33 +6,24 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Badge } from "@/components/ui/badge"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
-  HelpCircleIcon,
+  AiBrain01Icon,
   Link01Icon,
-  MessageQuestionIcon,
+  Message01Icon,
 } from "@hugeicons/core-free-icons"
 
 export function AccordionExample() {
   return (
-    <div className="flex justify-center">
     <Accordion
-      multiple={false}
       defaultValue={[""]}
-      className="w-full max-w-md gap-2"
+      className="w-full max-w-md mx-auto"
     >
-      <AccordionItem value="sources" className="px-2 rounded-lg border ">
+      <AccordionItem value="sources">
         <AccordionTrigger>
-          <span className="flex flex-1 items-center gap-2 pr-2 font-normal">
-            <HugeiconsIcon
-              icon={Link01Icon}
-              className="size-4 text-muted-foreground"
-            />
-            Sources used
-            <Badge variant="secondary" className="ml-auto">
-              3
-            </Badge>
+          <span className="flex items-center gap-2">
+            <HugeiconsIcon icon={Link01Icon} strokeWidth={2} className="size-4 text-muted-foreground" />
+            Sources used (3)
           </span>
         </AccordionTrigger>
         <AccordionContent className="space-y-1.5 text-muted-foreground">
@@ -41,13 +32,10 @@ export function AccordionExample() {
           <p>3. internal-architecture.pdf — page 12</p>
         </AccordionContent>
       </AccordionItem>
-      <AccordionItem value="followups" className="px-2 rounded-lg border ">
+      <AccordionItem value="followups">
         <AccordionTrigger>
-          <span className="flex items-center gap-2 font-normal">
-            <HugeiconsIcon
-              icon={MessageQuestionIcon}
-              className="size-4 text-muted-foreground"
-            />
+          <span className="flex items-center gap-2">
+            <HugeiconsIcon icon={Message01Icon} strokeWidth={2} className="size-4 text-muted-foreground" />
             Suggested follow-ups
           </span>
         </AccordionTrigger>
@@ -57,13 +45,10 @@ export function AccordionExample() {
           <p>· Show me a minimal example.</p>
         </AccordionContent>
       </AccordionItem>
-      <AccordionItem value="how" className="px-2 rounded-lg border ">
+      <AccordionItem value="how">
         <AccordionTrigger>
           <span className="flex items-center gap-2">
-            <HugeiconsIcon
-              icon={HelpCircleIcon}
-              className="size-4 text-muted-foreground"
-            />
+            <HugeiconsIcon icon={AiBrain01Icon} strokeWidth={2} className="size-4 text-muted-foreground" />
             How was this answered?
           </span>
         </AccordionTrigger>
@@ -73,6 +58,5 @@ export function AccordionExample() {
         </AccordionContent>
       </AccordionItem>
     </Accordion>
-    </div>
   )
 }
