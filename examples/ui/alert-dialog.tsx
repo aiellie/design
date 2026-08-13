@@ -26,7 +26,7 @@ export function AlertDialogExample() {
             render={
               <AlertDialogTrigger
                 render={
-                  <Button variant="destructive" size="icon-sm" className="rounded-full bg-destructive/5 text-destructive hover:bg-destructive/10">
+                  <Button variant="destructive" size="icon-sm" className="rounded-full">
                     <HugeiconsIcon icon={Trash} strokeWidth={2} />
                     <span className="sr-only">Delete</span>
                   </Button>
@@ -50,7 +50,7 @@ export function AlertDialogExample() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="rounded-full">Cancel</AlertDialogCancel>
-            <AlertDialogAction variant="destructive" className="rounded-full bg-destructive/5 text-destructive hover:bg-destructive/10">
+            <AlertDialogAction variant="destructive" className="rounded-full">
               Delete project
             </AlertDialogAction>
           </AlertDialogFooter>

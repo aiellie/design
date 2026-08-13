@@ -11,7 +11,6 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { cn } from "@/lib/utils"
 import {
   Attachment,
   AttachmentAction,
@@ -130,13 +129,11 @@ const files = [
 
 function ItemActions({
   keys,
-  className,
 }: {
   keys: ActionKey[]
-  className?: string
 }) {
   return (
-    <AttachmentActions className={cn("group-data-[orientation=vertical]/attachment:top-0 group-data-[orientation=vertical]/attachment:right-0", className)} >
+    <AttachmentActions>
       {keys.map((key) => {
         const action = actions[key]
         return (
@@ -169,10 +166,7 @@ export function AttachmentExample() {
               <AttachmentMedia variant="image">
                 <img src={image.src} alt={image.alt} />
               </AttachmentMedia>
-              <ItemActions
-                keys={image.actions}
-                className="pointer-events-none opacity-0 transition-opacity group-hover/attachment:pointer-events-auto group-hover/attachment:opacity-100 focus-within:pointer-events-auto focus-within:opacity-100"
-              />
+              <ItemActions keys={image.actions} />
               <DialogTrigger
                 render={
                   <AttachmentTrigger aria-label={`Preview ${image.name}`} />

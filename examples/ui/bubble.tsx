@@ -27,15 +27,15 @@ export function BubbleExample() {
         <BubbleContent>Hi I am the agent. How can I help you today?</BubbleContent>
       </Bubble>
       <BubbleGroup>
-        <Bubble variant="outline" className="*:data-[slot=bubble-content]:border-border *:data-[slot=bubble-content]:border-dashed" align="end">
+        <Bubble variant="outline" align="end">
           <BubbleContent render={<button onClick={() => toast.add({ description: "You clicked forgot password" })}>Show me a ghost bubble</button>} />
         </Bubble>
-        <Bubble variant="outline" className="*:data-[slot=bubble-content]:border-border *:data-[slot=bubble-content]:border-dashed" align="end">
+        <Bubble variant="outline" align="end">
           <BubbleContent render={<button onClick={() =>
                   toast.add({ description: "You clicked something else. Talk to a human." })
                 }>Show me a tinted bubble</button>} />
         </Bubble>
-        <Bubble variant="outline" className="*:data-[slot=bubble-content]:border-border *:data-[slot=bubble-content]:border-dashed" align="end">
+        <Bubble variant="outline" align="end">
           <BubbleContent render={<button onClick={() => toast.add({ description: "You clicked help with subscription" })}>Show me a destructive bubble</button>} />
         </Bubble>
       </BubbleGroup>
@@ -66,7 +66,7 @@ Ghost bubbles are full width and can take the full width of the container.
 `}</Markdown>
         </BubbleContent>
       </Bubble>
-      <Bubble variant="destructive" className="*:data-[slot=bubble-content]:bg-destructive/5 *:data-[slot=bubble-content]:text-destructive" align="end">
+      <Bubble variant="destructive" align="end">
         <BubbleContent>Ok thanks!</BubbleContent>
         <BubbleReactions role="img" aria-label="Reaction: fire">
         <Popover>

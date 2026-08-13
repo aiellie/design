@@ -102,7 +102,7 @@ export function ButtonExample() {
         <Button size="sm" variant="secondary" className="rounded-full">
           Secondary
         </Button>
-        <Button size="sm" variant="destructive" className="rounded-full bg-destructive/5 text-destructive hover:bg-destructive/10">
+        <Button size="sm" variant="destructive" className="rounded-full">
           Destructive
         </Button>
         <Button size="sm" variant="outline" className="rounded-full">
@@ -144,7 +144,7 @@ export function ButtonExample() {
 
       <div className="flex flex-wrap items-center gap-2">
         <IconButton icon={ArrowUp02Icon} label="Submit" className="rounded-full" />
-        <IconButton icon={Trash} label="Delete" variant="destructive" className="bg-destructive/5 text-destructive hover:bg-destructive/10" />
+        <IconButton icon={Trash} label="Delete" variant="destructive" />
         <IconButton
           icon={Notification01Icon}
           label="Notifications"

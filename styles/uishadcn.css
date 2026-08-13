@@ -252,14 +252,46 @@
  [data-slot="table-container"] {
    @apply border! rounded-lg!;
  }
+
+ /* Stock AttachmentActions uses top-3 / right-3 when vertical. */
+ [data-slot="attachment"][data-orientation="vertical"] [data-slot="attachment-actions"] {
+   @apply top-0! right-0!;
+ }
+
+ [data-slot="attachment"]:has([data-slot="attachment-media"][data-variant="image"])
+   [data-slot="attachment-actions"] {
+   @apply pointer-events-none opacity-0 transition-opacity;
+ }
+
+ [data-slot="attachment"]:has([data-slot="attachment-media"][data-variant="image"]):hover
+   [data-slot="attachment-actions"],
+ [data-slot="attachment"]:has([data-slot="attachment-media"][data-variant="image"])
+   [data-slot="attachment-actions"]:focus-within {
+   @apply pointer-events-auto opacity-100;
+ }
+
+ /* Stock destructive bubble content uses bg-destructive/10. */
+ [data-slot="bubble"][data-variant="destructive"] [data-slot="bubble-content"] {
+   @apply bg-destructive/5!;
+ }
+
+ [data-slot="bubble"][data-variant="outline"] [data-slot="bubble-content"] {
+   @apply border-border! border-dashed!;
+ }
+
+ /* Stock destructive button uses bg-destructive/10. */
+ [data-slot="button"][data-variant="destructive"],
+ [data-slot="alert-dialog-action"][data-variant="destructive"] {
+   @apply bg-destructive/5! hover:bg-destructive/10!;
+ }
  
- [data-slot="label"] {
+ /*[data-slot="label"] {
    @apply font-normal!;
  }
 
  [data-slot="field-label"] {
    @apply font-normal! text-sm!;
- }
+ }*/
 
  [data-slot="field-description"] {
    @apply text-xs!;
