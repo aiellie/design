@@ -1,71 +1,227 @@
 "use client"
 
 import {
+  CancelIcon,
+  FileSpreadsheetIcon,
+  Refresh01Icon,
+  Zip02Icon,
+  Pdf02Icon,
+  SquareMIcon,
+  FolderIcon,
+} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
+
+import { cn } from "@/lib/utils"
+import {
   Attachment,
   AttachmentAction,
   AttachmentActions,
   AttachmentContent,
   AttachmentDescription,
+  AttachmentGroup,
   AttachmentMedia,
   AttachmentTitle,
-} from '@/components/ui/attachment'
-import { Spinner } from '@/components/ui/spinner'
-import { HugeiconsIcon } from "@hugeicons/react"
+  AttachmentTrigger,
+} from "@/components/ui/attachment"
 import {
-  AlertCircleIcon,
-  Cancel01Icon,
-  Download02Icon,
-  Pdf02Icon,
-  RefreshIcon,
-} from "@hugeicons/core-free-icons"
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Spinner } from "@/components/ui/spinner"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
+const actions = {
+  remove: {
+    label: "Remove",
+    icon: CancelIcon,
+  },
+  cancel: {
+    label: "Cancel upload",
+    icon: CancelIcon,
+  },
+  retry: {
+    label: "Retry upload",
+    icon: Refresh01Icon,
+  },
+} as const
+
+type ActionKey = keyof typeof actions
+
+const images = [
+  {
+    name: "grain.png",
+    meta: "PNG · 2.5 MB",
+    src: "/brand/grain.png",
+    alt: "Grain texture",
+    actions: ["remove"] satisfies ActionKey[],
+  },
+  {
+    name: "aiellie.png",
+    meta: "PNG · 1.9 MB",
+    src: "/brand/aiellie.png",
+    alt: "Ellie avatar",
+    actions: ["remove"] satisfies ActionKey[],
+  },
+  {
+    name: "ellie-transparent-bg.png",
+    meta: "PNG · 289 KB",
+    src: "/brand/ellie-transparent-bg.png",
+    alt: "Ellie",
+    actions: ["remove"] satisfies ActionKey[],
+  },
+  {
+    name: "favion.svg",
+    meta: "PNG · 289 KB",
+    src: "/brand/favicon.svg",
+    alt: "Favicon",
+    actions: ["remove"] satisfies ActionKey[],
+  },
+]
+
+const files = [
+  {
+    name: "design-skills.md",
+    meta: "Markdown · 3 KB",
+    state: "done" as const,
+    actions: ["remove"] satisfies ActionKey[],
+    attachmentMediaClassName: "text-blue-500 bg-blue-500/5",
+    icon: SquareMIcon,
+  },
+  {
+    name: "projects.csv",
+    meta: "CSV · 12 KB",
+    state: "done" as const,
+    actions: ["remove"] satisfies ActionKey[],
+    attachmentMediaClassName: "text-green-500 bg-green-500/5",
+    icon: FileSpreadsheetIcon,
+  },
+  {
+    name: "design-system.zip",
+    meta: "Uploading · 64%",
+    state: "uploading" as const,
+    actions: ["cancel"] satisfies ActionKey[],
+    icon: Zip02Icon,
+  },
+  {
+    name: "aboutme.pdf",
+    meta: "Processing document",
+    state: "processing" as const,
+    actions: ["remove"] satisfies ActionKey[],
+    attachmentMediaClassName: "text-red-500 bg-red-500/5",
+    icon: Pdf02Icon,
+  },
+  {
+    name: "aiellieui.dev",
+    meta: "Upload failed. Please try again.",
+    state: "error" as const,
+    actions: ["retry", "remove"] satisfies ActionKey[],
+    attachmentMediaClassName: "text-red-500 bg-red-500/5",
+    icon: FolderIcon,
+  },
+]
+
+function ItemActions({
+  keys,
+  className,
+}: {
+  keys: ActionKey[]
+  className?: string
+}) {
+  return (
+    <AttachmentActions className={cn("group-data-[orientation=vertical]/attachment:top-0 group-data-[orientation=vertical]/attachment:right-0", className)} >
+      {keys.map((key) => {
+        const action = actions[key]
+        return (
+          <Tooltip key={key}>
+            <TooltipTrigger
+              render={
+                <AttachmentAction type="button" aria-label={action.label}>
+                  <HugeiconsIcon icon={action.icon} />
+                </AttachmentAction>
+              }
+            />
+            <TooltipContent>{action.label}</TooltipContent>
+          </Tooltip>
+        )
+      })}
+    </AttachmentActions>
+  )
+}
 
 export function AttachmentExample() {
   return (
-    <div className="flex justify-center flex-col gap-3">
-      <Attachment className="w-full">
-        <AttachmentMedia>
-          <HugeiconsIcon icon={Pdf02Icon} strokeWidth={2} />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>Q3-brand-guidelines.pdf</AttachmentTitle>
-          <AttachmentDescription>PDF · 2.4 MB</AttachmentDescription>
-        </AttachmentContent>
-        <AttachmentActions>
-          <AttachmentAction aria-label="Download attachment">
-            <HugeiconsIcon icon={Download02Icon} strokeWidth={2} />
-          </AttachmentAction>
-        </AttachmentActions>
-      </Attachment>
-      <Attachment state="uploading" className="w-full">
-        <AttachmentMedia>
-          <Spinner />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>launch-video-final.mp4</AttachmentTitle>
-          <AttachmentDescription>Uploading · 48% of 128 MB</AttachmentDescription>
-        </AttachmentContent>
-        <AttachmentActions>
-          <AttachmentAction aria-label="Cancel upload">
-            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
-          </AttachmentAction>
-        </AttachmentActions>
-      </Attachment>
-      <Attachment state="error" size="sm" className="w-full">
-        <AttachmentMedia>
-          <HugeiconsIcon icon={AlertCircleIcon} strokeWidth={2} />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>assets-bundle.zip</AttachmentTitle>
-          <AttachmentDescription>
-            Upload failed — file exceeds 100 MB
-          </AttachmentDescription>
-        </AttachmentContent>
-        <AttachmentActions>
-          <AttachmentAction aria-label="Retry upload">
-            <HugeiconsIcon icon={RefreshIcon} strokeWidth={2} />
-          </AttachmentAction>
-        </AttachmentActions>
-      </Attachment>
+    <div className="mx-auto flex w-full max-w-sm flex-col gap-3 py-12">
+      <AttachmentGroup>
+        {images.map((image) => (
+          <Dialog key={image.name}>
+            <Attachment
+              orientation="vertical"
+              className="has-data-[slot=attachment-media]:p-0"
+            >
+              <AttachmentMedia variant="image">
+                <img src={image.src} alt={image.alt} />
+              </AttachmentMedia>
+              <ItemActions
+                keys={image.actions}
+                className="pointer-events-none opacity-0 transition-opacity group-hover/attachment:pointer-events-auto group-hover/attachment:opacity-100 focus-within:pointer-events-auto focus-within:opacity-100"
+              />
+              <DialogTrigger
+                render={
+                  <AttachmentTrigger aria-label={`Preview ${image.name}`} />
+                }
+              />
+            </Attachment>
+            <DialogContent className="overflow-hidden sm:max-w-md">
+              <img
+                src={image.src}
+                alt={image.alt}
+                className="aspect-square w-full rounded-lg object-cover"
+              />
+              <DialogHeader>
+                <DialogTitle>{image.name}</DialogTitle>
+                <DialogDescription>{image.meta}</DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        ))}
+      </AttachmentGroup>
+      {files.map((file) => (
+        <Dialog key={file.name}>
+          <Attachment state={file.state} className="w-full" size="sm">
+            <AttachmentMedia className={file.attachmentMediaClassName}>
+              {file.state === "uploading" ? (
+                <Spinner />
+              ) : (
+                <HugeiconsIcon icon={file.icon} />
+              )}
+            </AttachmentMedia>
+            <AttachmentContent>
+              <AttachmentTitle>{file.name}</AttachmentTitle>
+              <AttachmentDescription>{file.meta}</AttachmentDescription>
+            </AttachmentContent>
+            <ItemActions keys={file.actions} />
+            <DialogTrigger
+              render={
+                <AttachmentTrigger aria-label={`Preview ${file.name}`} />
+              }
+            />
+          </Attachment>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>{file.name}</DialogTitle>
+              <DialogDescription>{file.meta}</DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      ))}
     </div>
   )
 }

@@ -494,6 +494,12 @@ export const exampleCategories: ExampleCategory[] = [
     title: "Chat",
     examples: [
       {
+        slug: "attachment",
+        name: "Attachment",
+        component: AttachmentExample,
+        icon: Icons.attachment,
+      },
+      {
         slug: "message",
         name: "Message",
         component: MessageExample,
@@ -510,12 +516,6 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Bubble",
         component: BubbleExample,
         icon: Icons.bubbleChat,
-      },
-      {
-        slug: "attachment",
-        name: "Attachment",
-        component: AttachmentExample,
-        icon: Icons.attachment,
       },
       {
         slug: "marker",

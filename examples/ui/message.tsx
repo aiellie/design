@@ -17,16 +17,35 @@ import {
   MessageFooter,
 } from "@/components/ui/message"
 import { Attachment, AttachmentMedia, AttachmentContent, AttachmentTitle, AttachmentDescription, AttachmentActions, AttachmentAction } from "@/components/ui/attachment"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { DownloadIcon, Pdf02Icon } from "@hugeicons/core-free-icons"
 export function MessageExample() {
   return (
     <div className="flex justify-center">
-    <div className="flex w-full max-w-sm flex-col gap-6 py-12">
-      <Message align="end">
+    <div className="flex w-full flex-col gap-6 py-0">
+    <Marker variant="separator">
+        <MarkerContent className="text-xs">Friday · 4:55 PM</MarkerContent>
+      </Marker>
+    <Message align="end">
         <MessageContent>
+          <Attachment orientation="vertical" className="has-data-[slot=attachment-media]:p-0">
+            <AttachmentMedia variant="image">
+              <img
+                src="https://avatar.aiellie.dev/workspace"
+                alt="Workspace"
+              />
+            </AttachmentMedia>
+          </Attachment>
           <Bubble>
-            <BubbleContent>Deploying to prod real quick.</BubbleContent>
+            <BubbleContent>
+              Here&apos;s the image. Can you add it to the PDF? Use it for the
+              cover page.
+            </BubbleContent>
           </Bubble>
         </MessageContent>
       </Message>
@@ -70,40 +89,6 @@ export function MessageExample() {
                 <span>👍</span>
               </BubbleReactions>
             </Bubble>
-          </BubbleGroup>
-        </MessageContent>
-      </Message>
-      <Message align="end">
-        <MessageContent>
-          <Attachment orientation="vertical">
-            <AttachmentMedia variant="image">
-              <img
-                src="https://avatar.aiellie.dev/workspace"
-                alt="Workspace"
-              />
-            </AttachmentMedia>
-          </Attachment>
-          <Bubble>
-            <BubbleContent>
-              Here&apos;s the image. Can you add it to the PDF? Use it for the
-              cover page.
-            </BubbleContent>
-          </Bubble>
-        </MessageContent>
-      </Message>
-      <Message>
-        <MessageAvatar>
-          <Avatar>
-            <AvatarImage src="/agent.png" alt="Agent" />
-            <AvatarFallback>A</AvatarFallback>
-          </Avatar>
-        </MessageAvatar>
-        <MessageContent>
-          <Bubble variant="muted">
-            <BubbleContent>
-              Done. Here&apos;s the PDF with the image added as the cover page.
-            </BubbleContent>
-          </Bubble>
           <Attachment size="sm">
             <AttachmentMedia  className="text-red-500 bg-red-500/5">
               <HugeiconsIcon icon={Pdf02Icon} />
@@ -113,16 +98,23 @@ export function MessageExample() {
               <AttachmentDescription>PDF · 2.4 MB</AttachmentDescription>
             </AttachmentContent>
             <AttachmentActions>
-              <AttachmentAction
-                type="button"
-                aria-label="Download"
-                size="icon-xs"
-                variant="ghost"
-              >
-                <HugeiconsIcon icon={DownloadIcon} />
-              </AttachmentAction>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <AttachmentAction
+                      type="button"
+                      aria-label="Download"
+                      variant="ghost"
+                    >
+                      <HugeiconsIcon icon={DownloadIcon} />
+                    </AttachmentAction>
+                  }
+                />
+                <TooltipContent>Download</TooltipContent>
+              </Tooltip>
             </AttachmentActions>
           </Attachment>
+          </BubbleGroup>
         </MessageContent>
       </Message>
       <Message align="end">
@@ -133,11 +125,11 @@ export function MessageExample() {
           <MessageFooter>Delivered</MessageFooter>
         </MessageContent>
       </Message>
-      <Marker role="status">
+      {/*<Marker role="status">
         <MarkerContent className="shimmer">
           <span className="font-medium">Oliver</span> is typing...
         </MarkerContent>
-      </Marker>
+      </Marker>*/}
     </div>
     </div>
   )

@@ -57,10 +57,10 @@
   "carousel": "shipped",
   "resizable": "shipped",
   "direction": "shipped",
+  "attachment": "shipped",
   "message": "planned",
   "message-scroller": "planned",
   "bubble": "planned",
-  "attachment": "planned",
   "marker": "planned",
   "questionnaire": "idea"
 }

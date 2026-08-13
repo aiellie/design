@@ -1,32 +1,28 @@
-"use client"
-
-import { Bubble, BubbleContent } from '@/components/ui/bubble'
-import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
+import { File, GitBranchIcon, SearchIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { PinIcon, Shield01Icon } from "@hugeicons/core-free-icons"
+
+import { Marker, MarkerContent, MarkerIcon } from "@/components/ui/marker"
 
 export function MarkerExample() {
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div className="flex w-full max-w-sm flex-col gap-3 py-12 mx-auto">
       <Marker variant="border">
         <MarkerIcon>
-          <HugeiconsIcon icon={Shield01Icon} strokeWidth={2} />
+          <HugeiconsIcon icon={GitBranchIcon} />
         </MarkerIcon>
-        <MarkerContent>Messages are end-to-end encrypted.</MarkerContent>
+        <MarkerContent>Used the browser, ran commands</MarkerContent>
       </Marker>
-      <Marker variant="separator">
-        <MarkerContent>Yesterday · 4:32 PM</MarkerContent>
-      </Marker>
-      <Bubble variant="muted">
-        <BubbleContent>The venue is confirmed for Friday!</BubbleContent>
-      </Bubble>
-      <Marker>
+      <Marker variant="border">
         <MarkerIcon>
-          <HugeiconsIcon icon={PinIcon} strokeWidth={2} />
+          <HugeiconsIcon icon={SearchIcon} />
         </MarkerIcon>
-        <MarkerContent>
-          Maya pinned a message · <a href="#">View</a>
-        </MarkerContent>
+        <MarkerContent>Reviewed 8 related files</MarkerContent>
+      </Marker>
+      <Marker variant="border">
+        <MarkerIcon>
+          <HugeiconsIcon icon={File} />
+        </MarkerIcon>
+        <MarkerContent>Opened implementation notes</MarkerContent>
       </Marker>
     </div>
   )
