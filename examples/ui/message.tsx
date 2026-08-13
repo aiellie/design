@@ -26,7 +26,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { DownloadIcon, Pdf02Icon } from "@hugeicons/core-free-icons"
 export function MessageExample() {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mx-auto max-w-xl">
     <div className="flex w-full flex-col gap-6 py-0">
     <Marker variant="separator">
         <MarkerContent className="text-xs">Friday · 4:55 PM</MarkerContent>
