@@ -43,6 +43,9 @@ const items = [
   { name: "workspace" },
 ]
 
+const itemClassName =
+  "data-active:animate-in data-active:fade-in-0 data-active:slide-in-from-bottom-2 data-active:duration-300 motion-reduce:animate-none"
+
 export function QuestionnaireExample() {
   const [submitted, setSubmitted] = React.useState(false)
 
@@ -66,6 +69,7 @@ export function QuestionnaireExample() {
 
   return (
     <Questionnaire
+      className="mx-auto max-w-md"
       items={items}
       shortcuts="letters"
       onSubmit={(event) => {
@@ -73,8 +77,29 @@ export function QuestionnaireExample() {
         setSubmitted(true)
       }}
     >
-      <QuestionnaireProgress />
-      <QuestionnaireItem name="team" required>
+      <QuestionnaireProgress
+        className="w-full"
+        render={(props, state) => (
+          <div {...props}>
+            <div className="mb-2 flex gap-1.5" aria-hidden="true">
+              {Array.from({ length: state.total }, (_, index) => (
+                <span
+                  key={index}
+                  className={
+                    index < state.current
+                      ? "h-1.5 flex-1 rounded-full bg-primary"
+                      : "h-1.5 flex-1 rounded-full bg-muted"
+                  }
+                />
+              ))}
+            </div>
+            <span>
+              Step {state.current} of {state.total}
+            </span>
+          </div>
+        )}
+      />
+      <QuestionnaireItem className={itemClassName} name="team" required>
         <QuestionnaireTitle>How big is your team?</QuestionnaireTitle>
         <QuestionnaireDescription>
           This helps us pick the right defaults for you.
@@ -87,7 +112,7 @@ export function QuestionnaireExample() {
         </QuestionnaireChoices>
         <QuestionnaireError />
       </QuestionnaireItem>
-      <QuestionnaireItem name="focus" multiple>
+      <QuestionnaireItem className={itemClassName} name="focus" multiple>
         <QuestionnaireTitle>What will you use it for?</QuestionnaireTitle>
         <QuestionnaireDescription>
           Select all that apply — you can change this later.
@@ -106,7 +131,7 @@ export function QuestionnaireExample() {
         </QuestionnaireChoices>
         <QuestionnaireError />
       </QuestionnaireItem>
-      <QuestionnaireItem name="workspace">
+      <QuestionnaireItem className={itemClassName} name="workspace">
         <QuestionnaireTitle>Name your workspace</QuestionnaireTitle>
         <QuestionnaireInput placeholder="Acme Inc." />
         <QuestionnaireError />
