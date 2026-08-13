@@ -98,7 +98,7 @@ export function MessageScrollerExample() {
     <MessageScrollerProvider>
       <div className="relative flex flex-col gap-4">
         <Card className="mx-auto h-140 w-full max-w-lg gap-0">
-          <CardHeader className="border-b">
+          <CardHeader className="border-b pt-0! px-2! py-0!">
             <CardDescription>Message Scroller Demo</CardDescription>
             <CardAction>
               <DropdownMenu>
