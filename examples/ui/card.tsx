@@ -5,6 +5,7 @@ import {
   AvatarFallback,
   AvatarGroup,
   AvatarGroupCount,
+  AvatarImage,
 } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -17,11 +18,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { statusMeta } from "@/examples/status"
+import { cn } from "@/lib/utils"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ArrowUpRight01Icon, Clock01Icon } from "@hugeicons/core-free-icons"
+import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons"
 
 export function CardExample() {
   return (
+    <div className="flex flex-col gap-2 mx-auto w-full max-w-md"> 
     <Card className="w-full">
       <CardHeader>
         <CardTitle>Acme Website Redesign</CardTitle>
@@ -29,30 +33,36 @@ export function CardExample() {
           Marketing site refresh with a new design system and CMS migration.
         </CardDescription>
         <CardAction>
-          <Badge variant="secondary">In progress</Badge>
+          <Badge
+            variant="outline"
+            className={cn(
+              "border-transparent",
+              statusMeta.building.iconBg,
+              statusMeta.building.textColor
+            )}
+          >
+            {statusMeta.building.label}
+          </Badge>
         </CardAction>
       </CardHeader>
       <CardContent className="flex items-center justify-between gap-3">
         <AvatarGroup>
           <Avatar size="sm">
+          <AvatarImage src="https://avatar.aiellie.dev/MK" alt="@MK" />
+          
             <AvatarFallback>MK</AvatarFallback>
           </Avatar>
           <Avatar size="sm">
-            <AvatarFallback>JT</AvatarFallback>
+            <AvatarImage src="https://avatar.aiellie.dev/JT" alt="@JT" />
+            <AvatarFallback>J T</AvatarFallback>
           </Avatar>
           <Avatar size="sm">
-            <AvatarFallback>AR</AvatarFallback>
+            <AvatarImage src="https://avatar.aiellie.dev/AR" alt="@AR" />
+              <AvatarFallback>AR</AvatarFallback>
           </Avatar>
           <AvatarGroupCount>+3</AvatarGroupCount>
         </AvatarGroup>
-        <div className="flex items-center gap-1.5 text-muted-foreground">
-          <HugeiconsIcon
-            icon={Clock01Icon}
-            strokeWidth={2}
-            className="size-3.5"
-          />
-          Due Aug 28, 2026
-        </div>
+        
       </CardContent>
       <CardFooter className="justify-between gap-2">
         <span className="text-xs text-muted-foreground">
@@ -64,5 +74,6 @@ export function CardExample() {
         </Button>
       </CardFooter>
     </Card>
+    </div>
   )
 }
