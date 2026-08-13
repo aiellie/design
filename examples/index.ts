@@ -65,8 +65,8 @@ import { ToggleExample } from "@/examples/ui/toggle"
 import { ToggleGroupExample } from "@/examples/ui/toggle-group"
 import { TooltipExample } from "@/examples/ui/tooltip"
 import { Icons, type IconData } from "@/icons/icons"
-import { CountriesSelect } from "@/components/countries-select"
-
+import { CodeBlockExample } from "@/examples/code/code-block"
+import { CodeLanguageSelectorExample } from "@/examples/code/code-language-selector"
 import type { ExampleStatus } from "./status"
 
 export type { ExampleStatus }
@@ -98,6 +98,8 @@ export function exampleFilePath(slug: string): string {
   if (slug === "colors") return "examples/styles/colors.tsx"
   if (slug === "typeset") return "examples/styles/typeset.tsx"
   if (slug === "icons") return "examples/icons/icons.tsx"
+  if (slug === "code-block" || slug === "code-language-selector")
+    return `examples/code/${slug}.tsx`
   return `examples/ui/${slug}.tsx`
 }
 
@@ -528,6 +530,23 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Questionnaire",
         component: QuestionnaireExample,
         icon: Icons.checkList,
+      },
+    ],
+  },
+  {
+    title: "Code",
+    examples: [
+      {
+        slug: "code-block",
+        name: "Code Block",
+        component: CodeBlockExample,
+        icon: Icons.code,
+      },
+      {
+        slug: "code-language-selector",
+        name: "Code Language Selector",
+        component: CodeLanguageSelectorExample,
+        icon: Icons.sorting,
       },
     ],
   },

@@ -62,5 +62,7 @@
   "message-scroller": "planned",
   "bubble": "shipped",
   "marker": "shipped",
-  "questionnaire": "shipped"
+  "questionnaire": "shipped",
+  "code-block": "shipped",
+  "code-language-selector": "shipped"
 }

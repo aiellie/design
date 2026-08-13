@@ -1,5 +1,6 @@
 "use client";
 
+import { getIconForLanguageExtension } from "@/icons/code-icons";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
@@ -614,17 +615,8 @@ export const CodeBlockDownloadButton = ({
   );
 };
 
-export {
-  CodeBlockLanguageSelector,
-  CodeBlockLanguageSelectorContent,
-  CodeBlockLanguageSelectorItem,
-  CodeBlockLanguageSelectorList,
-  CodeBlockLanguageSelectorTrigger,
-  CodeBlockLanguageSelectorValue,
-  type CodeBlockLanguageSelectorContentProps,
-  type CodeBlockLanguageSelectorItemProps,
-  type CodeBlockLanguageSelectorListProps,
-  type CodeBlockLanguageSelectorProps,
-  type CodeBlockLanguageSelectorTriggerProps,
-  type CodeBlockLanguageSelectorValueProps,
-} from "./code-language-selector";
+export const CodeBlockLanguageIcon = ({ language }: { language: string }) => (
+  <span className="flex size-3.5 shrink-0 items-center justify-center [&_svg]:size-3.5">
+    {getIconForLanguageExtension(language)}
+  </span>
+);
