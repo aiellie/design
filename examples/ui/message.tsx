@@ -36,7 +36,7 @@ export function MessageExample() {
           <Attachment orientation="vertical" className="has-data-[slot=attachment-media]:p-0">
             <AttachmentMedia variant="image">
               <img
-                src="https://avatar.aiellie.dev/workspace"
+                src="https://avatar.aiellie.dev/aielliedev"
                 alt="Workspace"
               />
             </AttachmentMedia>
@@ -52,7 +52,7 @@ export function MessageExample() {
       <Message>
         <MessageAvatar>
           <Avatar>
-            <AvatarImage src="/agent.png" alt="Agent" />
+            <AvatarImage src="/brand/agent.png" alt="Agent" />
             <AvatarFallback>A</AvatarFallback>
           </Avatar>
         </MessageAvatar>
@@ -72,19 +72,14 @@ export function MessageExample() {
       <Message>
         <MessageAvatar>
           <Avatar>
-            <AvatarImage src="/agent.png" alt="Agent" />
+            <AvatarImage src="/brand/agent.png" alt="Agent" />
             <AvatarFallback>A</AvatarFallback>
           </Avatar>
         </MessageAvatar>
         <MessageContent>
           <BubbleGroup>
             <Bubble variant="muted">
-              <BubbleContent>
-                It&apos;s always a one-line change 😭.
-              </BubbleContent>
-            </Bubble>
-            <Bubble variant="muted">
-              <BubbleContent>Alright, let me take a look.</BubbleContent>
+              <BubbleContent>Fine, let me take a look 😭</BubbleContent>
               <BubbleReactions aria-label="Reactions: thumbs up">
                 <span>👍</span>
               </BubbleReactions>
