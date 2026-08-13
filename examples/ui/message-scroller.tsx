@@ -1,12 +1,14 @@
 "use client"
 
+import * as React from "react"
 import { useChat } from "@ai-sdk/react"
 
 import { HugeiconsIcon } from '@hugeicons/react';
-import { ArrowUp02Icon, AiSearch02Icon, AiImageIcon, MessageSquareDashedIcon, AttachmentIcon, Plus, RotateCw, Telescope02Icon  } from '@hugeicons/core-free-icons';
+import { ArrowUp02Icon, AiSearch02Icon, AiImageIcon, AudioWave01Icon, MessageSquareDashedIcon, AttachmentIcon, MoreHorizontalIcon, Plus, RotateCw, Telescope02Icon  } from '@hugeicons/core-free-icons';
 import { createChat, getMessageText } from "@/lib/ai"
 import { MessageAnimated } from "@/components/message-animated"
 import { Button } from "@/components/ui/button"
+import { ButtonGroup } from "@/components/ui/button-group"
 import {
   Card,
   CardAction,
@@ -47,15 +49,20 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-
 const chat = createChat()
   .user(
     "I'm building a chat for our app and the scroll behavior is driving me nuts. Every time the AI streams a reply, the whole thread jumps around."
   )
   .sleep(1000)
-  .assistant(
-    "That's the classic streaming scroll problem. Wrap your message list in `MessageScroller` and turn on `autoScroll` — the viewport pins to the bottom as tokens arrive, so users always see the latest text land in place.\n\nThe important part: it only auto-scrolls while the reader is already at the bottom. The moment they scroll up to read something earlier, auto-scroll backs off and their position is preserved. You get smooth streaming without fighting the user's intent."
-  )
+  .assistant(({ writer }) => {
+    writer.reasoning(
+      "They are describing a streaming transcript that keeps taking control of the viewport. I should explain when auto-scroll follows and when it stops."
+    )
+    writer.sleep(1000)
+    writer.text(
+      "That's the classic streaming scroll problem. Wrap your message list in `MessageScroller` and turn on `autoScroll` — the viewport pins to the bottom as tokens arrive, so users always see the latest text land in place.\n\nThe important part: it only auto-scrolls while the reader is already at the bottom. The moment they scroll up to read something earlier, auto-scroll backs off and their position is preserved. You get smooth streaming without fighting the user's intent."
+    )
+  })
   .user(
     "Okay, but when someone sends a new message the view still feels jarring — like the whole conversation reloads from the top."
   )
@@ -85,21 +92,37 @@ export function MessageScrollerExample() {
   })
   const nextMessage = chat.next(messages)
   const isBusy = status === "submitted" || status === "streaming"
+  const [voice, setVoice] = React.useState(false)
 
   return (
     <MessageScrollerProvider>
       <div className="relative flex flex-col gap-4">
-        <Card className="mx-auto h-140 w-full max-w-sm gap-0">
-          <CardHeader className="gap-1 border-b">
-            <CardTitle>New Chat</CardTitle>
-            <CardDescription>How can I help you today?</CardDescription>
+        <Card className="mx-auto h-140 w-full max-w-lg gap-0">
+          <CardHeader className="border-b">
+            <CardDescription>Message Scroller Demo</CardDescription>
             <CardAction>
-              <Tooltip>
-                <TooltipTrigger render={<Button variant="outline" size="icon" aria-label="Reset conversation" onClick={() => setMessages(initialMessages)} disabled={isBusy}><HugeiconsIcon icon={RotateCw} /></Button>} />
-                <TooltipContent>
-                  <p>Reset</p>
-                </TooltipContent>
-              </Tooltip>
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label="Conversation settings"
+                    >
+                      <HugeiconsIcon icon={MoreHorizontalIcon} strokeWidth={2} />
+                    </Button>
+                  }
+                />
+                <DropdownMenuContent align="end" className="w-44">
+                  <DropdownMenuItem
+                    disabled={isBusy}
+                    onClick={() => setMessages(initialMessages)}
+                  >
+                    <HugeiconsIcon icon={RotateCw} />
+                    Reset conversation
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </CardAction>
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden p-0">
@@ -109,7 +132,7 @@ export function MessageScrollerExample() {
                   <EmptyMedia variant="icon">
                     <HugeiconsIcon icon={MessageSquareDashedIcon} />
                   </EmptyMedia>
-                  <EmptyTitle>Morning, shadcn!</EmptyTitle>
+                  <EmptyTitle>Morning, aiellie!</EmptyTitle>
                   <EmptyDescription>
                     What are we working on today? Press send to start a new
                     conversation
@@ -136,7 +159,7 @@ export function MessageScrollerExample() {
               </MessageScroller>
             )}
           </CardContent>
-          <CardFooter className="flex-col gap-2">
+          <CardFooter className="flex-col gap-2 px-2">
             <form
               onSubmit={(e) => {
                 e.preventDefault()
@@ -147,24 +170,21 @@ export function MessageScrollerExample() {
               }}
               className="w-full"
             >
-              <InputGroup>
-                <div className="h-14 w-full px-3 py-2.5">
-                  <span
-                    className="line-clamp-2 opacity-60 data-[status=ready]:opacity-100"
-                    data-status={status}
-                  >
-                    {nextMessage ? (
-                      getMessageText(nextMessage)
-                    ) : (
-                      <span className="text-muted-foreground">
-                        No messages queued. Reset the conversation.
-                      </span>
-                    )}
-                  </span>
-                </div>
-                <InputGroupAddon align="block-end" className="pt-1">
+              <ButtonGroup className="w-full min-w-0 items-center">
+                <ButtonGroup>
                   <DropdownMenu>
-                    <DropdownMenuTrigger render={<InputGroupButton aria-label="Add files" type="button" size="icon-sm" variant="outline"><HugeiconsIcon icon={Plus} /></InputGroupButton>} />
+                    <DropdownMenuTrigger
+                      render={
+                        <Button
+                          aria-label="Add files"
+                          type="button"
+                          size="icon-sm"
+                          variant="outline"
+                        >
+                          <HugeiconsIcon icon={Plus} />
+                        </Button>
+                      }
+                    />
                     <DropdownMenuContent
                       align="start"
                       side="top"
@@ -189,18 +209,64 @@ export function MessageScrollerExample() {
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
-                  <InputGroupButton
+                </ButtonGroup>
+                <ButtonGroup className="min-w-0 flex-1">
+                  <InputGroup className="overflow-hidden">
+                    <div className="min-w-0 flex-1 px-3">
+                      <span
+                        className="block truncate opacity-60 data-[status=ready]:opacity-100"
+                        data-status={status}
+                      >
+                        {voice ? (
+                          <span className="text-muted-foreground">
+                            Record and send audio...
+                          </span>
+                        ) : nextMessage ? (
+                          getMessageText(nextMessage)
+                        ) : (
+                          <span className="text-muted-foreground">
+                            No messages queued. Reset the conversation.
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                    <InputGroupAddon align="inline-end">
+                      <Tooltip>
+                        <TooltipTrigger
+                          render={
+                            <InputGroupButton
+                              type="button"
+                              size="icon-xs"
+                              aria-label="Voice mode"
+                              aria-pressed={voice}
+                              onClick={() => setVoice(!voice)}
+                              className="aria-pressed:bg-destructive/5 aria-pressed:text-destructive"
+                            >
+                              <HugeiconsIcon
+                                icon={AudioWave01Icon}
+                                strokeWidth={2}
+                              />
+                            </InputGroupButton>
+                          }
+                        />
+                        <TooltipContent>Voice mode</TooltipContent>
+                      </Tooltip>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </ButtonGroup>
+                <ButtonGroup>
+                  <Button
                     type="submit"
                     variant="default"
                     size="icon-sm"
                     disabled={!nextMessage || isBusy}
-                    className="ml-auto"
+                    aria-label="Send"
                   >
                     <HugeiconsIcon icon={ArrowUp02Icon} />
                     <span className="sr-only">Send</span>
-                  </InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
+                  </Button>
+                </ButtonGroup>
+              </ButtonGroup>
             </form>
           </CardFooter>
         </Card>

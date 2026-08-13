@@ -259,7 +259,7 @@
  }
   /* Stock CardFooter uses bg-muted/50. */
   [data-slot="card"] {
-    @apply rounded-3xl!;
+    @apply rounded-xl!;
   }
 
  /* Stock AttachmentActions uses top-3 / right-3 when vertical. */

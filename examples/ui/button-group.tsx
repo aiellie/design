@@ -171,7 +171,7 @@ export function ButtonGroupExample() {
           <Tooltip>
             <TooltipTrigger
               render={
-                <Button variant="outline" size="icon" aria-label="Attach">
+                <Button variant="outline" size="icon-sm" aria-label="Attach">
                   <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} />
                 </Button>
               }

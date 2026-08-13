@@ -31,7 +31,7 @@ function MessageAnimated({
   animationPreset = MESSAGE_ANIMATIONS["slide-up"],
   assistantVariant = "ghost",
   scrollAnchor,
-  userVariant = "muted",
+  userVariant = "secondary",
   ...props
 }: Omit<
   React.ComponentProps<typeof MotionMessageScrollerItem>,
