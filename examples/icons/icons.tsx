@@ -154,29 +154,7 @@ export function IconsExample() {
               </div>
             ))
           }
-          if (category.id === "emojis") {
-            return flagEmojiGroups.map((group) => (
-              <div key={group.label} className="flex flex-col gap-2">
-                <div className="text-xs font-medium text-muted-foreground">
-                  {group.label}
-                </div>
-                <div className="grid grid-cols-8 gap-3">
-                  {group.items.map(({ code, label, flag }) => (
-                    <Tooltip key={code}>
-                      <TooltipTrigger
-                        render={
-                          <Card className="flex size-8 items-center justify-center p-0 shadow-none">
-                            <Emoji emoji={flag} className="text-base" />
-                          </Card>
-                        }
-                      />
-                      <TooltipContent>{label}</TooltipContent>
-                    </Tooltip>
-                  ))}
-                </div>
-              </div>
-            ))
-          }
+         
           const icons = iconRegistry.filter(
             (entry) => entry.category === category.id
           )

@@ -1,6 +1,6 @@
 "use client"
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/item"
 import { Switch } from "@/components/ui/switch"
 import { HugeiconsIcon } from "@hugeicons/react"
-import {  ArrowUpRight01Icon, Briefcase01Icon, ChromeIcon, Clock01Icon, Database01Icon, GithubIcon, Link01Icon, MoreHorizontalIcon, Trash } from "@hugeicons/core-free-icons"
+import {  Briefcase01Icon, ChromeIcon, Clock01Icon, CrownIcon, Database01Icon, GithubIcon, Heart, Link01Icon, MoreHorizontalIcon, Trash } from "@hugeicons/core-free-icons"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 export function ItemExample() {
@@ -33,7 +33,7 @@ export function ItemExample() {
           </ItemDescription>
         </ItemContent>
         <ItemActions>
-          <Switch defaultChecked aria-label="Toggle automatic backups" />
+          <Switch size="sm" defaultChecked aria-label="Toggle automatic backups" />
         </ItemActions>
       </Item>
       <Item variant="outline">
@@ -56,10 +56,7 @@ export function ItemExample() {
                 <HugeiconsIcon icon={Clock01Icon} className="size-3.5" />
                 Run Now
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <HugeiconsIcon icon={Clock01Icon} className="size-3.5" />
-                Resume
-              </DropdownMenuItem>
+             
               <DropdownMenuItem variant="destructive">
                 <HugeiconsIcon icon={Trash} className="size-3.5" />
                 Delete
@@ -84,7 +81,7 @@ export function ItemExample() {
           </ItemDescription>
         </ItemContent>
         <ItemActions>
-          <Switch defaultChecked aria-label="Toggle automatic backups" />
+          <Switch size="sm" defaultChecked aria-label="Toggle automatic backups" />
         </ItemActions>
       </Item>
       <Item variant="outline">
@@ -119,20 +116,29 @@ export function ItemExample() {
       </ItemGroup>
       <ItemSeparator />
       <ItemGroup className="w-full gap-2" aria-label="Team">
-      <Item variant="muted">
+      <Item size="xs" variant="outline">
         <ItemMedia>
           <Avatar>
-            <AvatarFallback>MK</AvatarFallback>
+            <AvatarImage src="https://avatar.aiellie.dev/AE" alt="@AE" />
+            <AvatarFallback>AE</AvatarFallback>
           </Avatar>
         </ItemMedia>
         <ItemContent>
-          <ItemTitle>
-            Mira Kowalski
-            <Badge variant="secondary">Owner</Badge>
-          </ItemTitle>
-          <ItemDescription>mira@acme.dev</ItemDescription>
+          <ItemTitle>AI Ellie</ItemTitle>
+          <ItemDescription>hello@aiellie.dev</ItemDescription>
         </ItemContent>
         <ItemActions>
+        <Badge
+                variant="outline"
+                className="size-5 cursor-pointer rounded-full border-rose-200 bg-rose-50 p-0 text-rose-600 dark:border-rose-800 dark:bg-rose-950 dark:text-rose-400"
+                aria-label="Owner"
+              >
+                <HugeiconsIcon
+                  icon={CrownIcon}
+                  strokeWidth={2}
+                  className="fill-current"
+                />
+              </Badge>
           <Button size="sm" variant="outline">
             Manage
           </Button>

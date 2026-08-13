@@ -10,7 +10,7 @@ const shortcuts = [
   { action: "Undo", keys: ["⌘", "Z"] },
   { action: "Redo", keys: ["⌘", "⇧", "Z"] },
   { action: "Find in file", keys: ["⌘", "F"] },
-  { action: "Replace", keys: ["⌘", "⌥", "F"] },
+  /*{ action: "Replace", keys: ["⌘", "⌥", "F"] },
   { action: "Go to line", keys: ["⌃", "G"] },
   { action: "Select all", keys: ["⌘", "A"] },
   { action: "Copy", keys: ["⌘", "C"] },
@@ -40,7 +40,7 @@ const shortcuts = [
   { action: "DevTools", keys: ["⌘", "⌥", "I"] },
   { action: "Hard refresh", keys: ["⌘", "⇧", "R"] },
   { action: "Windows shortcut", keys: ["Ctrl", "Alt", "Del"] },
-  { action: "Modifiers", keys: ["⌘", "⇧", "⌥", "⌃"] },
+  { action: "Modifiers", keys: ["⌘", "⇧", "⌥", "⌃"] },*/
 ]
 
 const keyGroups = [
@@ -126,7 +126,7 @@ export function KbdExample() {
         ))}
       </div>
 
-      <div className="flex flex-col gap-4">
+      {/*<div className="flex flex-col gap-4">
         {keyGroups.map((group) => (
           <div key={group.label} className="flex flex-col gap-2">
             <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
@@ -139,7 +139,7 @@ export function KbdExample() {
             </div>
           </div>
         ))}
-      </div>
+      </div>*/}
 
       <p className="text-sm text-muted-foreground">
         Press <Kbd>?</Kbd> anywhere to view every shortcut, or hit{" "}

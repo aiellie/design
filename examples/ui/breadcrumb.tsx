@@ -22,9 +22,11 @@ import { Home01Icon } from "@hugeicons/core-free-icons"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
 import { BookOpen01Icon, PaintBrush01Icon, GithubIcon, ComponentIcon, Route02Icon } from "@hugeicons/core-free-icons"
+import { CodeIcons } from "@/icons/code-icons"
+
 export function BreadcrumbExample() {
   return (
-    <div className="flex w-full flex-col gap-5">
+    <div className="flex w-full flex-col gap-5 mx-auto max-w-sm">
  <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
@@ -81,7 +83,10 @@ export function BreadcrumbExample() {
       <Breadcrumb>
         <BreadcrumbList className="font-mono text-xs">
           <BreadcrumbItem>
-            <BreadcrumbLink href="#">examples</BreadcrumbLink>
+            <BreadcrumbLink href="#" className="flex items-center gap-1.5">
+              <CodeIcons.tsx className="size-3.5" />
+              examples
+            </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator>/</BreadcrumbSeparator>
           <BreadcrumbItem>

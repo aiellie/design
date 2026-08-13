@@ -109,11 +109,10 @@ export function PaginationExample() {
     )
   }
 
-  /* A 4-page window slides with the current page. The jump select sits in
-     a fixed slot between the window and the pinned last page, so the
-     layout never changes shape: window, jumper, last. */
+  /* Five slots: a 4-page window plus the jump ellipsis, e.g. 1, 2, 3, 4, …
+     The window slides with the current page so the layout never changes shape. */
   const showAll = totalPages <= 5
-  const start = Math.min(Math.max(page - 1, 1), Math.max(totalPages - 4, 1))
+  const start = Math.min(Math.max(page - 1, 1), Math.max(totalPages - 3, 1))
   const pageItems = showAll
     ? Array.from({ length: totalPages }, (_, i) => i + 1)
     : Array.from({ length: 4 }, (_, i) => start + i)
@@ -130,7 +129,7 @@ export function PaginationExample() {
   )
 
   return (
-    <TooltipProvider>
+    <div className="flex w-full flex-col gap-5 mx-auto max-w-sm">
       <div className="flex w-full max-w-2xl flex-wrap items-center justify-between gap-x-6 gap-y-3">
         <Field orientation="horizontal" className="w-fit">
           <FieldLabel htmlFor="select-rows-per-page">Rows per page</FieldLabel>
@@ -190,7 +189,6 @@ export function PaginationExample() {
                 />
               </PaginationItem>
             )}
-            {!showAll && pageLink(totalPages)}
             <PaginationItem>
               <Tooltip>
                 <TooltipTrigger
@@ -220,6 +218,6 @@ export function PaginationExample() {
           </PaginationContent>
         </Pagination>
       </div>
-    </TooltipProvider>
+    </div>
   )
 }

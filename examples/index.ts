@@ -529,12 +529,6 @@ export const exampleCategories: ExampleCategory[] = [
         component: QuestionnaireExample,
         icon: Icons.checkList,
       },
-      {
-        slug: "countries-select",
-        name: "Countries Select",
-        component: CountriesSelect,
-        icon: Icons.sorting,
-      },
     ],
   },
 ]
