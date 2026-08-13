@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { ThemeProvider } from "@/app/components/theme-provider";
+import { Toaster } from "@/components/ui/toast"
 
 const fontSans = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -35,7 +36,8 @@ export default function RootLayout({
       <body
         className="antialiased"
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>{children}          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
