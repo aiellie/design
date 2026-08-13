@@ -7,6 +7,15 @@ import { HugeiconsIcon } from "@hugeicons/react"
 
 import { cn } from "@/lib/utils"
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard"
+import {
+  CodeBlock,
+  CodeBlockActions,
+  CodeBlockCopyButton,
+  CodeBlockDownloadButton,
+  CodeBlockFilename,
+  CodeBlockHeader,
+  CodeBlockTitle,
+} from "@/components/code-block"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -18,6 +27,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { toast } from "@/components/ui/toast"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
@@ -28,6 +45,7 @@ import {
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { CodeIcons } from "@/icons/code-icons"
 import { Icon, Icons, type IconData } from "@/icons/icons"
+import { themesCss } from "./themes-css"
 
 type SetKey = "brand" | "interface" | "text" | "status" | "chart" | "sidebar"
 
@@ -82,9 +100,6 @@ const sets: Record<SetKey, TokenSwatch[]> = {
   ],
 }
 
-/** Shipped in the copied block but not given a swatch of their own. */
-const neutralTokens = ["--background", "--foreground", "--border"]
-
 const setMeta: Record<SetKey, { label: string; icon: IconData }> = {
   brand: { label: "Brand", icon: Icons.colors },
   interface: { label: "Interface", icon: Icons.layers },
@@ -102,7 +117,6 @@ export function ColorsExample() {
   const [selected, setSelected] = React.useState<
     (TokenSwatch & { value: string }) | null
   >(null)
-  const theme = useCopyToClipboard()
   const detail = useCopyToClipboard()
 
   const swatches = sets[set]
@@ -133,45 +147,48 @@ export function ColorsExample() {
     )
   }
 
-  async function copyThemeCss() {
-    const tokens = [
-      ...sets.brand.map((entry) => entry.token),
-      ...sets.interface.map((entry) => entry.token),
-      ...sets.text.map((entry) => entry.token),
-      ...sets.status.map((entry) => entry.token),
-      ...sets.chart.map((entry) => entry.token),
-      ...sets.sidebar.map((entry) => entry.token),
-      ...neutralTokens,
-    ]
-    const block = `:root {\n${tokens
-      .map((token) => `  ${token}: ${readValue(token)};`)
-      .join("\n")}\n}`
-    const copied = await theme.copyToClipboard(block)
-    toast.add(
-      copied
-        ? {
-            title: "Copied themes.css",
-            description: `${tokens.length} tokens as CSS variables.`,
-            type: "success",
-          }
-        : {
-            title: "Could not copy",
-            description: "The clipboard is unavailable here.",
-            type: "error",
-          }
-    )
-  }
-
   return (
     <Card ref={rootRef} className="mx-auto max-w-sm">
       <CardHeader>
         <CardTitle>Color Tokens</CardTitle>
         <CardDescription>Semantic palette in oklch</CardDescription>
         <CardAction>
-          <Button variant="outline" size="xs" onClick={copyThemeCss}>
-          <CodeIcons.css className="size-3.5" />
-            themes
-          </Button>
+          <Dialog>
+            <DialogTrigger
+              render={
+                <Button variant="outline" size="xs">
+                  <CodeIcons.css className="size-3.5" />
+                  themes
+                </Button>
+              }
+            />
+            <DialogContent className="gap-3 overflow-hidden sm:max-w-2xl">
+              <DialogHeader className="pr-8">
+                <DialogTitle>themes.css</DialogTitle>
+                <DialogDescription>
+                  Light and dark tokens for the aiellie theme.
+                </DialogDescription>
+              </DialogHeader>
+              <CodeBlock
+                code={themesCss.trim()}
+                language="css"
+                showLineNumbers
+                className="flex max-h-[min(28rem,60vh)] flex-col overflow-hidden rounded-lg"
+                contentClassName="min-h-0 flex-1"
+              >
+                <CodeBlockHeader>
+                  <CodeBlockTitle>
+                    <CodeIcons.css className="size-3.5" />
+                    <CodeBlockFilename>styles/themes.css</CodeBlockFilename>
+                  </CodeBlockTitle>
+                  <CodeBlockActions>
+                    <CodeBlockCopyButton />
+                    <CodeBlockDownloadButton filename="themes.css" />
+                  </CodeBlockActions>
+                </CodeBlockHeader>
+              </CodeBlock>
+            </DialogContent>
+          </Dialog>
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
@@ -191,7 +208,7 @@ export function ColorsExample() {
               <TooltipTrigger
                 render={
                   <ToggleGroupItem
-                    value={key}
+                    value={key}   
                     aria-label={setMeta[key].label}
                     className="flex-1"
                   >

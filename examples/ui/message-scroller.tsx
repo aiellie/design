@@ -155,7 +155,7 @@ export function MessageScrollerExample() {
                     ))}
                   </MessageScrollerContent>
                 </MessageScrollerViewport>
-                <MessageScrollerButton className="rounded-full" />
+                <MessageScrollerButton  />
               </MessageScroller>
             )}
           </CardContent>
@@ -191,20 +191,20 @@ export function MessageScrollerExample() {
                       className="w-44"
                     >
                       <DropdownMenuItem>
-                        <HugeiconsIcon icon={AttachmentIcon} />
+                        <HugeiconsIcon icon={AttachmentIcon} strokeWidth={2}/>
                         Add Photos & Files
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem>
-                        <HugeiconsIcon icon={AiImageIcon} />
+                        <HugeiconsIcon icon={AiImageIcon} strokeWidth={2}/>
                         Create Image
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <HugeiconsIcon icon={Telescope02Icon} />
+                        <HugeiconsIcon icon={Telescope02Icon} strokeWidth={2}/>
                         Deep Research
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <HugeiconsIcon icon={AiSearch02Icon} />
+                        <HugeiconsIcon icon={AiSearch02Icon} strokeWidth={2}/>
                         Web Search
                       </DropdownMenuItem>
                     </DropdownMenuContent>

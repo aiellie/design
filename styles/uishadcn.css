@@ -262,6 +262,11 @@
     @apply rounded-xl!;
   }
 
+ /* Stock MessageScrollerButton uses icon-sm radius. */
+ [data-slot="message-scroller-button"] {
+   @apply rounded-full!;
+ }
+
  /* Stock AttachmentActions uses top-3 / right-3 when vertical. */
  [data-slot="attachment"][data-orientation="vertical"] [data-slot="attachment-actions"] {
    @apply top-0! right-0!;

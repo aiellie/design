@@ -1,5 +1,6 @@
 import * as React from "react"
-
+import { FileEmptyIcon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 type IconProps = React.HTMLAttributes<SVGElement>
 
 export const CodeIcons = {
@@ -552,3 +553,57 @@ export const CodeIcons = {
     </svg>
   ),
 }
+export function getIconForLanguageExtension(language: string) {
+  switch (language) {
+    case "json":
+    case "jsonc":
+    case "json5":
+      return <CodeIcons.json />
+    case "ico":
+      return <CodeIcons.ico />
+    case "svg":
+      return <CodeIcons.svg />
+    case "mjs":
+    case "cjs":
+    case "js":
+      return <CodeIcons.js />
+    case "css":
+      return <CodeIcons.css />
+    case "gitignore":
+      return <CodeIcons.gitignore />
+    case "ts":
+    case "mts":
+    case "cts":
+    case "typescript":
+      return <CodeIcons.ts />
+    case "jsx":
+    case "tsx":
+      return <CodeIcons.tsx />
+    case "md":
+    case "mdx":
+    case "markdown":
+      return <CodeIcons.md />
+    case "sh":
+    case "bash":
+    case "shell":
+    case "zsh":
+      return <CodeIcons.bash />
+    case "py":
+    case "python":
+      return <CodeIcons.python />
+    case "go":
+    case "golang":
+      return <CodeIcons.go />
+    case "rs":
+    case "rust":
+      return <CodeIcons.rust />
+    default:
+      return (
+        <HugeiconsIcon
+          icon={FileEmptyIcon}
+          className="size-4 text-muted-foreground"
+        />
+      )
+  }
+}
+
