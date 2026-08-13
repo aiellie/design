@@ -60,7 +60,7 @@
   "attachment": "shipped",
   "message": "shipped",
   "message-scroller": "planned",
-  "bubble": "planned",
+  "bubble": "shipped",
   "marker": "shipped",
   "questionnaire": "shipped"
 }
