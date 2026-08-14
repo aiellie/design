@@ -67,6 +67,8 @@ import { TooltipExample } from "@/examples/ui/tooltip"
 import { Icons, type IconData } from "@/icons/icons"
 import { CodeBlockExample } from "@/examples/code/code-block"
 import { CodeLanguageSelectorExample } from "@/examples/code/code-language-selector"
+import { ColorFormatSelectorExample } from "@/examples/color/color-format-selector"
+import { ColorPickerExample } from "@/examples/color/color-picker"
 import type { ExampleStatus } from "./status"
 
 export type { ExampleStatus }
@@ -100,6 +102,8 @@ export function exampleFilePath(slug: string): string {
   if (slug === "icons") return "examples/icons/icons.tsx"
   if (slug === "code-block" || slug === "code-language-selector")
     return `examples/code/${slug}.tsx`
+  if (slug === "color-picker" || slug === "color-format-selector")
+    return `examples/color/${slug}.tsx`
   return `examples/ui/${slug}.tsx`
 }
 
@@ -546,6 +550,23 @@ export const exampleCategories: ExampleCategory[] = [
         slug: "code-language-selector",
         name: "Code Language Selector",
         component: CodeLanguageSelectorExample,
+        icon: Icons.sorting,
+      },
+    ],
+  },
+  {
+    title: "Color",
+    examples: [
+      {
+        slug: "color-picker",
+        name: "Color Picker",
+        component: ColorPickerExample,
+        icon: Icons.colors,
+      },
+      {
+        slug: "color-format-selector",
+        name: "Color Format Selector",
+        component: ColorFormatSelectorExample,
         icon: Icons.sorting,
       },
     ],
