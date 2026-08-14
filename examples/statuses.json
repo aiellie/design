@@ -64,5 +64,7 @@
   "marker": "shipped",
   "questionnaire": "shipped",
   "code-block": "shipped",
-  "code-language-selector": "shipped"
+  "code-language-selector": "shipped",
+  "color-picker": "shipped",
+  "color-swatch": "shipped"
 }
