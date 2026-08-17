@@ -9,7 +9,7 @@ import { AlertDialogExample } from "@/examples/ui/alert-dialog"
 import { AspectRatioExample } from "@/examples/ui/aspect-ratio"
 import { AttachmentExample } from "@/examples/ui/attachment"
 import { AvatarExample } from "@/examples/ui/avatar"
-import { BadgeExample } from "@/examples/ui/badge"
+import { BadgeColorsDemo, BadgeExample } from "@/examples/ui/badge"
 import { BreadcrumbExample } from "@/examples/ui/breadcrumb"
 import { BubbleExample } from "@/examples/ui/bubble"
 import { ButtonExample } from "@/examples/ui/button"
@@ -76,16 +76,38 @@ import type { ExampleStatus } from "./status"
 
 export type { ExampleStatus }
 
+/** One demo inside an example — a tab in the viewer when there's more than one. */
+export interface ExampleDemo {
+  /** Tab value; unique within the example. */
+  value: string
+  label: string
+  icon: IconData
+  component: React.ComponentType
+}
+
 export interface ComponentExample {
   /** Matches the file name in components/ui and examples/ui. */
   slug: string
   name: string
   component: React.ComponentType
   icon: IconData
+  /**
+   * Extra demos from the same file, shown as icon tabs next to the main one.
+   * Leave unset for examples with a single demo — the viewer renders those bare.
+   */
+  demos?: ExampleDemo[]
 }
 
 export interface ExampleCategory {
   title: string
+  /** Hugeicons glyph for the category in menus, headers, and nav. */
+  icon: IconData
+  /** Soft tinted background for the category icon chip (`bg-*-500/5`). */
+  iconBg: string
+  /** Tailwind text class so the icon renders via currentColor. */
+  textColor: string
+  /** Faint border that matches the tint. */
+  borderColor: string
   examples: ComponentExample[]
 }
 
@@ -96,6 +118,22 @@ export interface FlatExample extends ComponentExample {
   file: string
   /** Class name for the example container. */
   className?: string
+}
+
+/**
+ * Every demo for an example in tab order — the main one first, then extras.
+ * A single-entry result means the example has nothing to tab between.
+ */
+export function exampleDemos(example: ComponentExample): ExampleDemo[] {
+  return [
+    {
+      value: example.slug,
+      label: example.name,
+      icon: example.icon,
+      component: example.component,
+    },
+    ...(example.demos ?? []),
+  ]
 }
 
 /** Repo-relative source path for an example slug. */
@@ -119,6 +157,10 @@ export function exampleFilePath(slug: string): string {
 export const exampleCategories: ExampleCategory[] = [
   {
     title: "Foundations",
+    icon: Icons.layers,
+    iconBg: "bg-violet-500/5",
+    textColor: "text-violet-500",
+    borderColor: "border-violet-200/10",
     examples: [
       {
         slug: "colors",
@@ -142,6 +184,10 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Actions",
+    icon: Icons.cursorPointer,
+    iconBg: "bg-blue-500/5",
+    textColor: "text-blue-500",
+    borderColor: "border-blue-200/10",
     examples: [
       {
         slug: "button",
@@ -172,6 +218,14 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Badge",
         component: BadgeExample,
         icon: Icons.tag,
+        demos: [
+          {
+            value: "badge-colors",
+            label: "Colors",
+            icon: Icons.colors,
+            component: BadgeColorsDemo,
+          },
+        ],
       },
       {
         slug: "kbd",
@@ -183,6 +237,10 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Forms & Input",
+    icon: Icons.edit,
+    iconBg: "bg-cyan-500/5",
+    textColor: "text-cyan-500",
+    borderColor: "border-cyan-200/10",
     examples: [
       {
         slug: "input",
@@ -266,6 +324,10 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Overlays",
+    icon: Icons.appWindow,
+    iconBg: "bg-indigo-500/5",
+    textColor: "text-indigo-500",
+    borderColor: "border-indigo-200/10",
     examples: [
       {
         slug: "dialog",
@@ -313,6 +375,10 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Menus & Navigation",
+    icon: Icons.menu,
+    iconBg: "bg-teal-500/5",
+    textColor: "text-teal-500",
+    borderColor: "border-teal-200/10",
     examples: [
       {
         slug: "dropdown-menu",
@@ -372,6 +438,10 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Status",
+    icon: Icons.alert,
+    iconBg: "bg-amber-500/5",
+    textColor: "text-amber-500",
+    borderColor: "border-amber-200/10",
     examples: [
       {
         slug: "alert",
@@ -413,6 +483,10 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Data",
+    icon: Icons.analytics,
+    iconBg: "bg-emerald-500/5",
+    textColor: "text-emerald-500",
+    borderColor: "border-emerald-200/10",
     examples: [
       {
         slug: "table",
@@ -454,6 +528,10 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Display",
+    icon: Icons.layout,
+    iconBg: "bg-orange-500/5",
+    textColor: "text-orange-500",
+    borderColor: "border-orange-200/10",
     examples: [
       {
         slug: "separator",
@@ -507,6 +585,10 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Chat",
+    icon: Icons.chatting,
+    iconBg: "bg-pink-500/5",
+    textColor: "text-pink-500",
+    borderColor: "border-pink-200/10",
     examples: [
       {
         slug: "attachment",
@@ -548,6 +630,10 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Code",
+    icon: Icons.code,
+    iconBg: "bg-purple-500/5",
+    textColor: "text-purple-500",
+    borderColor: "border-purple-200/10",
     examples: [
       {
         slug: "code-block",
@@ -565,6 +651,10 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Color",
+    icon: Icons.colors,
+    iconBg: "bg-rose-500/5",
+    textColor: "text-rose-500",
+    borderColor: "border-rose-200/10",
     examples: [
       {
         slug: "color-picker",
@@ -582,6 +672,10 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Locale",
+    icon: Icons.globe,
+    iconBg: "bg-green-500/5",
+    textColor: "text-green-500",
+    borderColor: "border-green-200/10",
     examples: [
       {
         slug: "countries-select",
@@ -604,6 +698,12 @@ export const exampleCategories: ExampleCategory[] = [
     ],
   },
 ]
+
+/** Category metadata keyed by title, for looking up from a flat example. */
+export const categoryByTitle: Record<string, ExampleCategory> =
+  Object.fromEntries(
+    exampleCategories.map((category) => [category.title, category])
+  )
 
 /** Every example in display order, annotated with category and source file. */
 export const allExamples: FlatExample[] = exampleCategories.flatMap(

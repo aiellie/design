@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation"
 import * as React from "react"
 
+import { DashboardFooter } from "@/app/components/dashboard-footer"
 import { DashboardHeader } from "@/app/components/dashboard-header"
 import { DashboardOverview } from "@/app/components/dashboard-overview"
 import { DashboardSidebar } from "@/app/components/dashboard-sidebar"
@@ -93,8 +94,6 @@ function DashboardShell() {
           selected={selected}
           index={index}
           total={total}
-          previous={previous}
-          next={next}
           onSelect={setSelectedSlug}
         />
         <div className="flex-1 p-0">
@@ -104,6 +103,12 @@ function DashboardShell() {
             <DashboardOverview onSelect={setSelectedSlug} />
           )}
         </div>
+        <DashboardFooter
+          selected={selected}
+          previous={previous}
+          next={next}
+          onSelect={setSelectedSlug}
+        />
       </SidebarInset>
     </SidebarProvider>
   )

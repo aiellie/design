@@ -2,6 +2,7 @@
 
 import * as React from "react"
 
+import { CategoryIcon } from "@/app/components/category-icon"
 import { statusOf, useStatuses } from "@/app/components/status-provider"
 import { StatusSelect } from "@/app/components/status-select"
 import {
@@ -11,6 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Progress } from "@/components/ui/progress"
 import {
   Table,
@@ -20,7 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { allExamples, exampleCategories } from "@/examples"
+import { allExamples, categoryByTitle, exampleCategories } from "@/examples"
 import { exampleStatuses } from "@/examples/status"
 import { Icon } from "@/icons/icons"
 
@@ -43,7 +52,7 @@ export function DashboardOverview({
   const distribution = [...counts].reverse().filter((s) => s.count > 0)
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
+    <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 p-6">
       <Card>
         <CardHeader>
           <CardTitle>Progress</CardTitle>
@@ -86,45 +95,6 @@ export function DashboardOverview({
           </div>
         </CardContent>
       </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Categories</CardTitle>
-          <CardDescription>Shipped examples per category.</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          {exampleCategories.map((category) => {
-            const done = category.examples.filter(
-              (example) => statusOf(statuses, example.slug) === "shipped"
-            ).length
-            const pct = Math.round((done / category.examples.length) * 100)
-            return (
-              <div key={category.title} className="flex items-center gap-4">
-                <div className="w-40 shrink-0 truncate text-sm">
-                  {category.title}
-                </div>
-                <Progress
-                  value={pct}
-                  className="flex-1"
-                  aria-label={`${category.title} completion`}
-                />
-                <div className="w-12 shrink-0 text-right font-mono text-xs text-muted-foreground">
-                  {done}/{category.examples.length}
-                </div>
-              </div>
-            )
-          })}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>All items</CardTitle>
-          <CardDescription>
-            Click a row to focus on that example.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
@@ -149,8 +119,13 @@ export function DashboardOverview({
                       {example.name}
                     </div>
                   </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {example.categoryTitle}
+                  <TableCell>
+                    <div
+                      className="inline-flex"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      <CategoryPopover title={example.categoryTitle} />
+                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     <div
@@ -164,8 +139,70 @@ export function DashboardOverview({
               ))}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
     </div>
+  )
+}
+
+
+/**
+ * Category icon in the items table — click it for the category's name and
+ * where its examples stand.
+ */
+function CategoryPopover({ title }: { title: string }) {
+  const { statuses } = useStatuses()
+  const category = categoryByTitle[title]
+  const total = category.examples.length
+  const counts = exampleStatuses
+    .map((status) => ({
+      ...status,
+      count: category.examples.filter(
+        (example) => statusOf(statuses, example.slug) === status.id
+      ).length,
+    }))
+    .filter((status) => status.count > 0)
+    .reverse()
+  const shipped = category.examples.filter(
+    (example) => statusOf(statuses, example.slug) === "shipped"
+  ).length
+
+  return (
+    <Popover>
+      <PopoverTrigger
+        aria-label={`${category.title} category`}
+        className="inline-flex cursor-pointer rounded-md outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <CategoryIcon category={category} />
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-60">
+        <PopoverHeader className="flex-row items-center gap-2">
+          <CategoryIcon category={category} />
+          <div className="flex flex-col">
+            <PopoverTitle>{category.title}</PopoverTitle>
+            <PopoverDescription>
+              {shipped} of {total} shipped
+            </PopoverDescription>
+          </div>
+        </PopoverHeader>
+        <Progress
+          value={Math.round((shipped / total) * 100)}
+          aria-label={`${category.title} completion`}
+        />
+        <div className="flex flex-col gap-1">
+          {counts.map((status) => (
+            <div
+              key={status.id}
+              className="flex items-center gap-1.5 text-xs text-muted-foreground"
+            >
+              <span
+                className={`size-2 rounded-full ${status.color}`}
+                aria-hidden
+              />
+              {status.label}
+              <span className="ms-auto font-mono">{status.count}</span>
+            </div>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }

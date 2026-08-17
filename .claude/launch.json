@@ -26,10 +26,14 @@
       "runtimeArgs": [
         "NEXT_DIST_DIR=.next-dev-alt",
         "pnpm",
-        "dev"
+        "exec",
+        "next",
+        "dev",
+        "--turbopack",
+        "--port",
+        "3011"
       ],
-      "port": 3010,
-      "autoPort": true
+      "port": 3011
     }
   ]
 }

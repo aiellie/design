@@ -6,11 +6,22 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
+import {
+  Combobox,
+  ComboboxCollection,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxTrigger,
+} from "@/components/ui/combobox"
+import { InputGroupAddon } from "@/components/ui/input-group"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import {
@@ -18,24 +29,59 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import type { FlatExample } from "@/examples"
+import { allExamples, exampleCategories, type FlatExample } from "@/examples"
 import { Icon, Icons } from "@/icons/icons"
 import { Home01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
+
+/** 1-based page number for each example, matching the ⌘N search shortcuts. */
+const pageNumberOf = new Map(
+  allExamples.map((example, index) => [example.slug, index + 1])
+)
+
+/** Examples grouped for the combobox: `value` is the heading, `items` the rows. */
+const exampleGroups = exampleCategories.map((category) => ({
+  value: category.title,
+  items: allExamples.filter(
+    (example) => example.categoryTitle === category.title
+  ),
+}))
+
+function renderExampleGroup(group: (typeof exampleGroups)[number]) {
+  return (
+    <ComboboxGroup key={group.value} items={group.items}>
+      <ComboboxLabel>{group.value}</ComboboxLabel>
+      <ComboboxCollection>
+        {(example: FlatExample) => (
+          <ComboboxItem
+            key={example.slug}
+            value={example}
+            // The tick normally floats at the right edge; make it flow inline so
+            // it sits just left of the shortcut.
+            className="pr-2 [&_[data-slot=combobox-item-indicator]]:static"
+          >
+            <Icon icon={example.icon} className="text-muted-foreground" />
+            {example.name}
+            <span className="ml-auto" />
+            <span className="order-last text-xs tracking-widest text-muted-foreground">
+              ⌘{pageNumberOf.get(example.slug)}
+            </span>
+          </ComboboxItem>
+        )}
+      </ComboboxCollection>
+    </ComboboxGroup>
+  )
+}
 
 export function DashboardHeader({
   selected,
   index,
   total,
-  previous,
-  next,
   onSelect,
 }: {
   selected: FlatExample | null
   index: number
   total: number
-  previous: FlatExample | null
-  next: FlatExample | null
   onSelect: (slug: string | null) => void
 }) {
   return (
@@ -66,20 +112,57 @@ export function DashboardHeader({
               <>
                 <BreadcrumbSeparator className="hidden sm:inline-flex" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="flex items-center gap-2 whitespace-nowrap">
-                    <Icon icon={selected.icon} className="size-4" />
-                    {selected.name}
-                  </BreadcrumbPage>
+                  <Combobox
+                    items={exampleGroups}
+                    value={selected}
+                    onValueChange={(example: FlatExample | null) => {
+                      if (example) onSelect(example.slug)
+                    }}
+                    itemToStringLabel={(example: FlatExample) => example.name}
+                    isItemEqualToValue={(item: FlatExample, value: FlatExample) =>
+                      item.slug === value.slug
+                    }
+                  >
+                    <ComboboxTrigger
+                      render={
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          aria-label={`${selected.name} — switch example`}
+                          className="gap-2 whitespace-nowrap text-sm font-normal text-foreground"
+                        >
+                          <Icon icon={selected.icon} className="size-4" />
+                          {selected.name}
+                          <Icon
+                            icon={Icons.chevronDown}
+                            className="size-3.5 text-muted-foreground"
+                          />
+                        </Button>
+                      }
+                    />
+                    <ComboboxContent className="w-64">
+                      <ComboboxInput
+                        showClear={true}
+                        showTrigger={false}
+                        placeholder="Search examples"
+                      >
+                        <InputGroupAddon>
+                          <Icon
+                            icon={Icons.search}
+                            strokeWidth={2}
+                            className="size-3.5"
+                          />
+                        </InputGroupAddon>
+                      </ComboboxInput>
+                      <ComboboxEmpty>No examples found.</ComboboxEmpty>
+                      <ComboboxList>{renderExampleGroup}</ComboboxList>
+                    </ComboboxContent>
+                  </Combobox>
                 </BreadcrumbItem>
               </>
             ) : null}
           </BreadcrumbList>
         </Breadcrumb>
-        {selected ? (
-          <span className="hidden truncate font-mono text-xs text-muted-foreground xl:inline">
-            {selected.file}
-          </span>
-        ) : null}
       </div>
       {selected ? (
         <div className="flex shrink-0 items-center gap-3">
@@ -88,44 +171,6 @@ export function DashboardHeader({
             {index + 1} / {total}
           </span> */}
                 <SearchCommand onSelect={onSelect} />
-          <ButtonGroup>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <Button
-                    variant="outline"
-                    size="icon-sm"
-                    disabled={!previous}
-                    onClick={() => previous && onSelect(previous.slug)}
-                    aria-label="Previous example"
-                  >
-                    <Icon icon={Icons.arrowLeft} className="text-muted-foreground" />
-                  </Button>
-                }
-              />
-              <TooltipContent>
-                {previous ? `Previous: ${previous.name}` : "Previous"}
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <Button
-                    variant="outline"
-                    size="icon-sm"
-                    disabled={!next}
-                    onClick={() => next && onSelect(next.slug)}
-                    aria-label="Next example"
-                  >
-                    <Icon icon={Icons.arrowRight} className="text-muted-foreground" />
-                  </Button>
-                }
-              />
-              <TooltipContent>
-                {next ? `Next: ${next.name}` : "Next"}
-              </TooltipContent>
-            </Tooltip>
-          </ButtonGroup>
         </div>
       ) : null}
     </header>

@@ -35,6 +35,7 @@ import {
   HelpCircleIcon,
   HelpSquareIcon,
   HighlighterIcon,
+  HomeIcon,
   InboxIcon,
   InformationCircleIcon,
   KeyboardIcon,
@@ -181,6 +182,7 @@ export const Icons = {
   translate: TranslateIcon,
   chevronDown: ChevronDownIcon,
   userCircle: UserCircleIcon,
+  home: HomeIcon,
 } as const
 
 export type IconName = keyof typeof Icons

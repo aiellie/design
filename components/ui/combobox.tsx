@@ -140,7 +140,7 @@ function ComboboxItem({
       {...props}
     >
       {children}
-      <ComboboxPrimitive.ItemIndicator render={<span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center"><HugeiconsIcon icon={Tick02Icon} strokeWidth={2} className="pointer-events-none" /></span>} />
+      <ComboboxPrimitive.ItemIndicator render={<span data-slot="combobox-item-indicator" className="pointer-events-none absolute right-2 flex size-4 items-center justify-center"><HugeiconsIcon icon={Tick02Icon} strokeWidth={2} className="pointer-events-none" /></span>} />
     </ComboboxPrimitive.Item>
   )
 }

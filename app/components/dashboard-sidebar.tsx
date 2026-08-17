@@ -83,8 +83,8 @@ export function DashboardSidebar({
                   isActive={selectedSlug === null}
                   onClick={() => onSelect(null)}
                 >
-                  <Icon icon={Icons.grid} />
-                  <span>Overview</span>
+                  <Icon icon={Icons.home} />
+                  <span>Home</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
