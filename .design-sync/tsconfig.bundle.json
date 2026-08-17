@@ -1,0 +1,15 @@
+{
+  // Read by design-sync's esbuild paths plugin ONLY (it does not follow
+  // "extends", so this file is standalone). Two jobs: resolve the app's @/*
+  // alias, and swap the full `shiki` entry for the slim curated shim so
+  // _ds_bundle.js stays under the 12MB upload limit. tsc type generation
+  // uses tsconfig.types.json instead and never sees the shim.
+  "compilerOptions": {
+    "baseUrl": "..",
+    "paths": {
+      "@/*": ["./*"],
+      "shiki": ["./.design-sync/shims/shiki.ts"],
+      "next/image": ["./.design-sync/shims/next-image.tsx"]
+    }
+  }
+}

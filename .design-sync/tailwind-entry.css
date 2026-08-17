@@ -1,0 +1,13 @@
+/* design-sync Tailwind entry: the app's real stylesheet plus an explicit
+ * source directive for the preview compositions. Tailwind v4's automatic
+ * content detection skips dot-directories, so utilities used ONLY in
+ * .design-sync/previews/*.tsx would otherwise compile to nothing and
+ * collapse in the preview cards. */
+@import "../styles/globals.css";
+@source "./previews";
+/* Streamdown (the Markdown component's renderer) styles its elements with its
+ * own utility classes; the app never scans its dist, so they'd compile to
+ * nothing (headings at body size, list markers gone). The app's own prod CSS
+ * has the same gap — mirrored fix, also worth applying to styles/globals.css. */
+@source "../node_modules/streamdown/dist";
+@source "../node_modules/@streamdown/code/dist";

@@ -1,0 +1,4 @@
+---
+category: Display
+keywords: [carousel]
+---

@@ -27,3 +27,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+# design-sync (staged scripts, build output, machine state — durable files
+# under .design-sync/ like config.json, NOTES.md, previews/ ARE committed)
+/.ds-sync/
+/ds-bundle/
+/types/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules
