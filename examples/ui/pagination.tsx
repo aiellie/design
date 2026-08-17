@@ -2,7 +2,14 @@
 
 import * as React from "react"
 
-import { Field, FieldLabel } from "@/components/ui/field"
+import { HugeiconsIcon } from "@hugeicons/react"
+import {
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+  MoreHorizontalCircle01Icon,
+} from "@hugeicons/core-free-icons"
+
+import { Button } from "@/components/ui/button"
 import {
   Pagination,
   PaginationContent,
@@ -10,214 +17,225 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination"
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { HugeiconsIcon } from "@hugeicons/react"
-import {
-  ArrowLeft01Icon,
-  ArrowRight01Icon,
-  MoreHorizontalIcon,
-} from "@hugeicons/core-free-icons"
 
-const TOTAL_ITEMS = 300
-const ROWS_OPTIONS = [
-  { value: "10", label: "10" },
-  { value: "25", label: "25" },
-  { value: "50", label: "50" },
-  { value: "100", label: "100" },
-  { value: "all", label: "All" },
-]
+const TOTAL_ROWS = 137
 
-const toRowsPerPage = (value: string) =>
-  value === "all" ? TOTAL_ITEMS : Number(value)
-
-/* The ellipsis slot: an icon button that opens a select of every page. */
-function JumpToPage({
-  page,
-  totalPages,
-  onSelect,
-}: {
-  page: number
-  totalPages: number
-  onSelect: (page: number) => void
-}) {
+export function PaginationExample() {
   return (
-    <Select
-      value={String(page)}
-      onValueChange={(value) => onSelect(Number(value))}
-    >
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <SelectTrigger
-              aria-label="Jump to page"
-              className="size-8 justify-center border-transparent bg-transparent p-0 hover:bg-muted hover:text-foreground aria-expanded:bg-muted dark:bg-transparent dark:hover:bg-input/50 [&>svg:last-child]:hidden"
-            >
-              <HugeiconsIcon icon={MoreHorizontalIcon} strokeWidth={2} />
-              <span className="sr-only">Jump to page</span>
-            </SelectTrigger>
-          }
-        />
-        <TooltipContent>Jump to page</TooltipContent>
-      </Tooltip>
-      <SelectContent className="min-w-24">
-        <SelectGroup>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-            <SelectItem key={n} value={String(n)}>
-              Page {n}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <>
+      <PaginationBasic />
+    </>
   )
 }
 
-export function PaginationExample() {
-  const [rows, setRows] = React.useState("25")
-  const [page, setPage] = React.useState(2)
+type PageItem = number | { type: "ellipsis"; pages: number[] }
 
-  const rowsPerPage = toRowsPerPage(rows)
-  const totalPages = Math.max(1, Math.ceil(TOTAL_ITEMS / rowsPerPage))
+/** Windowed page list, with an ellipsis standing in for the hidden pages. */
+function getPageItems(
+  page: number,
+  totalPages: number,
+  siblings = 1
+): PageItem[] {
+  const range = (start: number, end: number) =>
+    Array.from({ length: end - start + 1 }, (_, index) => start + index)
+  const ellipsis = (start: number, end: number) => ({
+    type: "ellipsis" as const,
+    pages: range(start, end),
+  })
 
-  const goTo =
-    (target: number) => (event: React.MouseEvent<HTMLAnchorElement>) => {
-      event.preventDefault()
-      setPage(Math.min(Math.max(target, 1), totalPages))
-    }
-
-  const changeRows = (value: string | null) => {
-    if (value === null) return
-    setRows(value)
-    // Keep the current page in range when the page count shrinks.
-    setPage((current) =>
-      Math.min(
-        current,
-        Math.max(1, Math.ceil(TOTAL_ITEMS / toRowsPerPage(value)))
-      )
-    )
+  const edgeCount = siblings * 2 + 3
+  if (totalPages <= edgeCount + 2) {
+    return range(1, totalPages)
   }
 
-  /* Five slots: a 4-page window plus the jump ellipsis, e.g. 1, 2, 3, 4, …
-     The window slides with the current page so the layout never changes shape. */
-  const showAll = totalPages <= 5
-  const start = Math.min(Math.max(page - 1, 1), Math.max(totalPages - 3, 1))
-  const pageItems = showAll
-    ? Array.from({ length: totalPages }, (_, i) => i + 1)
-    : Array.from({ length: 4 }, (_, i) => start + i)
+  const showStartEllipsis = page - siblings > 2
+  const showEndEllipsis = page + siblings < totalPages - 1
 
-  const rangeStart = (page - 1) * rowsPerPage + 1
-  const rangeEnd = Math.min(page * rowsPerPage, TOTAL_ITEMS)
+  if (!showStartEllipsis) {
+    return [
+      ...range(1, edgeCount),
+      ellipsis(edgeCount + 1, totalPages - 1),
+      totalPages,
+    ]
+  }
+  if (!showEndEllipsis) {
+    return [
+      1,
+      ellipsis(2, totalPages - edgeCount),
+      ...range(totalPages - edgeCount + 1, totalPages),
+    ]
+  }
+  return [
+    1,
+    ellipsis(2, page - siblings - 1),
+    ...range(page - siblings, page + siblings),
+    ellipsis(page + siblings + 1, totalPages - 1),
+    totalPages,
+  ]
+}
 
-  const pageLink = (n: number) => (
-    <PaginationItem key={n}>
-      <PaginationLink href="#" isActive={page === n} onClick={goTo(n)}>
-        {n}
-      </PaginationLink>
-    </PaginationItem>
+const ROWS_PER_PAGE_OPTIONS = [10, 20, 50, 100]
+
+/** Stands in for the ellipsis: jumps to any hidden page, and sets the page size. */
+function PageJumpMenu({
+  pages,
+  page,
+  onSelect,
+  rowsPerPage,
+  onRowsPerPageChange,
+}: {
+  pages: number[]
+  page: number
+  onSelect: (page: number) => void
+  rowsPerPage: number
+  onRowsPerPageChange: (rowsPerPage: number) => void
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button variant="ghost" size="icon" aria-label="More pages">
+            <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} />
+          </Button>
+        }
+      />
+      <DropdownMenuContent align="center" className="w-auto min-w-40">
+        <DropdownMenuRadioGroup
+          value={page}
+          onValueChange={(value) => onSelect(value as number)}
+        >
+          {pages.map((pageNumber) => (
+            <DropdownMenuRadioItem key={pageNumber} value={pageNumber}>
+              Page {pageNumber}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>Rows per page</DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuRadioGroup
+              value={rowsPerPage}
+              onValueChange={(value) => onRowsPerPageChange(value as number)}
+            >
+              {ROWS_PER_PAGE_OPTIONS.map((option) => (
+                <DropdownMenuRadioItem key={option} value={option}>
+                  {option}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
+}
+
+function PaginationBasic({ className }: { className?: string }) {
+  const [page, setPage] = React.useState(1)
+  const [rowsPerPage, setRowsPerPage] = React.useState(
+    ROWS_PER_PAGE_OPTIONS[0]
+  )
+  const totalPages = Math.ceil(TOTAL_ROWS / rowsPerPage)
+
+  const handleRowsPerPageChange = (next: number) => {
+    setRowsPerPage(next)
+    setPage((current) => Math.min(current, Math.ceil(TOTAL_ROWS / next)))
+  }
 
   return (
-    <div className="flex w-full flex-col gap-5 mx-auto max-w-sm">
-      <div className="flex w-full max-w-2xl flex-wrap items-center justify-between gap-x-6 gap-y-3">
-        <Field orientation="horizontal" className="w-fit">
-          <FieldLabel htmlFor="select-rows-per-page">Rows per page</FieldLabel>
-          <Select value={rows} onValueChange={changeRows} items={ROWS_OPTIONS}>
-            <SelectTrigger className="w-20" id="select-rows-per-page">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent align="start">
-              <SelectGroup>
-                {ROWS_OPTIONS.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </Field>
-        <p className="text-sm text-muted-foreground tabular-nums">
-          {rangeStart}&ndash;{rangeEnd} of {TOTAL_ITEMS}
-        </p>
-        <Pagination className="mx-0 w-auto">
-          <PaginationContent>
-            <PaginationItem>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <PaginationLink
-                      href="#"
-                      aria-label="Go to previous page"
-                      onClick={goTo(page - 1)}
-                      aria-disabled={page === 1}
-                      className={
-                        page === 1
-                          ? "pointer-events-none opacity-50"
-                          : undefined
-                      }
-                    >
-                      <HugeiconsIcon
-                        icon={ArrowLeft01Icon}
-                        strokeWidth={2}
-                        className="cn-rtl-flip"
-                      />
-                    </PaginationLink>
-                  }
-                />
-                <TooltipContent>Previous page</TooltipContent>
-              </Tooltip>
-            </PaginationItem>
-            {pageItems.map(pageLink)}
-            {!showAll && (
-              <PaginationItem>
-                <JumpToPage
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Go to previous page"
+                    disabled={page === 1}
+                    onClick={() =>
+                      setPage((current) => Math.max(1, current - 1))
+                    }
+                  >
+                    <HugeiconsIcon
+                      icon={ArrowLeft01Icon}
+                      strokeWidth={2}
+                      className="cn-rtl-flip"
+                    />
+                  </Button>
+                }
+              />
+              <TooltipContent>Previous</TooltipContent>
+            </Tooltip>
+          </PaginationItem>
+          {getPageItems(page, totalPages).map((item, index) =>
+            typeof item === "object" ? (
+              <PaginationItem key={`ellipsis-${index}`}>
+                <PageJumpMenu
+                  pages={item.pages}
                   page={page}
-                  totalPages={totalPages}
                   onSelect={setPage}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={handleRowsPerPageChange}
                 />
               </PaginationItem>
-            )}
-            <PaginationItem>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <PaginationLink
-                      href="#"
-                      aria-label="Go to next page"
-                      onClick={goTo(page + 1)}
-                      aria-disabled={page === totalPages}
-                      className={
-                        page === totalPages
-                          ? "pointer-events-none opacity-50"
-                          : undefined
-                      }
-                    >
-                      <HugeiconsIcon
-                        icon={ArrowRight01Icon}
-                        strokeWidth={2}
-                        className="cn-rtl-flip"
-                      />
-                    </PaginationLink>
-                  }
-                />
-                <TooltipContent>Next page</TooltipContent>
-              </Tooltip>
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
-    </div>
+            ) : (
+              <PaginationItem key={item}>
+                <PaginationLink
+                  href="#"
+                  isActive={item === page}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    setPage(item)
+                  }}
+                >
+                  {item}
+                </PaginationLink>
+              </PaginationItem>
+            )
+          )}
+          <PaginationItem>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Go to next page"
+                    disabled={page === totalPages}
+                    onClick={() =>
+                      setPage((current) => Math.min(totalPages, current + 1))
+                    }
+                  >
+                    <HugeiconsIcon
+                      icon={ArrowRight01Icon}
+                      strokeWidth={2}
+                      className="cn-rtl-flip"
+                    />
+                  </Button>
+                }
+              />
+              <TooltipContent>Next</TooltipContent>
+            </Tooltip>
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
   )
 }

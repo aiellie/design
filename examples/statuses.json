@@ -34,7 +34,7 @@
   "navigation-menu": "shipped",
   "command": "shipped",
   "breadcrumb": "shipped",
-  "pagination": "reviewing",
+  "pagination": "shipped",
   "tabs": "shipped",
   "sidebar": "planned",
   "alert": "shipped",
@@ -66,5 +66,5 @@
   "code-block": "shipped",
   "code-language-selector": "shipped",
   "color-picker": "shipped",
-  "color-swatch": "shipped"
+  "color-format-selector": "shipped"
 }
