@@ -14,13 +14,11 @@ export * from "../components/ui/toggle-group"
 // Forms & Input
 export * from "../components/ui/checkbox"
 export * from "../components/ui/combobox"
-export * from "../components/countries-select"
 export * from "../components/ui/field"
 export * from "../components/ui/input"
 export * from "../components/ui/input-group"
 export * from "../components/ui/input-otp"
 export * from "../components/ui/label"
-export * from "../components/language-selector"
 export * from "../components/ui/native-select"
 export * from "../components/ui/radio-group"
 export * from "../components/ui/select"
@@ -92,6 +90,11 @@ export * from "../components/code/code-language-selector"
 // Color
 export * from "../components/color/color-format-selector"
 export * from "../components/color/color-picker"
+
+// Locale
+export * from "../components/locale/countries-select"
+export * from "../components/locale/language-selector"
+export * from "../components/locale/time-picker"
 
 // Icons & utilities
 export * from "../icons/icons"

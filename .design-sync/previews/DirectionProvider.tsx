@@ -4,7 +4,7 @@
 // for Arabic without any interaction.
 import { Bubble, BubbleContent } from "@/components/ui/bubble"
 import { DirectionProvider } from "@/components/ui/direction"
-import { LanguageSelector } from "@/components/language-selector"
+import { LanguageSelector } from "@/components/locale/language-selector"
 
 export { DirectionExample as Showcase } from "@/examples/ui/direction"
 

@@ -127,11 +127,18 @@ export const countryGroups: CountryGroup[] = [
   },
 ]
 
+/**
+ * Emoji flags bring their own font metrics: the ink is ~1.4x the font size and
+ * sits low in an asymmetric em box (18 up / 5 down in Apple Color Emoji). At the
+ * row's own 14px with `leading-none` that rendered 20px of ink hanging ~4.5px
+ * below the label's optical centre. Centring the glyph in a fixed icon-sized box
+ * at `text-xs` lands it on that centre at the same scale as the chevron.
+ */
 function CountryFlag({ flag }: { flag: string }) {
   return (
     <span
       aria-hidden="true"
-      className="w-5 shrink-0 text-center leading-none [font-family:'Apple_Color_Emoji','Segoe_UI_Emoji','Noto_Color_Emoji',sans-serif]"
+      className="flex h-4 w-5 shrink-0 items-center justify-center text-xs [font-family:'Apple_Color_Emoji','Segoe_UI_Emoji','Noto_Color_Emoji',sans-serif]"
     >
       {flag}
     </span>

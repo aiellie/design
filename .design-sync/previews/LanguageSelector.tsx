@@ -9,7 +9,7 @@ import {
   LanguageSelector,
   languageOptions,
   type Language,
-} from "@/components/language-selector"
+} from "@/components/locale/language-selector"
 import { Label } from "@/components/ui/label"
 
 export function Showcase() {

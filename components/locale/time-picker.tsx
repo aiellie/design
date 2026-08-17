@@ -77,7 +77,7 @@ function Column({
 
   return (
     <div className="flex min-w-0 flex-1 flex-col">
-      <span className="px-1 pb-1 text-center text-[10px] font-medium text-muted-foreground uppercase">
+      <span className="px-1 pt-2 pb-1 text-center text-[10px] font-medium text-muted-foreground uppercase">
         {label}
       </span>
       <div

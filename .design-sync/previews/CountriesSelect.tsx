@@ -3,7 +3,7 @@
 // Base UI's open/defaultOpen, so an open-popup cell isn't statically
 // reachable — cells show placeholder / selected / disabled trigger states,
 // with countryGroups driving the caption counts.
-import { CountriesSelect, countryGroups } from "@/components/countries-select"
+import { CountriesSelect, countryGroups } from "@/components/locale/countries-select"
 import { Label } from "@/components/ui/label"
 
 const countryCount = countryGroups.reduce(

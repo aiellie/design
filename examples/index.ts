@@ -69,6 +69,9 @@ import { CodeBlockExample } from "@/examples/code/code-block"
 import { CodeLanguageSelectorExample } from "@/examples/code/code-language-selector"
 import { ColorFormatSelectorExample } from "@/examples/color/color-format-selector"
 import { ColorPickerExample } from "@/examples/color/color-picker"
+import { CountriesSelectExample } from "@/examples/locale/countries-select"
+import { LanguageSelectorExample } from "@/examples/locale/language-selector"
+import { TimePickerExample } from "@/examples/locale/time-picker"
 import type { ExampleStatus } from "./status"
 
 export type { ExampleStatus }
@@ -104,6 +107,12 @@ export function exampleFilePath(slug: string): string {
     return `examples/code/${slug}.tsx`
   if (slug === "color-picker" || slug === "color-format-selector")
     return `examples/color/${slug}.tsx`
+  if (
+    slug === "countries-select" ||
+    slug === "language-selector" ||
+    slug === "time-picker"
+  )
+    return `examples/locale/${slug}.tsx`
   return `examples/ui/${slug}.tsx`
 }
 
@@ -568,6 +577,29 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Color Format Selector",
         component: ColorFormatSelectorExample,
         icon: Icons.sorting,
+      },
+    ],
+  },
+  {
+    title: "Locale",
+    examples: [
+      {
+        slug: "countries-select",
+        name: "Countries Select",
+        component: CountriesSelectExample,
+        icon: Icons.globe,
+      },
+      {
+        slug: "language-selector",
+        name: "Language Selector",
+        component: LanguageSelectorExample,
+        icon: Icons.translate,
+      },
+      {
+        slug: "time-picker",
+        name: "Time Picker",
+        component: TimePickerExample,
+        icon: Icons.clock,
       },
     ],
   },

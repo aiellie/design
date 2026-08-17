@@ -15,13 +15,11 @@ export { ToggleGroup } from "./components/ui/toggle-group"
 // Forms & Input
 export { Checkbox } from "./components/ui/checkbox"
 export { Combobox } from "./components/ui/combobox"
-export { CountriesSelect } from "./components/countries-select"
 export { Field } from "./components/ui/field"
 export { Input } from "./components/ui/input"
 export { InputGroup } from "./components/ui/input-group"
 export { InputOTP } from "./components/ui/input-otp"
 export { Label } from "./components/ui/label"
-export { LanguageSelector } from "./components/language-selector"
 export { NativeSelect } from "./components/ui/native-select"
 export { RadioGroup } from "./components/ui/radio-group"
 export { Select } from "./components/ui/select"
@@ -93,3 +91,8 @@ export { CodeBlockLanguageSelector } from "./components/code/code-language-selec
 // Color
 export { ColorFormatSelector } from "./components/color/color-format-selector"
 export { ColorRow } from "./components/color/color-picker"
+
+// Locale
+export { CountriesSelect } from "./components/locale/countries-select"
+export { LanguageSelector } from "./components/locale/language-selector"
+export { TimePicker } from "./components/locale/time-picker"

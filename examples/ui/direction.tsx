@@ -6,7 +6,7 @@ import {
   LanguageSelector,
   useTranslation,
   type Translations,
-} from "@/components/language-selector"
+} from "@/components/locale/language-selector"
 
 const translations: Translations<{
   incoming: string

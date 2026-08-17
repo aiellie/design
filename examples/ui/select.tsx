@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { CountriesSelect } from "@/components/countries-select"
+import { CountriesSelect } from "@/components/locale/countries-select"
 import {
   Field,
   FieldContent,
