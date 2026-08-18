@@ -102,7 +102,8 @@ import {
   Rocket01Icon,
   TriangleIcon,
   UserCircleIcon,
-  DarkModeIcon
+  DarkModeIcon,
+  LoginIcon,
 } from "@hugeicons/core-free-icons"
 
 import type { IconCategoryId } from "./icon-categories"
@@ -114,6 +115,7 @@ import { cn } from "@/lib/utils"
  * shares the same set and default styling.
  */
 export const Icons = {
+  login: LoginIcon,
   dropper: DropperIcon,
   mic: MicIcon,
   alert: AlertCircleIcon,

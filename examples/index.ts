@@ -82,7 +82,7 @@ import { TimePickerExample } from "@/examples/locale/time-picker"
 import { WebPreviewExample } from "@/examples/web/web-preview"
 import type { ExampleStatus } from "./status"
 import { MicSelectorExample } from "@/examples/audio/mic-selector"
-
+import { LoginFormExample } from "@/examples/auth/login-form"
 export type { ExampleStatus }
 
 /** One demo inside an example — a tab in the viewer when there's more than one. */
@@ -834,6 +834,22 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Mic Selector",
         component: MicSelectorExample,
         icon: Icons.mic,
+      },
+    ],
+  },
+  {
+    title: "Auth",
+    icon: Icons.login,
+    iconBg: "bg-indigo-500/5",
+    textColor: "text-indigo-500",
+    borderColor: "border-indigo-200/10",
+    type: "component",
+    examples: [
+      {
+        slug: "login-form",
+        name: "Login Form",
+        component: LoginFormExample,
+        icon: Icons.login,
       },
     ],
   },
