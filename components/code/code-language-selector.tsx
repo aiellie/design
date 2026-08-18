@@ -1,6 +1,6 @@
 "use client"
 
-import type { ComponentProps } from "react"
+import type { ComponentProps, ReactNode } from "react"
 
 import { getIconForLanguageExtension } from "@/icons/code-icons"
 import { Button } from "@/components/ui/button"
@@ -16,6 +16,34 @@ import {
 } from "@/components/ui/combobox"
 import { cn } from "@/lib/utils"
 
+function languageFromValue(value: unknown): string | undefined {
+  if (typeof value === "string") {
+    return value
+  }
+
+  if (
+    value &&
+    typeof value === "object" &&
+    "value" in value &&
+    typeof value.value === "string"
+  ) {
+    return value.value
+  }
+}
+
+function labelFromValue(value: unknown): string | undefined {
+  if (
+    value &&
+    typeof value === "object" &&
+    "label" in value &&
+    typeof value.label === "string"
+  ) {
+    return value.label
+  }
+
+  return languageFromValue(value)
+}
+
 function LanguageIcon({ language }: { language: string }) {
   return (
     <span className="flex size-3.5 shrink-0 items-center justify-center [&_svg]:size-3.5">
@@ -24,11 +52,57 @@ function LanguageIcon({ language }: { language: string }) {
   )
 }
 
+function LanguageValue({ value }: { value: unknown }) {
+  const language = languageFromValue(value)
+  const label = labelFromValue(value)
+
+  if (!language) {
+    return null
+  }
+
+  return (
+    <span className="flex min-w-0 items-center gap-1.5">
+      <LanguageIcon language={language} />
+      <span className="truncate">{label}</span>
+    </span>
+  )
+}
+
+function renderLanguageItem(
+  item: { value?: string; label?: string } | string
+): ReactNode {
+  const language = languageFromValue(item)
+
+  if (!language) {
+    return null
+  }
+
+  return (
+    <CodeBlockLanguageSelectorItem key={language} value={item}>
+      {labelFromValue(item)}
+    </CodeBlockLanguageSelectorItem>
+  )
+}
+
 export type CodeBlockLanguageSelectorProps = ComponentProps<typeof Combobox>
 
-export const CodeBlockLanguageSelector = (
-  props: CodeBlockLanguageSelectorProps
-) => <Combobox data-slot="code-block-language-selector" {...props} />
+export const CodeBlockLanguageSelector = ({
+  children,
+  ...props
+}: CodeBlockLanguageSelectorProps) => (
+  <Combobox data-slot="code-block-language-selector" {...props}>
+    {children ?? (
+      <>
+        <CodeBlockLanguageSelectorTrigger>
+          <CodeBlockLanguageSelectorValue />
+        </CodeBlockLanguageSelectorTrigger>
+        <CodeBlockLanguageSelectorContent>
+          <CodeBlockLanguageSelectorList />
+        </CodeBlockLanguageSelectorContent>
+      </>
+    )}
+  </Combobox>
+)
 
 export type CodeBlockLanguageSelectorTriggerProps = ComponentProps<
   typeof ComboboxTrigger
@@ -66,14 +140,7 @@ export const CodeBlockLanguageSelectorValue = ({
   ...props
 }: CodeBlockLanguageSelectorValueProps) => (
   <ComboboxValue data-slot="code-block-language-selector-value" {...props}>
-    {children ??
-      ((value) =>
-        typeof value === "string" ? (
-          <span className="flex min-w-0 items-center gap-1.5">
-            <LanguageIcon language={value} />
-            <span className="truncate">{value}</span>
-          </span>
-        ) : null)}
+    {children ?? ((value) => <LanguageValue value={value} />)}
   </ComboboxValue>
 )
 
@@ -96,7 +163,7 @@ export const CodeBlockLanguageSelectorContent = ({
     <ComboboxInput
       showTrigger={false}
       placeholder="Search language"
-      className="h-7! rounded-none! border-x-0 border-t-0  border-input/30 bg-background shadow-none! *:data-[slot=input-group-addon]:ps-2! ring-0! focus-visible:ring-0!"
+      className="h-7! rounded-none! border-x-0 border-t-0  border-input/30 bg-background! shadow-none! *:data-[slot=input-group-addon]:ps-2! ring-0! focus-visible:ring-0!"
     />
     <ComboboxEmpty>No language found.</ComboboxEmpty>
     {children}
@@ -109,13 +176,16 @@ export type CodeBlockLanguageSelectorListProps = ComponentProps<
 
 export const CodeBlockLanguageSelectorList = ({
   className,
+  children,
   ...props
 }: CodeBlockLanguageSelectorListProps) => (
   <ComboboxList
     data-slot="code-block-language-selector-list"
     className={cn(className)}
     {...props}
-  />
+  >
+    {children ?? renderLanguageItem}
+  </ComboboxList>
 )
 
 export type CodeBlockLanguageSelectorItemProps = ComponentProps<
@@ -127,14 +197,18 @@ export const CodeBlockLanguageSelectorItem = ({
   children,
   value,
   ...props
-}: CodeBlockLanguageSelectorItemProps) => (
-  <ComboboxItem
-    data-slot="code-block-language-selector-item"
-    className={cn("gap-2 text-xs", className)}
-    value={value}
-    {...props}
-  >
-    {typeof value === "string" ? <LanguageIcon language={value} /> : null}
-    {children}
-  </ComboboxItem>
-)
+}: CodeBlockLanguageSelectorItemProps) => {
+  const language = languageFromValue(value)
+
+  return (
+    <ComboboxItem
+      data-slot="code-block-language-selector-item"
+      className={cn("gap-2 text-xs", className)}
+      value={value}
+      {...props}
+    >
+      {language ? <LanguageIcon language={language} /> : null}
+      {children}
+    </ComboboxItem>
+  )
+}

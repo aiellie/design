@@ -3,6 +3,7 @@
 import { NavUser } from "@/app/components/nav-user"
 import {
   NavFilters,
+  type NavCollapse,
   type NavGroupBy,
   type NavSortBy,
 } from "@/app/components/nav-filters"
@@ -144,6 +145,40 @@ function buildNavGroups(
   return groups.filter((group) => group.examples.length > 0)
 }
 
+const defaultSortBy: NavSortBy = "default"
+const defaultGroupBy: NavGroupBy = "category"
+// The default status filter leaves finished (shipped) work unchecked.
+const defaultVisibleStatuses = () =>
+  exampleStatuses
+    .filter((status) => status.id !== "shipped")
+    .map((status) => status.id)
+
+/** A group is completed when every example in it has shipped. */
+const isGroupCompleted = (group: NavGroup, statuses: StatusMap) =>
+  group.examples.every(
+    (example) => statusOf(statuses, example.slug) === "shipped"
+  )
+
+/**
+ * Completed groups start collapsed. Computed over every status — not the
+ * default filter, which hides shipped work entirely — so finished groups
+ * arrive folded the moment the user shows shipped work again.
+ */
+const defaultCollapsedKeys = (statuses: StatusMap) =>
+  new Set(
+    buildNavGroups(
+      defaultSortBy,
+      defaultGroupBy,
+      exampleStatuses.map((status) => status.id),
+      statuses
+    )
+      .filter((group) => isGroupCompleted(group, statuses))
+      .map((group) => group.key)
+  )
+
+const setEquals = <T,>(a: ReadonlySet<T>, b: ReadonlySet<T>) =>
+  a.size === b.size && [...a].every((item) => b.has(item))
+
 export function DashboardSidebar({
   selectedSlug,
   onSelect,
@@ -154,11 +189,16 @@ export function DashboardSidebar({
   const { statuses } = useStatuses()
   const activeItemRef = React.useRef<HTMLButtonElement>(null)
 
-  const [sortBy, setSortBy] = React.useState<NavSortBy>("default")
-  const [groupBy, setGroupBy] = React.useState<NavGroupBy>("category")
+  const [sortBy, setSortBy] = React.useState<NavSortBy>(defaultSortBy)
+  const [groupBy, setGroupBy] = React.useState<NavGroupBy>(defaultGroupBy)
   const [visibleStatuses, setVisibleStatuses] = React.useState<
     ExampleStatus[]
-  >(() => exampleStatuses.map((status) => status.id))
+  >(defaultVisibleStatuses)
+  // Group open state lives here (keyed by group key) so the filter menu's
+  // collapse preset and the per-group toggles drive the same state.
+  const [collapsedKeys, setCollapsedKeys] = React.useState<Set<string>>(() =>
+    defaultCollapsedKeys(statuses)
+  )
 
   // Initial load is handled by the inline script below, before first paint.
   // This covers in-app navigation (clicks, arrow keys): center the active
@@ -190,6 +230,65 @@ export function DashboardSidebar({
   const completion = Math.round((shipped / total) * 100)
 
   const groups = buildNavGroups(sortBy, groupBy, visibleStatuses, statuses)
+
+  const isCollapsed = (group: NavGroup) => collapsedKeys.has(group.key)
+  const isCompleted = (group: NavGroup) => isGroupCompleted(group, statuses)
+
+  // Which preset the current open state matches — drives the menu's radio
+  // selection; null when manual toggles produced a mix ("Custom").
+  const collapse: NavCollapse | null = groups.every(
+    (group) => !isCollapsed(group)
+  )
+    ? "none"
+    : groups.every(isCollapsed)
+      ? "all"
+      : groups.every((group) => isCollapsed(group) === isCompleted(group))
+        ? "completed"
+        : null
+
+  // Any deviation from the default view lights the trigger icon and arms
+  // the reset item.
+  const isFiltering =
+    sortBy !== defaultSortBy ||
+    groupBy !== defaultGroupBy ||
+    !setEquals(
+      new Set(visibleStatuses),
+      new Set(defaultVisibleStatuses())
+    ) ||
+    !setEquals(collapsedKeys, defaultCollapsedKeys(statuses))
+
+  function setGroupOpen(key: string, open: boolean) {
+    setCollapsedKeys((prev) => {
+      const next = new Set(prev)
+      if (open) {
+        next.delete(key)
+      } else {
+        next.add(key)
+      }
+      return next
+    })
+  }
+
+  function handleCollapse(collapse: NavCollapse) {
+    // "Completed" folds away finished work (which includes the "Shipped"
+    // group when grouping by status).
+    const shouldCollapse =
+      collapse === "all"
+        ? () => true
+        : collapse === "none"
+          ? () => false
+          : isCompleted
+    setCollapsedKeys(
+      new Set(groups.filter(shouldCollapse).map((group) => group.key))
+    )
+  }
+
+  function handleReset() {
+    setSortBy(defaultSortBy)
+    setGroupBy(defaultGroupBy)
+    setVisibleStatuses(defaultVisibleStatuses())
+    setCollapsedKeys(defaultCollapsedKeys(statuses))
+  }
 
   return (
     <Sidebar>
@@ -223,15 +322,21 @@ export function DashboardSidebar({
             sortBy={sortBy}
             groupBy={groupBy}
             visibleStatuses={visibleStatuses}
+            collapse={collapse}
+            isFiltering={isFiltering}
             onSortByChange={setSortBy}
             onGroupByChange={setGroupBy}
             onVisibleStatusesChange={setVisibleStatuses}
+            onCollapseChange={handleCollapse}
+            onReset={handleReset}
           />
         </SidebarGroup>
         {groups.map((group) => (
           <SidebarNavGroup
             key={group.key}
             group={group}
+            open={!collapsedKeys.has(group.key)}
+            onOpenChange={(open) => setGroupOpen(group.key, open)}
             selectedSlug={selectedSlug}
             onSelect={onSelect}
             activeItemRef={activeItemRef}
@@ -266,28 +371,33 @@ export function DashboardSidebar({
  */
 function SidebarNavGroup({
   group,
+  open,
+  onOpenChange,
   selectedSlug,
   onSelect,
   activeItemRef,
 }: {
   group: NavGroup
+  open: boolean
+  onOpenChange: (open: boolean) => void
   selectedSlug: string | null
   onSelect: (slug: string | null) => void
   activeItemRef: React.Ref<HTMLButtonElement>
 }) {
-  const [open, setOpen] = React.useState(true)
   const hasSelection = group.examples.some(
     (example) => example.slug === selectedSlug
   )
+  const openRef = React.useRef(onOpenChange)
+  openRef.current = onOpenChange
   // Selecting an item elsewhere (search, arrow keys) must reveal it even if
   // the group was collapsed; the scroll-into-view effect needs it rendered.
   React.useEffect(() => {
     if (hasSelection) {
-      setOpen(true)
+      openRef.current(true)
     }
   }, [hasSelection])
   return (
-    <Collapsible open={open} onOpenChange={setOpen}>
+    <Collapsible open={open} onOpenChange={onOpenChange}>
       <SidebarGroup>
         <SidebarGroupLabel className="group/category relative gap-1.5">
           <Icon

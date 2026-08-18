@@ -7,8 +7,10 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -28,6 +30,7 @@ import { Icon, Icons } from "@/icons/icons"
 
 export type NavSortBy = "default" | "name" | "status"
 export type NavGroupBy = "category" | "status" | "none"
+export type NavCollapse = "all" | "none" | "completed"
 
 const sortOptions: { id: NavSortBy; label: string }[] = [
   { id: "default", label: "Default" },
@@ -41,30 +44,53 @@ const groupOptions: { id: NavGroupBy; label: string }[] = [
   { id: "none", label: "None" },
 ]
 
+const collapseOptions: { id: NavCollapse; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "none", label: "None" },
+  { id: "completed", label: "Completed" },
+]
+
 const optionLabel = (options: { id: string; label: string }[], id: string) =>
   options.find((option) => option.id === id)?.label
 
 /**
- * Sidebar filter menu rendered as a group action: sort by, group by, and a
- * multi-select status filter, each in its own submenu. Fully controlled —
+ * Sidebar filter menu rendered as a group action: sort by, group by, a
+ * multi-select status filter, and a collapse preset, each in its own
+ * submenu, plus a reset item that restores the defaults. Fully controlled —
  * the owner holds the state and applies it to the nav list.
  */
 export function NavFilters({
   sortBy,
   groupBy,
   visibleStatuses,
+  collapse,
+  isFiltering,
   onSortByChange,
   onGroupByChange,
   onVisibleStatusesChange,
+  onCollapseChange,
+  onReset,
   className,
 }: {
   sortBy: NavSortBy
   groupBy: NavGroupBy
   /** Statuses currently shown; all statuses = no filter. */
   visibleStatuses: ExampleStatus[]
+  /**
+   * Collapse preset the groups currently match; null when manual toggles
+   * produced a mix.
+   */
+  collapse: NavCollapse | null
+  /** Whether the view deviates from the defaults; lights the trigger icon
+   * and arms the reset item. The owner knows the defaults, so it decides. */
+  isFiltering: boolean
   onSortByChange: (sortBy: NavSortBy) => void
   onGroupByChange: (groupBy: NavGroupBy) => void
   onVisibleStatusesChange: (statuses: ExampleStatus[]) => void
+  /** Collapse every group, no group, or the completed ones. */
+  onCollapseChange: (collapse: NavCollapse) => void
+  /** Restore every setting above to its default. */
+  onReset: () => void
   className?: string
 }) {
   function toggleStatus(status: ExampleStatus, checked: boolean) {
@@ -79,12 +105,6 @@ export function NavFilters({
     visibleStatuses.length === exampleStatuses.length
       ? "All"
       : `${visibleStatuses.length}`
-
-  // The filter is active whenever the list deviates from the default view.
-  const isFiltering =
-    sortBy !== "default" ||
-    groupBy !== "category" ||
-    visibleStatuses.length !== exampleStatuses.length
 
   return (
     <DropdownMenu>
@@ -180,6 +200,36 @@ export function NavFilters({
             ))}
           </DropdownMenuSubContent>
         </DropdownMenuSub>
+
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <Icon icon={Icons.minimize} className="size-3.5" />
+            Collapse
+            <span className="ml-auto text-xs text-muted-foreground">
+              {collapse ? optionLabel(collapseOptions, collapse) : "Custom"}
+            </span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className="w-44">
+            <DropdownMenuRadioGroup
+              value={collapse ?? ""}
+              onValueChange={(value) =>
+                onCollapseChange(value as NavCollapse)
+              }
+            >
+              {collapseOptions.map((option) => (
+                <DropdownMenuRadioItem key={option.id} value={option.id}>
+                  {option.label}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+
+        <DropdownMenuSeparator />
+        <DropdownMenuItem disabled={!isFiltering} onClick={onReset}>
+          <Icon icon={Icons.refresh} className="size-3.5" />
+          Reset filters
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

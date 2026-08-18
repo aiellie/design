@@ -17,7 +17,7 @@ import {
 import {
   Copy01Icon,
   Copy02Icon,
-  Delete02Icon,
+  Trash,
   Download01Icon,
   FileAddIcon,
   File01Icon,
@@ -154,7 +154,7 @@ function FolderMenu() {
       </ContextMenuGroup>
       <ContextMenuSeparator />
       <ContextMenuItem variant="destructive">
-        <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} />
+        <HugeiconsIcon icon={Trash} strokeWidth={2} />
         Delete
         <ContextMenuShortcut>⌫</ContextMenuShortcut>
       </ContextMenuItem>
@@ -200,7 +200,7 @@ function FileMenu() {
       </ContextMenuGroup>
       <ContextMenuSeparator />
       <ContextMenuItem variant="destructive">
-        <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} />
+        <HugeiconsIcon icon={Trash} strokeWidth={2} />
         Delete
         <ContextMenuShortcut>⌫</ContextMenuShortcut>
       </ContextMenuItem>
@@ -216,9 +216,9 @@ export function FileTreeExample() {
   )
 
   return (
-    <div className="w-full max-w-lg">
+    <div className="w-full max-w-md mx-auto">
       <FileTree
-        defaultExpanded={new Set(["app", "components", "components/ui"])}
+        defaultExpanded={new Set(["app"])}
         onSelect={setSelectedPath}
         selectedPath={selectedPath}
         variant="file-type"
