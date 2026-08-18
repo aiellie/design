@@ -1,9 +1,18 @@
 "use client"
 
 import { NavUser } from "@/app/components/nav-user"
+import {
+  NavFilters,
+  type NavGroupBy,
+  type NavSortBy,
+} from "@/app/components/nav-filters"
 import { ItemActions } from "@/app/components/item-actions"
 import { StatusDot } from "@/app/components/status-badge"
-import { statusOf, useStatuses } from "@/app/components/status-provider"
+import {
+  statusOf,
+  useStatuses,
+  type StatusMap,
+} from "@/app/components/status-provider"
 import {
   Collapsible,
   CollapsibleContent,
@@ -25,9 +34,115 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { allExamples, exampleCategories } from "@/examples"
-import { Icon, Icons } from "@/icons/icons"
+import {
+  allExamples,
+  exampleCategories,
+  type ComponentExample,
+} from "@/examples"
+import { exampleStatuses, type ExampleStatus } from "@/examples/status"
+import { Icon, Icons, type IconData } from "@/icons/icons"
 import * as React from "react"
+
+/** One rendered nav section after grouping, filtering, and sorting. */
+interface NavGroup {
+  key: string
+  title: string
+  icon: IconData
+  /** Right-aligned counter, e.g. "3/12" for categories or "8" for statuses. */
+  countLabel: string
+  examples: ComponentExample[]
+}
+
+const statusRank = Object.fromEntries(
+  exampleStatuses.map((status, index) => [status.id, index])
+) as Record<ExampleStatus, number>
+
+function sortExamples(
+  examples: ComponentExample[],
+  sortBy: NavSortBy,
+  statuses: StatusMap
+): ComponentExample[] {
+  if (sortBy === "name") {
+    return [...examples].sort((a, b) => a.name.localeCompare(b.name))
+  }
+  if (sortBy === "status") {
+    return [...examples].sort(
+      (a, b) =>
+        statusRank[statusOf(statuses, a.slug)] -
+          statusRank[statusOf(statuses, b.slug)] ||
+        a.name.localeCompare(b.name)
+    )
+  }
+  return examples
+}
+
+/** Groups examples per the filter settings; empty groups are dropped. */
+function buildNavGroups(
+  sortBy: NavSortBy,
+  groupBy: NavGroupBy,
+  visibleStatuses: ExampleStatus[],
+  statuses: StatusMap
+): NavGroup[] {
+  const visible = (example: ComponentExample) =>
+    visibleStatuses.includes(statusOf(statuses, example.slug))
+  const shippedCount = (examples: ComponentExample[]) =>
+    examples.filter(
+      (example) => statusOf(statuses, example.slug) === "shipped"
+    ).length
+
+  let groups: NavGroup[]
+  if (groupBy === "category") {
+    groups = exampleCategories.map((category) => {
+      const examples = sortExamples(
+        category.examples.filter(visible),
+        sortBy,
+        statuses
+      )
+      return {
+        key: category.title,
+        title: category.title,
+        icon: category.icon,
+        countLabel: `${shippedCount(examples)}/${examples.length}`,
+        examples,
+      }
+    })
+  } else if (groupBy === "status") {
+    groups = exampleStatuses
+      .filter((status) => visibleStatuses.includes(status.id))
+      .map((status) => {
+        const examples = sortExamples(
+          allExamples.filter(
+            (example) => statusOf(statuses, example.slug) === status.id
+          ),
+          sortBy,
+          statuses
+        )
+        return {
+          key: status.id,
+          title: status.label,
+          icon: status.icon,
+          countLabel: `${examples.length}`,
+          examples,
+        }
+      })
+  } else {
+    const examples = sortExamples(
+      allExamples.filter(visible),
+      sortBy,
+      statuses
+    )
+    groups = [
+      {
+        key: "all",
+        title: "Components",
+        icon: Icons.grid,
+        countLabel: `${shippedCount(examples)}/${examples.length}`,
+        examples,
+      },
+    ]
+  }
+  return groups.filter((group) => group.examples.length > 0)
+}
 
 export function DashboardSidebar({
   selectedSlug,
@@ -38,6 +153,12 @@ export function DashboardSidebar({
 }) {
   const { statuses } = useStatuses()
   const activeItemRef = React.useRef<HTMLButtonElement>(null)
+
+  const [sortBy, setSortBy] = React.useState<NavSortBy>("default")
+  const [groupBy, setGroupBy] = React.useState<NavGroupBy>("category")
+  const [visibleStatuses, setVisibleStatuses] = React.useState<
+    ExampleStatus[]
+  >(() => exampleStatuses.map((status) => status.id))
 
   // Initial load is handled by the inline script below, before first paint.
   // This covers in-app navigation (clicks, arrow keys): center the active
@@ -68,6 +189,8 @@ export function DashboardSidebar({
   ).length
   const completion = Math.round((shipped / total) * 100)
 
+  const groups = buildNavGroups(sortBy, groupBy, visibleStatuses, statuses)
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -96,16 +219,19 @@ export function DashboardSidebar({
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
+          <NavFilters
+            sortBy={sortBy}
+            groupBy={groupBy}
+            visibleStatuses={visibleStatuses}
+            onSortByChange={setSortBy}
+            onGroupByChange={setGroupBy}
+            onVisibleStatusesChange={setVisibleStatuses}
+          />
         </SidebarGroup>
-        {exampleCategories.map((category) => (
-          <SidebarCategoryGroup
-            key={category.title}
-            category={category}
-            done={
-              category.examples.filter(
-                (example) => statusOf(statuses, example.slug) === "shipped"
-              ).length
-            }
+        {groups.map((group) => (
+          <SidebarNavGroup
+            key={group.key}
+            group={group}
             selectedSlug={selectedSlug}
             onSelect={onSelect}
             activeItemRef={activeItemRef}
@@ -134,25 +260,23 @@ export function DashboardSidebar({
 }
 
 /**
- * A collapsible category group whose label doubles as the toggle: the category
- * icon swaps to a caret while the label is hovered or keyboard-focused, so the
+ * A collapsible nav group whose label doubles as the toggle: the group icon
+ * swaps to a caret while the label is hovered or keyboard-focused, so the
  * affordance only shows up when it is reachable.
  */
-function SidebarCategoryGroup({
-  category,
-  done,
+function SidebarNavGroup({
+  group,
   selectedSlug,
   onSelect,
   activeItemRef,
 }: {
-  category: (typeof exampleCategories)[number]
-  done: number
+  group: NavGroup
   selectedSlug: string | null
   onSelect: (slug: string | null) => void
   activeItemRef: React.Ref<HTMLButtonElement>
 }) {
   const [open, setOpen] = React.useState(true)
-  const hasSelection = category.examples.some(
+  const hasSelection = group.examples.some(
     (example) => example.slug === selectedSlug
   )
   // Selecting an item elsewhere (search, arrow keys) must reveal it even if
@@ -167,12 +291,12 @@ function SidebarCategoryGroup({
       <SidebarGroup>
         <SidebarGroupLabel className="group/category relative gap-1.5">
           <Icon
-            icon={category.icon}
+            icon={group.icon}
             className="size-3.5! group-hover/category:invisible group-has-[:focus-visible]/category:invisible"
           />
-          {category.title}
+          {group.title}
           <span className="ml-auto font-mono text-[0.65rem]">
-            {done}/{category.examples.length}
+            {group.countLabel}
           </span>
           <SidebarGroupAction
             render={<CollapsibleTrigger />}
@@ -183,14 +307,14 @@ function SidebarCategoryGroup({
               className="size-3.5!"
             />
             <span className="sr-only">
-              {open ? "Close" : "Open"} {category.title}
+              {open ? "Close" : "Open"} {group.title}
             </span>
           </SidebarGroupAction>
         </SidebarGroupLabel>
         <CollapsibleContent>
           <SidebarGroupContent>
             <SidebarMenu>
-              {category.examples.map((example) => (
+              {group.examples.map((example) => (
                 <SidebarMenuItem key={example.slug}>
                   <SidebarMenuButton
                     ref={

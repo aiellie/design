@@ -289,24 +289,12 @@ export const exampleCategories: ExampleCategory[] = [
     ],
   },
   {
-    title: "Forms & Input",
+    title: "Forms",
     icon: Icons.edit,
     iconBg: "bg-cyan-500/5",
     textColor: "text-cyan-500",
     borderColor: "border-cyan-200/10",
     examples: [
-      {
-        slug: "input",
-        name: "Input",
-        component: InputExample,
-        icon: Icons.edit,
-      },
-      {
-        slug: "textarea",
-        name: "Textarea",
-        component: TextareaExample,
-        icon: Icons.textSquare,
-      },
       {
         slug: "label",
         name: "Label",
@@ -318,36 +306,6 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Field",
         component: FieldExample,
         icon: Icons.note,
-      },
-      {
-        slug: "input-group",
-        name: "Input Group",
-        component: InputGroupExample,
-        icon: Icons.rowInsert,
-      },
-      {
-        slug: "input-otp",
-        name: "Input OTP",
-        component: InputOtpExample,
-        icon: Icons.squareLock,
-      },
-      {
-        slug: "native-select",
-        name: "Native Select",
-        component: NativeSelectExample,
-        icon: Icons.sorting,
-      },
-      {
-        slug: "select",
-        name: "Select",
-        component: SelectExample,
-        icon: Icons.chevronDown,
-      },
-      {
-        slug: "combobox",
-        name: "Combobox",
-        component: ComboboxExample,
-        icon: Icons.searchList,
       },
       {
         slug: "checkbox",
@@ -372,6 +330,39 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Slider",
         component: SliderExample,
         icon: Icons.slidersHorizontal,
+      },
+    ],
+  },
+  {
+    title: "Input",
+    icon: Icons.edit,
+    iconBg: "bg-cyan-500/5",
+    textColor: "text-cyan-500",
+    borderColor: "border-cyan-200/10",
+    examples: [
+      {
+        slug: "input",
+        name: "Input",
+        component: InputExample,
+        icon: Icons.edit,
+      },
+      {
+        slug: "textarea",
+        name: "Textarea",
+        component: TextareaExample,
+        icon: Icons.textSquare,
+      },
+      {
+        slug: "input-group",
+        name: "Input Group",
+        component: InputGroupExample,
+        icon: Icons.rowInsert,
+      },
+      {
+        slug: "input-otp",
+        name: "Input OTP",
+        component: InputOtpExample,
+        icon: Icons.squareLock,
       },
     ],
   },
@@ -427,7 +418,7 @@ export const exampleCategories: ExampleCategory[] = [
     ],
   },
   {
-    title: "Menus & Navigation",
+    title: "Menus",
     icon: Icons.menu,
     iconBg: "bg-teal-500/5",
     textColor: "text-teal-500",
@@ -447,11 +438,38 @@ export const exampleCategories: ExampleCategory[] = [
         icon: Icons.mouseRightClick,
       },
       {
+        slug: "native-select",
+        name: "Native Select",
+        component: NativeSelectExample,
+        icon: Icons.sorting,
+      },
+      {
+        slug: "select",
+        name: "Select",
+        component: SelectExample,
+        icon: Icons.chevronDown,
+      },
+      {
+        slug: "combobox",
+        name: "Combobox",
+        component: ComboboxExample,
+        icon: Icons.searchList,
+      },
+      {
         slug: "menubar",
         name: "Menubar",
         component: MenubarExample,
         icon: Icons.appWindowMac,
       },
+    ],
+  },
+  {
+    title: "Navigation",
+    icon: Icons.navigation,
+    iconBg: "bg-teal-500/5",
+    textColor: "text-teal-500",
+    borderColor: "border-teal-200/10",
+    examples: [
       {
         slug: "navigation-menu",
         name: "Navigation Menu",

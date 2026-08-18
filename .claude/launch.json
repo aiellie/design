@@ -21,6 +21,20 @@
       "port": 3100
     },
     {
+      "name": "dev-auto",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "NEXT_DIST_DIR=.next-dev-auto",
+        "pnpm",
+        "exec",
+        "next",
+        "dev",
+        "--turbopack"
+      ],
+      "port": 3012,
+      "autoPort": true
+    },
+    {
       "name": "dev-alt",
       "runtimeExecutable": "env",
       "runtimeArgs": [
