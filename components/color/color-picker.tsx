@@ -843,7 +843,7 @@ function ColorPopover({
       const target = e.target as Node;
       const element = target instanceof Element ? target : target.parentElement;
       // The format list portals to the body, so it reads as an outside press.
-      if (element?.closest('[data-slot="color-format-selector-content"]')) {
+      if (element?.closest("[data-color-format-selector-content]")) {
         return;
       }
       if (

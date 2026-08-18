@@ -65,7 +65,7 @@ export const ColorFormatSelectorContent = ({
   ...props
 }: ColorFormatSelectorContentProps) => (
   <ComboboxContent
-    data-slot="color-format-selector-content"
+    data-color-format-selector-content=""
     className={cn("min-w-40", className)}
     {...props}
   />
