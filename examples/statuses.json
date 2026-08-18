@@ -80,5 +80,6 @@
   "commit": "shipped",
   "date-picker": "shipped",
   "time-picker": "shipped",
-  "open-in-chat": "shipped"
+  "open-in-chat": "shipped",
+  "login-form": "shipped"
 }
