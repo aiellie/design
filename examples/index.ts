@@ -120,6 +120,8 @@ export interface ExampleCategory {
   /** Faint border that matches the tint. */
   borderColor: string
   examples: ComponentExample[]
+  /** Type of the category. */
+  type: "ui" | "component" | "block" | "style" | "icon"
 }
 
 export interface FlatExample extends ComponentExample {
@@ -186,6 +188,7 @@ export const exampleCategories: ExampleCategory[] = [
     iconBg: "bg-violet-500/5",
     textColor: "text-violet-500",
     borderColor: "border-violet-200/10",
+    type: "style",
     examples: [
       {
         slug: "colors",
@@ -222,9 +225,10 @@ export const exampleCategories: ExampleCategory[] = [
   {
     title: "Icons",
     icon: Icons.smile,
-    iconBg: "bg-orange-500/5",
-    textColor: "text-orange-500",
-    borderColor: "border-orange-200/10",
+    iconBg: "bg-yellow-500/5",
+    textColor: "text-yellow-500",
+    borderColor: "border-yellow-200/10",
+    type: "icon",
     examples: [
       {
         slug: "icons",
@@ -240,6 +244,7 @@ export const exampleCategories: ExampleCategory[] = [
     iconBg: "bg-blue-500/5",
     textColor: "text-blue-500",
     borderColor: "border-blue-200/10",
+    type: "ui",
     examples: [
       {
         slug: "button",
@@ -290,10 +295,11 @@ export const exampleCategories: ExampleCategory[] = [
   },
   {
     title: "Forms",
-    icon: Icons.edit,
+    icon: Icons.checkList,
     iconBg: "bg-cyan-500/5",
     textColor: "text-cyan-500",
     borderColor: "border-cyan-200/10",
+    type: "ui",
     examples: [
       {
         slug: "label",
@@ -336,9 +342,10 @@ export const exampleCategories: ExampleCategory[] = [
   {
     title: "Input",
     icon: Icons.edit,
-    iconBg: "bg-cyan-500/5",
-    textColor: "text-cyan-500",
-    borderColor: "border-cyan-200/10",
+    iconBg: "bg-sky-500/5",
+    textColor: "text-sky-500",
+    borderColor: "border-sky-200/10",
+    type: "ui",
     examples: [
       {
         slug: "input",
@@ -372,6 +379,7 @@ export const exampleCategories: ExampleCategory[] = [
     iconBg: "bg-indigo-500/5",
     textColor: "text-indigo-500",
     borderColor: "border-indigo-200/10",
+    type: "ui",
     examples: [
       {
         slug: "dialog",
@@ -423,6 +431,7 @@ export const exampleCategories: ExampleCategory[] = [
     iconBg: "bg-teal-500/5",
     textColor: "text-teal-500",
     borderColor: "border-teal-200/10",
+    type: "ui",
     examples: [
       {
         slug: "dropdown-menu",
@@ -466,9 +475,10 @@ export const exampleCategories: ExampleCategory[] = [
   {
     title: "Navigation",
     icon: Icons.navigation,
-    iconBg: "bg-teal-500/5",
-    textColor: "text-teal-500",
-    borderColor: "border-teal-200/10",
+    iconBg: "bg-lime-500/5",
+    textColor: "text-lime-500",
+    borderColor: "border-lime-200/10",
+    type: "ui",
     examples: [
       {
         slug: "navigation-menu",
@@ -515,6 +525,7 @@ export const exampleCategories: ExampleCategory[] = [
     iconBg: "bg-amber-500/5",
     textColor: "text-amber-500",
     borderColor: "border-amber-200/10",
+    type: "ui",
     examples: [
       {
         slug: "alert",
@@ -560,6 +571,7 @@ export const exampleCategories: ExampleCategory[] = [
     iconBg: "bg-emerald-500/5",
     textColor: "text-emerald-500",
     borderColor: "border-emerald-200/10",
+    type: "ui",
     examples: [
       {
         slug: "table",
@@ -606,6 +618,7 @@ export const exampleCategories: ExampleCategory[] = [
     iconBg: "bg-orange-500/5",
     textColor: "text-orange-500",
     borderColor: "border-orange-200/10",
+    type: "ui",
     examples: [
       {
         slug: "separator",
@@ -663,7 +676,8 @@ export const exampleCategories: ExampleCategory[] = [
     iconBg: "bg-pink-500/5",
     textColor: "text-pink-500",
     borderColor: "border-pink-200/10",
-    examples: [
+    type: "ui",
+        examples: [
       {
         slug: "attachment",
         name: "Attachment",
@@ -711,6 +725,7 @@ export const exampleCategories: ExampleCategory[] = [
     iconBg: "bg-purple-500/5",
     textColor: "text-purple-500",
     borderColor: "border-purple-200/10",
+    type: "component",
     examples: [
       {
         slug: "code-block",
@@ -768,6 +783,7 @@ export const exampleCategories: ExampleCategory[] = [
     iconBg: "bg-green-500/5",
     textColor: "text-green-500",
     borderColor: "border-green-200/10",
+    type: "component",
     examples: [
       {
         slug: "countries-select",
@@ -792,9 +808,10 @@ export const exampleCategories: ExampleCategory[] = [
   {
     title: "Web",
     icon: Icons.browser,
-    iconBg: "bg-sky-500/5",
-    textColor: "text-sky-500",
-    borderColor: "border-sky-200/10",
+    iconBg: "bg-fuchsia-500/5",
+    textColor: "text-fuchsia-500",
+    borderColor: "border-fuchsia-200/10",
+    type: "component",
     examples: [
       {
         slug: "web-preview",
@@ -807,9 +824,10 @@ export const exampleCategories: ExampleCategory[] = [
   {
     title: "Audio",
     icon: Icons.mic,
-    iconBg: "bg-pink-500/5",
-    textColor: "text-pink-500",
-    borderColor: "border-pink-200/10",
+    iconBg: "bg-rose-500/5",
+    textColor: "text-rose-500",
+    borderColor: "border-rose-200/10",
+    type: "component",
     examples: [
       {
         slug: "mic-selector",
