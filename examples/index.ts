@@ -83,6 +83,11 @@ import { WebPreviewExample } from "@/examples/web/web-preview"
 import type { ExampleStatus } from "./status"
 import { MicSelectorExample } from "@/examples/audio/mic-selector"
 import { LoginFormExample } from "@/examples/auth/login-form"
+import { CommitExample } from "@/examples/code/commit"
+import { JsxPreviewExample } from "@/examples/code/jsx-preview"
+import { PackageInfoExample } from "@/examples/code/package-info"
+import { SchemaDisplayExample } from "@/examples/code/schema-display"
+import { TestResultsExample } from "@/examples/code/test-results"
 export type { ExampleStatus }
 
 /** One demo inside an example — a tab in the viewer when there's more than one. */
@@ -160,6 +165,8 @@ export function exampleFilePath(slug: string): string {
     slug === "code-language-selector" ||
     slug === "environment-variables" ||
     slug === "file-tree" ||
+    slug === "jsx-preview" ||
+    slug === "package-info" ||
     slug === "snippet" ||
     slug === "stack-trace" ||
     slug === "terminal"
@@ -774,6 +781,36 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Artifact",
         component: ArtifactExample,
         icon: Icons.doc,
+      },
+      {
+        slug: "commit",
+        name: "Commit",
+        component: CommitExample,
+        icon: Icons.commit,
+      },
+      {
+        slug: "jsx-preview",
+        name: "JSX Preview",
+        component: JsxPreviewExample,
+        icon: Icons.appWindow,
+      },
+      {
+        slug: "package-info",
+        name: "Package Info",
+        component: PackageInfoExample,
+        icon: Icons.layers,
+      },
+      {
+        slug: "schema-display",
+        name: "Schema Display",
+        component: SchemaDisplayExample,
+        icon: Icons.schema,
+      },
+      {
+        slug: "test-results",
+        name: "Test Results",
+        component: TestResultsExample,
+        icon: Icons.test,
       },
     ],
   },

@@ -93,6 +93,7 @@ import {
   TerminalIcon,
   TextFontIcon,
   TextIcon,
+  TestTubeIcon,
   TextSquareIcon,
   Tick02Icon,
   ToggleOffIcon,
@@ -104,6 +105,8 @@ import {
   UserCircleIcon,
   DarkModeIcon,
   LoginIcon,
+  GitBranchIcon,
+  ThirdBracketIcon,
 } from "@hugeicons/core-free-icons"
 
 import type { IconCategoryId } from "./icon-categories"
@@ -115,6 +118,7 @@ import { cn } from "@/lib/utils"
  * shares the same set and default styling.
  */
 export const Icons = {
+  test: TestTubeIcon,
   login: LoginIcon,
   dropper: DropperIcon,
   mic: MicIcon,
@@ -219,6 +223,8 @@ export const Icons = {
   v0: TriangleIcon,
   home: HomeIcon,
   style: DarkModeIcon,
+  commit: GitBranchIcon,
+  schema: ThirdBracketIcon,
 } as const
 
 export type IconName = keyof typeof Icons
