@@ -2,13 +2,15 @@
 
 import * as React from "react"
 
-import { StatusIcon } from "@/app/components/status-badge"
+import { StatusDot } from "@/app/components/status-badge"
 import { statusOf, useStatuses } from "@/app/components/status-provider"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
@@ -20,7 +22,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { exampleStatuses, statusMeta } from "@/examples/status"
+import {
+  exampleStatuses,
+  statusMeta,
+  type ExampleStatus,
+} from "@/examples/status"
 import { Icon, Icons, type IconData } from "@/icons/icons"
 
 /** Where the Open submenu can send the item. */
@@ -87,7 +93,7 @@ export function ItemActions({
               render={
                 <Button
                   variant="ghost"
-                  size="icon-sm"
+                  size="icon-xs"
                   className={className}
                   aria-label={name ? `${name} actions` : "Actions"}
                 >
@@ -157,18 +163,20 @@ export function ItemActions({
             </span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="w-40">
-            {exampleStatuses.map((status) => (
-              <DropdownMenuItem
-                key={status.id}
-                onClick={() => setStatus(slug, status.id)}
-              >
-                <StatusIcon status={status.id} />
-                {status.label}
-                {current === status.id ? (
-                  <Icon icon={Icons.check} className="ml-auto size-3.5" />
-                ) : null}
-              </DropdownMenuItem>
-            ))}
+            <DropdownMenuRadioGroup
+              value={current}
+              onValueChange={(value) =>
+                setStatus(slug, value as ExampleStatus)
+              }
+            >
+              {exampleStatuses.map((status) => (
+                <DropdownMenuRadioItem key={status.id} value={status.id}>
+                  <Icon icon={status.icon} className="size-3.5" />
+                  {status.label}
+                  <StatusDot status={status.id} className="ml-auto" />
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
 

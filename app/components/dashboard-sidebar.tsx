@@ -97,7 +97,8 @@ export function DashboardSidebar({
           ).length
           return (
             <SidebarGroup key={category.title}>
-              <SidebarGroupLabel>
+              <SidebarGroupLabel className="gap-1.5">
+                <Icon icon={category.icon} className="size-3.5!" />
                 {category.title}
                 <span className="ml-auto font-mono text-[0.65rem]">
                   {done}/{category.examples.length}
@@ -121,12 +122,12 @@ export function DashboardSidebar({
                       </SidebarMenuButton>
                       {/* The dot gives way to the actions menu on hover (and
                           stays away while that menu is open). Touch devices
-                          have no hover, so they get the menu outright. */}
-                      <SidebarMenuBadge className="transition-opacity max-md:hidden group-hover/menu-item:opacity-0 group-focus-within/menu-item:opacity-0 group-has-data-popup-open/menu-item:opacity-0">
+                          have no hover, so they get the menu outright. 
+                    <SidebarMenuBadge className="transition-opacity max-md:hidden group-hover/menu-item:opacity-0 group-focus-within/menu-item:opacity-0 group-has-data-popup-open/menu-item:opacity-0">
                         <StatusDot
                           status={statusOf(statuses, example.slug)}
                         />
-                      </SidebarMenuBadge>
+                      </SidebarMenuBadge>*/}
                       <ItemActions
                         slug={example.slug}
                         name={example.name}
