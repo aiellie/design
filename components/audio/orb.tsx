@@ -12,6 +12,7 @@ import {
   DashboardSpeed01Icon,
   DropletIcon,
   EyeClosedIcon,
+  Film01Icon,
   GridViewIcon,
   Megaphone01Icon,
   Menu01Icon,
@@ -47,6 +48,7 @@ import {
   RadioRow,
   randomSeedName,
   randomValues,
+  Scrubber,
   ScrubberRows,
   SeedRow,
   valuesAreDefault,
@@ -122,6 +124,12 @@ const DEFAULT_COLORS = presets[DEFAULT_PRESET]
 // The starting look *is* the aiellie preset, so the field says so rather
 // than sitting empty on a placeholder.
 const DEFAULT_SEED: string = DEFAULT_PRESET
+
+const DEFAULT_GRAIN = 0
+
+/** A tiling monochrome noise texture, blended over the shader for a film
+ * grain finish. SVG turbulence keeps it a few hundred bytes. */
+const GRAIN_TEXTURE = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E`
 
 const DEFAULT_VALUES: OrbValues = {
   proportion: 0.35,
@@ -408,7 +416,12 @@ function colorsFromRng(rng: () => number): OrbColors {
   }
 }
 
-type OrbConfig = { colors: OrbColors; shape: WarpShape; values: OrbValues }
+type OrbConfig = {
+  colors: OrbColors
+  shape: WarpShape
+  values: OrbValues
+  grain: number
+}
 
 /** A name is the whole recipe: preset names resolve to their preset, and
  * anything else is hashed into a look that never changes for that name. */
@@ -420,6 +433,7 @@ function configFromSeed(text: string): OrbConfig {
       colors: presets[name as Preset],
       shape: DEFAULT_SHAPE,
       values: DEFAULT_VALUES,
+      grain: DEFAULT_GRAIN,
     }
   }
 
@@ -428,6 +442,9 @@ function configFromSeed(text: string): OrbConfig {
     values: randomValues(CONTROLS, rng),
     shape: SHAPES[Math.floor(rng() * SHAPES.length)],
     colors: colorsFromRng(rng),
+    // Rolled last so earlier rolls keep matching looks minted before grain
+    // existed; capped where the texture accents rather than muddies.
+    grain: Math.round(rng() * 50) / 100,
   }
 }
 
@@ -469,6 +486,7 @@ export function Orb({
   const [colors, setColors] = useState<OrbColors>(DEFAULT_COLORS)
   const [shape, setShape] = useState<WarpShape>(DEFAULT_SHAPE)
   const [values, setValues] = useState<OrbValues>(DEFAULT_VALUES)
+  const [grain, setGrain] = useState(DEFAULT_GRAIN)
   const [internalState, setInternalState] = useState<OrbState>("idle")
   const orbRef = useRef<HTMLDivElement>(null)
   const { audioLevel, isListening, startListening, stopListening } =
@@ -487,6 +505,7 @@ export function Orb({
   const activeColors = seeded?.colors ?? colors
   const activeShape = seeded?.shape ?? shape
   const activeValues = seeded?.values ?? values
+  const activeGrain = seeded?.grain ?? grain
 
   const shaderValues = shaderValuesFor(activeValues, activeState, audioLevel)
 
@@ -505,6 +524,7 @@ export function Orb({
   const isDefault =
     seed === DEFAULT_SEED &&
     shape === DEFAULT_SHAPE &&
+    grain === DEFAULT_GRAIN &&
     valuesAreDefault(colors, DEFAULT_COLORS) &&
     valuesAreDefault(values, DEFAULT_VALUES)
 
@@ -523,15 +543,17 @@ export function Orb({
     setColors(config.colors)
     setShape(config.shape)
     setValues(config.values)
+    setGrain(config.grain)
   }
 
   // Hand edits leave the seed behind: no short name reproduces an arbitrary
   // set of sliders, so the field says so instead of inventing one.
   const applyConfig = (next: Partial<OrbConfig>) => {
-    const config: OrbConfig = { colors, shape, values, ...next }
+    const config: OrbConfig = { colors, shape, values, grain, ...next }
     setColors(config.colors)
     setShape(config.shape)
     setValues(config.values)
+    setGrain(config.grain)
     setSeed(CUSTOM_SEED)
   }
 
@@ -554,6 +576,7 @@ export function Orb({
   const exportValue = JSON.stringify({
     colors: [colors.color1, colors.color2, colors.color3],
     shape,
+    grain,
     ...values,
   })
 
@@ -573,6 +596,33 @@ export function Orb({
     ctx.arc(edge / 2, edge / 2, edge / 2, 0, Math.PI * 2)
     ctx.clip()
     ctx.drawImage(source, 0, 0)
+    // Bake the grain overlay in, or the file loses the on-screen finish.
+    // Noise is generated at half size and scaled up, matching how the CSS
+    // texture's 1px speckles land on a 2x canvas.
+    if (activeGrain > 0) {
+      const half = Math.ceil(edge / 2)
+      const noise = document.createElement("canvas")
+      noise.width = half
+      noise.height = half
+      const noiseCtx = noise.getContext("2d")
+      if (noiseCtx) {
+        const pixels = noiseCtx.createImageData(half, half)
+        for (let i = 0; i < pixels.data.length; i += 4) {
+          const level = Math.floor(Math.random() * 256)
+          pixels.data[i] = level
+          pixels.data[i + 1] = level
+          pixels.data[i + 2] = level
+          pixels.data[i + 3] = 255
+        }
+        noiseCtx.putImageData(pixels, 0, 0)
+        ctx.globalCompositeOperation = "overlay"
+        ctx.globalAlpha = activeGrain
+        ctx.imageSmoothingEnabled = false
+        ctx.drawImage(noise, 0, 0, edge, edge)
+        ctx.globalCompositeOperation = "source-over"
+        ctx.globalAlpha = 1
+      }
+    }
     target.toBlob((blob) => {
       if (!blob) return
       const url = URL.createObjectURL(blob)
@@ -597,7 +647,7 @@ export function Orb({
       {/* AI Orb - circular clipped shader */}
       <motion.div
         ref={orbRef}
-        className="overflow-hidden rounded-full"
+        className="relative overflow-hidden rounded-full"
         style={{ width: size, height: size }}
         animate={orbAnimate}
         transition={orbMotion.transition}
@@ -615,6 +665,17 @@ export function Orb({
           shape={activeShape}
           {...shaderValues}
         />
+        {activeGrain > 0 && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 mix-blend-overlay"
+            style={{
+              backgroundImage: `url("${GRAIN_TEXTURE}")`,
+              backgroundSize: "140px 140px",
+              opacity: activeGrain,
+            }}
+          />
+        )}
       </motion.div>
 
       {/* State selector */}
@@ -655,6 +716,7 @@ export function Orb({
             setColors(DEFAULT_COLORS)
             setShape(DEFAULT_SHAPE)
             setValues(DEFAULT_VALUES)
+            setGrain(DEFAULT_GRAIN)
           }}
           footer={
             <ExportRow
@@ -715,6 +777,16 @@ export function Orb({
             onChange={(key, next) =>
               applyConfig({ values: { ...values, [key]: next } })
             }
+          />
+          <Scrubber
+            label="Grain"
+            icon={Film01Icon}
+            min={0}
+            max={1}
+            step={0.01}
+            decimals={2}
+            value={grain}
+            onValueChange={(next) => applyConfig({ grain: next })}
           />
         </DemoControls>
       ) : null}
