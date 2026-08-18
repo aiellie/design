@@ -1,12 +1,12 @@
 import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-  FieldGroup,
-  FieldTitle,
-} from "@/components/ui/field"
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item"
 import { Switch } from "@/components/ui/switch"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
@@ -18,63 +18,80 @@ import {
 export function SwitchExample() {
   return (
     <div className="flex w-full items-center justify-center">
-    <FieldGroup className="w-full max-w-sm">
-      <FieldLabel htmlFor="switch-share">
-        <Field orientation="horizontal" className="cursor-pointer">
-          <HugeiconsIcon
-            icon={ComputerPhoneSyncIcon}
-            strokeWidth={2}
-            className="size-4 shrink-0 text-muted-foreground"
-          />
-          <FieldContent>
-            <FieldTitle>Share across devices</FieldTitle>
-            <FieldDescription>
+      <ItemGroup className="w-full max-w-sm gap-2">
+        <Item
+          variant="outline"
+          className="cursor-pointer"
+          render={<label htmlFor="switch-share" />}
+        >
+          <ItemMedia className="rounded-lg p-1">
+            <HugeiconsIcon
+              icon={ComputerPhoneSyncIcon}
+              strokeWidth={1.25}
+              className="size-6 text-muted-foreground"
+            />
+          </ItemMedia>
+          <ItemContent className="gap-0">
+            <ItemTitle className="font-normal">Share across devices</ItemTitle>
+            <ItemDescription className="text-muted-foreground text-xs">
               Focus is shared when you leave the app.
-            </FieldDescription>
-          </FieldContent>
-          <Switch size="sm" id="switch-share" />
-        </Field>
-      </FieldLabel>
-      <FieldLabel htmlFor="switch-notifications">
-        <Field orientation="horizontal" className="cursor-pointer">
-          <HugeiconsIcon
-            icon={Notification01Icon}
-            strokeWidth={2}
-            className="size-4 shrink-0 text-muted-foreground"
-          />
-          <FieldContent>
-            <FieldTitle>Enable notifications</FieldTitle>
-            <FieldDescription>
+            </ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <Switch size="sm" id="switch-share" />
+          </ItemActions>
+        </Item>
+        <Item
+          variant="outline"
+          className="cursor-pointer"
+          render={<label htmlFor="switch-notifications" />}
+        >
+          <ItemMedia className="rounded-lg p-1">
+            <HugeiconsIcon
+              icon={Notification01Icon}
+              strokeWidth={1.25}
+              className="size-6 text-muted-foreground"
+            />
+          </ItemMedia>
+          <ItemContent className="gap-0">
+            <ItemTitle className="font-normal">Enable notifications</ItemTitle>
+            <ItemDescription className="text-muted-foreground text-xs">
               Receive notifications even if focus mode is disabled.
-            </FieldDescription>
-          </FieldContent>
-          <Switch size="sm" id="switch-notifications" defaultChecked />
-        </Field>
-      </FieldLabel>
-      <FieldLabel htmlFor="switch-terms">
-        <Field orientation="horizontal" data-invalid className="cursor-pointer">
-          <HugeiconsIcon
-            icon={Agreement01Icon}
-            strokeWidth={2}
-            className="size-4 shrink-0 text-destructive"
-          />
-          <FieldContent>
-            <FieldTitle>Accept terms</FieldTitle>
-            <FieldDescription>
+            </ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <Switch size="sm" id="switch-notifications" defaultChecked />
+          </ItemActions>
+        </Item>
+        <Item
+          variant="outline"
+          className="cursor-pointer border-destructive"
+          render={<label htmlFor="switch-terms" />}
+        >
+          <ItemMedia className="rounded-lg p-1">
+            <HugeiconsIcon
+              icon={Agreement01Icon}
+              strokeWidth={1.25}
+              className="size-6 text-destructive"
+            />
+          </ItemMedia>
+          <ItemContent className="gap-0">
+            <ItemTitle className="font-normal">Accept terms</ItemTitle>
+            <ItemDescription className="text-destructive text-xs">
               You must accept the terms to continue.
-            </FieldDescription>
-            <FieldError errors={[{ }]} />
-          </FieldContent>
-          <Switch
-            size="sm"
-            id="switch-terms"
-            aria-invalid
-            data-variant="destructive"
-            defaultChecked
-          />
-        </Field>
-      </FieldLabel>
-    </FieldGroup>
+            </ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <Switch
+              size="sm"
+              id="switch-terms"
+              aria-invalid
+              data-variant="destructive"
+              defaultChecked
+            />
+          </ItemActions>
+        </Item>
+      </ItemGroup>
     </div>
   )
 }

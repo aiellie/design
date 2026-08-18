@@ -12,13 +12,23 @@ import {
 } from "react"
 import {
   Cancel01Icon,
+  Copy01Icon,
+  Download01Icon,
   RefreshIcon,
   SlidersHorizontalIcon,
+  Tick02Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard"
 import { ColorPicker } from "@/components/color/color-picker"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group"
 import {
   Select,
   SelectContent,
@@ -533,7 +543,8 @@ export const DEMO_CONTROLS_HEADER_BUTTON =
 
 /**
  * A floating "Controls" pill that expands into a glassy panel of control
- * rows, anchored to the bottom-right of the viewport.
+ * rows, anchored to the bottom-right of its nearest positioned ancestor —
+ * give the demo's container `relative` so the panel stays inside the demo.
  */
 export function DemoControls({
   title,
@@ -547,7 +558,7 @@ export function DemoControls({
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="fixed right-4 bottom-4 z-40 flex flex-col items-end gap-2">
+    <div className="absolute right-4 bottom-4 z-40 flex flex-col items-end gap-2">
       <AnimatePresence>
         {open && (
           <motion.div
@@ -1051,5 +1062,94 @@ export function CopyRow({
           })
       }}
     />
+  )
+}
+
+/**
+ * A footer row that exposes the current config as text: the value sits in a
+ * read-only input, with an icon button to copy it and, optionally, one to
+ * download the demo as an image.
+ */
+export function ExportRow({
+  label,
+  value,
+  toastMessage = "Copied to clipboard",
+  downloadLabel = "Download as image",
+  onDownload,
+}: {
+  /** Names the input for screen readers, e.g. "Shader values". */
+  label: string
+  value: string
+  /** Set to null to confirm on the button only. */
+  toastMessage?: string | null
+  downloadLabel?: string
+  /** When set, shows a download icon button after copy. */
+  onDownload?: () => void
+}) {
+  const { isCopied, copyToClipboard } = useCopyToClipboard()
+
+  const copy = async () => {
+    const copied = await copyToClipboard(value)
+    if (copied) {
+      if (toastMessage) toast.add({ title: toastMessage, type: "success" })
+    } else {
+      toast.add({ title: "Couldn't reach the clipboard", type: "error" })
+    }
+  }
+
+  return (
+    <TooltipProvider>
+      <InputGroup className="shrink-0 border-0 bg-muted/60 transition-colors hover:bg-muted/80">
+        <InputGroupInput
+          readOnly
+          value={value}
+          aria-label={label}
+          spellCheck={false}
+          autoComplete="off"
+          onFocus={(e) => e.currentTarget.select()}
+          className="px-3 text-[12.5px] font-medium text-muted-foreground md:text-[12.5px]"
+        />
+        <InputGroupAddon align="inline-end" className="gap-0.5 pr-1">
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <InputGroupButton
+                  size="icon-xs"
+                  aria-label={isCopied ? "Copied" : `Copy ${label}`}
+                  onClick={() => void copy()}
+                />
+              }
+            >
+              <HugeiconsIcon
+                aria-hidden
+                className="size-3.5"
+                icon={isCopied ? Tick02Icon : Copy01Icon}
+              />
+            </TooltipTrigger>
+            <TooltipContent>{isCopied ? "Copied" : "Copy"}</TooltipContent>
+          </Tooltip>
+          {onDownload && (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <InputGroupButton
+                    size="icon-xs"
+                    aria-label={downloadLabel}
+                    onClick={onDownload}
+                  />
+                }
+              >
+                <HugeiconsIcon
+                  aria-hidden
+                  className="size-3.5"
+                  icon={Download01Icon}
+                />
+              </TooltipTrigger>
+              <TooltipContent>{downloadLabel}</TooltipContent>
+            </Tooltip>
+          )}
+        </InputGroupAddon>
+      </InputGroup>
+    </TooltipProvider>
   )
 }

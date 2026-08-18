@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import {
   AiBrain01Icon,
   ApertureIcon,
@@ -8,16 +8,18 @@ import {
   ArrowVerticalIcon,
   BlurIcon,
   CircleIcon,
+  ContrastIcon,
   DashboardSpeed01Icon,
   DropletIcon,
   EyeClosedIcon,
+  GridViewIcon,
   Megaphone01Icon,
+  Menu01Icon,
   Mic01Icon,
   RatioIcon,
   RepeatIcon,
   RippleIcon,
   Rotate01Icon,
-  ShapesIcon,
   ShuffleIcon,
   SparklesIcon,
   SpiralsIcon,
@@ -38,9 +40,9 @@ import {
 } from "@/components/ui/tooltip"
 import {
   ColorRow,
-  CopyRow,
   createRng,
   DemoControls,
+  ExportRow,
   hashSeed,
   RadioRow,
   randomSeedName,
@@ -98,10 +100,14 @@ const PRESET_OPTIONS = [
 ] as const satisfies readonly { value: Preset; label: string }[]
 
 const SHAPE_OPTIONS = [
-  { value: "checks", label: "Checks" },
-  { value: "stripes", label: "Stripes" },
-  { value: "edge", label: "Edge" },
-] as const satisfies readonly { value: WarpShape; label: string }[]
+  { value: "checks", label: "Checks", icon: GridViewIcon },
+  { value: "stripes", label: "Stripes", icon: Menu01Icon },
+  { value: "edge", label: "Edge", icon: ContrastIcon },
+] as const satisfies readonly {
+  value: WarpShape
+  label: string
+  icon: IconSvgElement
+}[]
 
 const SHAPES = SHAPE_OPTIONS.map((option) => option.value)
 
@@ -429,8 +435,10 @@ function configFromSeed(text: string): OrbConfig {
  * hand-tuned config has no short name, so "Copy values" is its export. */
 const CUSTOM_SEED = "custom"
 
-/** Full-page playground layout, used whenever no `className` is given. */
-const PLAYGROUND_LAYOUT = " gap-8"
+/** Full-page playground layout, used whenever no `className` is given. The
+ * height matches the demo viewer's content area, so the controls panel
+ * anchored to this box stays inside the demo. */
+const PLAYGROUND_LAYOUT = "min-h-[calc(100svh-10rem)] gap-8"
 
 export function Orb({
   /** Drive the orb from your own conversation state. Left off, the buttons
@@ -462,6 +470,7 @@ export function Orb({
   const [shape, setShape] = useState<WarpShape>(DEFAULT_SHAPE)
   const [values, setValues] = useState<OrbValues>(DEFAULT_VALUES)
   const [internalState, setInternalState] = useState<OrbState>("idle")
+  const orbRef = useRef<HTMLDivElement>(null)
   const { audioLevel, isListening, startListening, stopListening } =
     useAudioLevel()
   const shouldReduceMotion = useReducedMotion()
@@ -541,10 +550,45 @@ export function Orb({
     handleStateChange(isListening ? "idle" : "listening")
   }
 
+  // Single-line so it reads whole inside the export row's input.
+  const exportValue = JSON.stringify({
+    colors: [colors.color1, colors.color2, colors.color3],
+    shape,
+    ...values,
+  })
+
+  // Redraws the shader canvas through a circular clip, so the file matches
+  // the on-screen orb instead of the square canvas behind it.
+  const downloadImage = () => {
+    const source = orbRef.current?.querySelector("canvas")
+    if (!source) return
+    const edge = Math.min(source.width, source.height)
+    if (!edge) return
+    const target = document.createElement("canvas")
+    target.width = edge
+    target.height = edge
+    const ctx = target.getContext("2d")
+    if (!ctx) return
+    ctx.beginPath()
+    ctx.arc(edge / 2, edge / 2, edge / 2, 0, Math.PI * 2)
+    ctx.clip()
+    ctx.drawImage(source, 0, 0)
+    target.toBlob((blob) => {
+      if (!blob) return
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = url
+      link.download = `orb-${seed.trim() || "untitled"}.png`
+      link.click()
+      URL.revokeObjectURL(url)
+    }, "image/png")
+  }
+
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center",
+        // `relative` anchors the DemoControls panel inside this demo.
+        "relative flex flex-col items-center justify-center",
         // A caller that lays the orb out itself gets none of the playground
         // chrome — not even the viewport height that centres it here.
         className === undefined ? PLAYGROUND_LAYOUT : className
@@ -552,6 +596,7 @@ export function Orb({
     >
       {/* AI Orb - circular clipped shader */}
       <motion.div
+        ref={orbRef}
         className="overflow-hidden rounded-full"
         style={{ width: size, height: size }}
         animate={orbAnimate}
@@ -560,6 +605,8 @@ export function Orb({
         <Warp
           width={size}
           height={size}
+          // Keeps the last frame readable, so "Download as image" isn't blank.
+          webGlContextAttributes={{ preserveDrawingBuffer: true }}
           colors={[
             activeColors.color1,
             activeColors.color2,
@@ -610,20 +657,12 @@ export function Orb({
             setValues(DEFAULT_VALUES)
           }}
           footer={
-            <CopyRow
-              label="Copy values"
+            <ExportRow
+              label="Shader values"
+              value={exportValue}
               toastMessage="Shader values copied to clipboard"
-              value={() =>
-                JSON.stringify(
-                  {
-                    colors: [colors.color1, colors.color2, colors.color3],
-                    shape,
-                    ...values,
-                  },
-                  null,
-                  2
-                )
-              }
+              downloadLabel="Download as image"
+              onDownload={downloadImage}
             />
           }
         >
@@ -666,7 +705,6 @@ export function Orb({
           />
           <RadioRow
             label="Shape"
-            icon={ShapesIcon}
             options={SHAPE_OPTIONS}
             value={shape}
             onValueChange={(next) => applyConfig({ shape: next })}

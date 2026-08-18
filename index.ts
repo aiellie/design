@@ -90,7 +90,8 @@ export { CodeBlockLanguageSelector } from "./components/code/code-language-selec
 
 // Color
 export { ColorFormatSelector } from "./components/color/color-format-selector"
-export { ColorRow } from "./components/color/color-picker"
+export { ColorPicker } from "./components/color/color-picker"
+export { ColorRow } from "./components/forms/demo-controls"
 
 // Locale
 export { CountriesSelect } from "./components/locale/countries-select"

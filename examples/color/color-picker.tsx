@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { ColorPicker } from "@/components/color/color-picker"
+import { ColorRow } from "@/components/forms/demo-controls"
 
 const DEFAULTS = {
   background: "#fdf6e3",
@@ -49,7 +49,7 @@ export function ColorPickerExample() {
           {rows.map(({ key, label }) => {
             const isDefault = colors[key] === DEFAULTS[key]
             return (
-              <ColorPicker
+              <ColorRow
                 key={key}
                 label={label}
                 value={colors[key]}

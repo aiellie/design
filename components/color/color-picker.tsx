@@ -3,7 +3,6 @@
 import {
   Copy01Icon,
   DropperIcon,
-  RotateCcw,
   Tick02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -1086,20 +1085,22 @@ function ColorPopover({
   );
 }
 
+/**
+ * The swatch trigger and its popover only — no row chrome or label, so the
+ * hosting row (e.g. `ColorRow`) owns those without doubling them up.
+ */
 export function ColorPicker({
   label,
   value,
   onValueChange,
   displayValue,
-  onReset,
 }: {
+  /** Names the trigger for screen readers; not rendered visually. */
   label: string;
   value: string;
   onValueChange: (value: string) => void;
   /** Text shown instead of the hex value, e.g. "Auto". */
   displayValue?: string;
-  /** When set, shows a reset icon that reverts the row. */
-  onReset?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const [format, setFormat] = useState<ColorFormat>("hex");
@@ -1112,56 +1113,28 @@ export function ColorPicker({
   }, []);
 
   return (
-    <div className="flex h-8 w-full shrink-0 items-center justify-between rounded-lg bg-muted/60 px-3 transition-colors select-none hover:bg-muted/80">
-      <span className="text-[12.5px] font-medium text-foreground/90">
-        {label}
-      </span>
-      <span className="flex items-center gap-2">
-        {onReset && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <button
-                    type="button"
-                    onClick={onReset}
-                    aria-label={`Reset ${label}`}
-                    className="inline-flex size-5 cursor-pointer items-center justify-center rounded-full text-muted-foreground/60 transition-colors hover:bg-foreground/10 hover:text-foreground"
-                  >
-                    <HugeiconsIcon
-                      icon={RotateCcw}
-                      aria-hidden
-                      className="size-3"
-                    />
-                  </button>
-                }
-              />
-              <TooltipContent>Reset {label}</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
-        <button
-          ref={toggleRef}
-          type="button"
-          aria-expanded={open}
-          aria-haspopup="dialog"
-          aria-controls={open ? popoverId : undefined}
-          aria-label={`${label} color`}
-          onClick={() => setOpen((prev) => !prev)}
-          className="flex cursor-pointer items-center gap-2 transition-transform active:scale-95"
+    <>
+      <button
+        ref={toggleRef}
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="dialog"
+        aria-controls={open ? popoverId : undefined}
+        aria-label={`${label} color`}
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex cursor-pointer items-center gap-2 transition-transform active:scale-95"
+      >
+        <span
+          className="text-[12.5px] font-medium text-muted-foreground"
+          style={{ fontVariantNumeric: "tabular-nums" }}
         >
-          <span
-            className="text-[12.5px] font-medium text-muted-foreground"
-            style={{ fontVariantNumeric: "tabular-nums" }}
-          >
-            {displayValue ?? value}
-          </span>
-          <span
-            className="size-4.5 rounded-full border border-border/70"
-            style={{ background: value }}
-          />
-        </button>
-      </span>
+          {displayValue ?? value}
+        </span>
+        <span
+          className="size-4.5 rounded-full border border-border/70"
+          style={{ background: value }}
+        />
+      </button>
       <AnimatePresence>
         {open && (
           <ColorPopover
@@ -1175,6 +1148,6 @@ export function ColorPicker({
           />
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
