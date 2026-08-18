@@ -1086,7 +1086,7 @@ function ColorPopover({
   );
 }
 
-export function ColorRow({
+export function ColorPicker({
   label,
   value,
   onValueChange,

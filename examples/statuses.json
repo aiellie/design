@@ -81,5 +81,7 @@
   "date-picker": "shipped",
   "time-picker": "shipped",
   "open-in-chat": "shipped",
-  "login-form": "shipped"
+  "login-form": "shipped",
+  "rate-limits": "shipped",
+  "mic-selector": "shipped"
 }

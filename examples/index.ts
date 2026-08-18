@@ -176,6 +176,10 @@ import { TestResultsExample } from "@/examples/code/test-results"
 import { AudioPlayerExample } from "@/examples/audio/audio-player"
 import { DatePickerExample } from "./locale/date-picker"
 import { OpenInChatExample } from "./chat/open-in-chat"
+import { Brain01Icon, Orbit01Icon } from "@hugeicons/core-free-icons"
+import { RateLimitsExample } from "./models/rate-limits"
+import { LimitationIcon } from "@hugeicons/core-free-icons"
+import { OrbExample } from "@/examples/audio/orb"
 export type { ExampleStatus }
 
 /** One demo inside an example — a tab in the viewer when there's more than one. */
@@ -978,6 +982,12 @@ export const exampleCategories: ExampleCategory[] = [
         component: AudioPlayerExample,
         icon: PauseIcon,
       },
+      {
+        slug: "orb",
+        name: "Orb",
+        component: OrbExample,
+        icon: Orbit01Icon,
+      },
     ],
   },
   {
@@ -993,6 +1003,22 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Login Form",
         component: LoginFormExample,
         icon: LoginIcon,
+      },
+    ],
+  },
+  {
+    title: "Models",
+    icon: Brain01Icon,
+    iconBg: "bg-orange-500/5",
+    textColor: "text-orange-500",
+    borderColor: "border-orange-200/10",
+    type: "component",
+    examples: [
+      {
+        slug: "rate-limits",
+        name: "Rate Limits",
+        component: RateLimitsExample,
+        icon: LimitationIcon,
       },
     ],
   },
