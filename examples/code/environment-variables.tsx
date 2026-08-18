@@ -44,8 +44,7 @@ const variables = [
 
 export function EnvironmentVariablesExample() {
   return (
-    <div className="flex w-full justify-center">
-        <div className="w-full max-w-lg border-none">
+    <div className="w-full max-w-md mx-auto">
         <EnvironmentVariables defaultShowValues={false}>
           <EnvironmentVariablesHeader>
             <EnvironmentVariablesTitle />
@@ -63,9 +62,6 @@ export function EnvironmentVariablesExample() {
               >
                 <EnvironmentVariableGroup className="min-w-0">
                   <EnvironmentVariableName />
-                  {variable.required && <EnvironmentVariableRequired />}
-                </EnvironmentVariableGroup>
-                <EnvironmentVariableGroup className="shrink-0">
                   {variable.value ? (
                     <EnvironmentVariableValue />
                   ) : (
@@ -74,6 +70,9 @@ export function EnvironmentVariablesExample() {
                       Not set
                     </EnvironmentVariableValue>
                   )}
+                </EnvironmentVariableGroup>
+                <EnvironmentVariableGroup className="shrink-0">
+                  {variable.required && <EnvironmentVariableRequired />}
                   <EnvironmentVariableCopyButton
                     disabled={!variable.value}
                     tooltip={
@@ -88,6 +87,5 @@ export function EnvironmentVariablesExample() {
           </EnvironmentVariablesContent>
         </EnvironmentVariables>
         </div>
-            </div>
   )
 }

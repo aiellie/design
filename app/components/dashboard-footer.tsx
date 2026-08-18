@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/tooltip"
 import type { FlatExample } from "@/examples"
 import { getIconForLanguageExtension } from "@/icons/code-icons"
-import { Icon, Icons } from "@/icons/icons"
+import {ArrowLeftIcon, ArrowRightIcon} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 
 export function DashboardFooter({
   selected,
@@ -50,7 +51,8 @@ export function DashboardFooter({
                   onClick={() => previous && onSelect(previous.slug)}
                   aria-label="Previous example"
                 >
-                  <Icon icon={Icons.arrowLeft} className="text-muted-foreground" />
+                  <HugeiconsIcon icon={ArrowLeftIcon} className="text-muted-foreground" />
+                  strokeWidth={2}
                 </Button>
               }
             />
@@ -68,7 +70,7 @@ export function DashboardFooter({
                   onClick={() => next && onSelect(next.slug)}
                   aria-label="Next example"
                 >
-                  <Icon icon={Icons.arrowRight} className="text-muted-foreground" />
+                  <HugeiconsIcon icon={ArrowRightIcon} className="text-muted-foreground" strokeWidth={2} />
                 </Button>
               }
             />

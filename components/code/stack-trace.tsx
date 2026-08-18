@@ -197,7 +197,7 @@ export const StackTrace = ({
     <StackTraceContext.Provider value={contextValue}>
       <Collapsible
         className={cn(
-          "not-prose w-full overflow-hidden rounded-xl border bg-background font-mono text-xs",
+          "not-prose w-full min-w-0 max-w-full overflow-hidden rounded-xl border bg-background font-mono text-xs",
           className
         )}
         onOpenChange={setIsOpen}
@@ -223,7 +223,7 @@ export const StackTraceHeader = ({
     render={
       <div
         className={cn(
-          "bg-muted/30 group flex cursor-pointer items-center justify-between gap-4 px-3 py-1 text-start transition-colors hover:opacity-80",
+          "bg-muted/30 group flex cursor-pointer items-center gap-2 px-3 py-1 text-start transition-colors hover:opacity-80",
           className
         )}
       />
@@ -293,9 +293,16 @@ export const StackTraceErrorMessage = ({
 
 export type StackTraceActionsProps = ComponentProps<"div">;
 
-const handleActionsClick = (e: React.MouseEvent) => e.stopPropagation();
+const handleActionsClick = (e: React.MouseEvent) => {
+  if ((e.target as HTMLElement).closest("button")) {
+    e.stopPropagation();
+  }
+};
 const handleActionsKeyDown = (e: React.KeyboardEvent) => {
-  if (e.key === "Enter" || e.key === " ") {
+  if (
+    (e.key === "Enter" || e.key === " ") &&
+    (e.target as HTMLElement).closest("button")
+  ) {
     e.stopPropagation();
   }
 };
@@ -389,38 +396,54 @@ export const StackTraceCopyButton = ({
       {children ?? (
         <HugeiconsIcon
           icon={isCopied ? Tick02Icon : Copy01Icon}
-          strokeWidth={2}
+          strokeWidth={1.5}
+          className="text-muted-foreground"
         />
       )}
     </Button>
   );
 };
 
-export type StackTraceExpandButtonProps = ComponentProps<"div">;
+export type StackTraceExpandButtonProps = ComponentProps<typeof Button>;
 
 export const StackTraceExpandButton = ({
   className,
+  children,
+  onClick,
   ...props
 }: StackTraceExpandButtonProps) => {
-  const { isOpen } = useStackTrace();
+  const { isOpen, setIsOpen } = useStackTrace();
+
+  const handleClick = useCallback<
+    NonNullable<ComponentProps<typeof Button>["onClick"]>
+  >(
+    (event) => {
+      onClick?.(event);
+      setIsOpen(!isOpen);
+    },
+    [onClick, isOpen, setIsOpen]
+  );
 
   return (
-    <div
-      className={cn(
-        "flex size-8 shrink-0 items-center justify-center",
-        className
-      )}
+    <Button
+      aria-expanded={isOpen}
+      className={cn("shrink-0", className)}
+      size="icon-sm"
+      variant="ghost"
       {...props}
+      onClick={handleClick}
     >
-      <HugeiconsIcon
-        className={cn(
-          "size-4 text-muted-foreground transition-transform",
-          isOpen ? "rotate-180" : "rotate-0"
-        )}
-        icon={ArrowDown01Icon}
-        strokeWidth={2}
-      />
-    </div>
+      {children ?? (
+        <HugeiconsIcon
+          className={cn(
+            "text-muted-foreground transition-transform",
+            isOpen ? "rotate-180" : "rotate-0"
+          )}
+          icon={ArrowDown01Icon}
+          strokeWidth={1.5}
+        />
+      )}
+    </Button>
   );
 };
 
@@ -437,7 +460,7 @@ export const StackTraceContent = ({
   ...props
 }: StackTraceContentProps) => (
   <CollapsibleContent
-    className={cn("overflow-auto border-t", className)}
+    className={cn("min-w-0 overflow-y-auto overflow-x-hidden border-t", className)}
     style={{ maxHeight }}
     {...props}
   >
@@ -498,11 +521,11 @@ export const StackTraceFrames = ({
     : trace.frames.filter((f) => !f.isInternal);
 
   return (
-    <div className={cn("space-y-1 p-3", className)} {...props}>
+    <div className={cn("min-w-0 space-y-1 p-3", className)} {...props}>
       {framesToShow.map((frame) => (
         <div
           className={cn(
-            "text-xs",
+            "max-w-full overflow-x-auto whitespace-nowrap text-xs",
             frame.isInternal ? "text-muted-foreground/50" : "text-foreground/90"
           )}
           key={frame.raw}

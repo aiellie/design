@@ -66,5 +66,12 @@
   "code-block": "shipped",
   "code-language-selector": "shipped",
   "color-picker": "shipped",
-  "color-format-selector": "shipped"
+  "color-format-selector": "shipped",
+  "environment-variables": "shipped",
+  "test-results": "building",
+  "schema-display": "building",
+  "file-tree": "shipped",
+  "stack-trace": "shipped",
+  "code-command": "shipped",
+  "snippet": "shipped"
 }

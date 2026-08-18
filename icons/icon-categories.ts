@@ -17,6 +17,11 @@ export const iconCategories = [
   { id: "status", label: "Status & Feedback", icon: Icons.alert },
   { id: "code", label: "Code", icon: Icons.code },
   { id: "emojis", label: "Emojis", icon: Icons.smile },
+  { id: "files", label: "Files", icon: Icons.fileX },
+  { id: "users", label: "Users", icon: Icons.user },
+  { id: "editor", label: "Editor", icon: Icons.editor },
+  { id: "development", label: "Development", icon: Icons.development },
+  
 ] as const
 
 export type IconCategoryId = (typeof iconCategories)[number]["id"]

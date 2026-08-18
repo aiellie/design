@@ -33,7 +33,7 @@ const handleCopyError = () => {
 
 export function SnippetExample() {
   return (
-      <div className="w-full max-w-md space-y-3 border-none">
+      <div className="w-full max-w-sm mx-auto border-none">
         {commands.map((command) => (
           <Snippet code={command.code} key={command.code}>
             <SnippetAddon>

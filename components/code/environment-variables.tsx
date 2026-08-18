@@ -100,7 +100,7 @@ export const EnvironmentVariables = ({
   return (
     <EnvironmentVariablesContext.Provider value={contextValue}>
       <div
-        className={cn("rounded-xl border bg-background", className)}
+        className={cn("rounded-2xl overflow-hidden border bg-background", className)}
         {...props}
       >
         {children}
@@ -118,7 +118,7 @@ export const EnvironmentVariablesHeader = ({
 }: EnvironmentVariablesHeaderProps) => (
   <div
     className={cn(
-      "flex items-center justify-between gap-4 border-b py-2 px-4 bg-muted-foreground/3",
+      "flex items-center justify-between gap-4 border-b py-2 px-4 bg-muted/20",
       className
     )}
     {...props}
@@ -199,8 +199,9 @@ export const EnvironmentVariablesToggle = ({
           >
             {children ?? (
               <HugeiconsIcon
-                icon={showValues ? ViewIcon : ViewOffSlashIcon}
-                strokeWidth={2}
+                icon={showValues ? ViewOffSlashIcon : ViewIcon}
+                strokeWidth={1.5}
+                className="text-muted-foreground"
               />
             )}
           </Button>
@@ -314,7 +315,7 @@ export const EnvironmentVariablesDownloadButton = ({
             onClick={handleClick}
           >
             {children ?? (
-              <HugeiconsIcon icon={Download01Icon} strokeWidth={2} />
+              <HugeiconsIcon icon={Download01Icon} strokeWidth={1.5} className="text-muted-foreground" />
             )}
           </Button>
         }
@@ -331,7 +332,7 @@ export const EnvironmentVariablesContent = ({
   children,
   ...props
 }: EnvironmentVariablesContentProps) => (
-  <div className={cn("divide-y", className)} {...props}>
+  <div className={cn("space-y-1 divide-y", className)} {...props}>
     {children}
   </div>
 );
@@ -369,8 +370,15 @@ export const EnvironmentVariableName = ({
   const { name } = useContext(EnvironmentVariableContext);
 
   return (
-    <span className={cn("truncate font-mono text-xs font-medium text-sky-600 dark:text-sky-400", className)} {...props}>
-      {children ?? name}
+    <span
+      className={cn(
+        "flex min-w-0 items-center gap-1 font-mono text-xs font-medium text-sky-600 dark:text-sky-400",
+        className
+      )}
+      {...props}
+    >
+      <span className="truncate">{children ?? name}</span>
+      <span className="shrink-0 text-muted-foreground">=</span>
     </span>
   );
 };
@@ -462,12 +470,6 @@ const copyFormatLabels = {
   value: "Copy value",
 };
 
-const copyFormatToasts = {
-  export: "Export statement copied",
-  name: "Variable name copied",
-  value: "Value copied",
-};
-
 export const EnvironmentVariableCopyButton = ({
   onCopy,
   onError,
@@ -504,8 +506,7 @@ export const EnvironmentVariableCopyButton = ({
         await navigator.clipboard.writeText(getTextToCopy());
         setIsCopied(true);
         toast.add({
-          description: name,
-          title: copyFormatToasts[copyFormat],
+          title: `${name} copied`,
           type: "success",
         });
         onCopy?.();
@@ -518,7 +519,7 @@ export const EnvironmentVariableCopyButton = ({
       toast.add({ title: "Could not copy to clipboard", type: "error" });
       onError?.(error as Error);
     }
-  }, [copyFormat, getTextToCopy, isCopied, name, onCopy, onError, timeout]);
+  }, [getTextToCopy, isCopied, name, onCopy, onError, timeout]);
 
   // Compose rather than replace: when this button is used as the render target
   // of a Tooltip/Popover trigger, the wrapper supplies its own `onClick`.
@@ -556,7 +557,8 @@ export const EnvironmentVariableCopyButton = ({
             {children ?? (
               <HugeiconsIcon
                 icon={isCopied ? Tick02Icon : Copy01Icon}
-                strokeWidth={2}
+                strokeWidth={1.5}
+                className="text-muted-foreground"
               />
             )}
           </Button>
@@ -572,20 +574,27 @@ export const EnvironmentVariableRequired = ({
   className,
   children,
   ...props
-}: EnvironmentVariableRequiredProps) => (
-  <Badge
-    className={cn(
-      "text-xs bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
-      className
-    )}
-    {...props}
-  >
-    {/* `inline-start` tightens the badge's leading padding around the icon. */}
-    <HugeiconsIcon
-      data-icon="inline-start"
-      icon={AlertCircleIcon}
-      strokeWidth={2}
-    />
-    {children ?? "Required"}
-  </Badge>
-);
+}: EnvironmentVariableRequiredProps) => {
+  const label = typeof children === "string" ? children : "Required";
+
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Badge
+            variant="outline"
+            className={cn(
+              "size-5 cursor-pointer rounded-full border-amber-200 bg-amber-50 p-0 text-amber-600 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-400",
+              className
+            )}
+            aria-label={label}
+            {...props}
+          >
+            <HugeiconsIcon icon={AlertCircleIcon} strokeWidth={2} />
+          </Badge>
+        }
+      />
+      <TooltipContent>{children ?? "Required"}</TooltipContent>
+    </Tooltip>
+  );
+};

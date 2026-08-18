@@ -27,9 +27,6 @@ const codeIconLabels: Partial<Record<keyof typeof CodeIcons, string>> = {
   yarn: "Yarn",
   pnpm: "pnpm",
   react: "React",
-  google: "Google",
-  apple: "Apple",
-  paypal: "PayPal",
   json: "JSON",
   ts: "TypeScript",
   css: "CSS",
@@ -48,24 +45,16 @@ const codeIconLabels: Partial<Record<keyof typeof CodeIcons, string>> = {
   baseui: "Base UI",
   lucide: "Lucide",
   hugeicons: "Hugeicons",
-  cva: "CVA",
   cmdk: "cmdk",
-  ansiToReact: "ansi-to-react",
   inputOtp: "input-otp",
   resizablePanels: "react-resizable-panels",
-  tokenlens: "TokenLens",
   useStickToBottom: "use-stick-to-bottom",
   nextThemes: "next-themes",
   rive: "Rive",
   streamdown: "Streamdown",
-  tanstack: "TanStack",
   xyflow: "XYFlow",
-  dateFns: "date-fns",
   embla: "Embla Carousel",
-  nanoid: "Nano ID",
   reactDayPicker: "React DayPicker",
-  shiki: "Shiki",
-  vercelAi: "Vercel AI SDK",
   recharts: "Recharts",
 }
 
@@ -100,27 +89,7 @@ const codeIconCategories: { label: string; names: (keyof typeof CodeIcons)[] }[]
       "recharts",
     ],
   },
-  {
-    label: "Utilities",
-    names: [
-      "cva",
-      "ansiToReact",
-      "tokenlens",
-      "tanstack",
-      "dateFns",
-      "nanoid",
-      "shiki",
-      "vercelAi",
-    ],
-  },
-  {
-    label: "Tooling",
-    names: ["npm", "yarn", "pnpm"],
-  },
-  {
-    label: "Brands",
-    names: ["google", "apple", "paypal"],
-  },
+  
 ]
 
 const codeIconSections = codeIconCategories.map(({ label, names }) => ({

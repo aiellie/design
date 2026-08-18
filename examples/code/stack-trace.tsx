@@ -45,7 +45,7 @@ const handleFilePathClick = (
 export function StackTraceExample() {
   return (
     <div className="flex w-full justify-center">
-      <div className="w-full max-w-3xl">
+      <div className="w-full max-w-md">
         <StackTrace
           defaultOpen
           onFilePathClick={handleFilePathClick}
@@ -68,8 +68,8 @@ export function StackTraceExample() {
                 />
                 <TooltipContent>Copy stack trace</TooltipContent>
               </Tooltip>
+              <StackTraceExpandButton />
             </StackTraceActions>
-            <StackTraceExpandButton />
           </StackTraceHeader>
           <StackTraceContent>
             <StackTraceFrames />
