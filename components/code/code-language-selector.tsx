@@ -2,7 +2,7 @@
 
 import type { ComponentProps, ReactNode } from "react"
 
-import { getIconForLanguageExtension } from "@/icons/code-icons"
+import { getIconForLanguageExtension } from "@/icons/icons"
 import { Button } from "@/components/ui/button"
 import {
   Combobox,

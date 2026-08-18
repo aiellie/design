@@ -27,17 +27,32 @@ import {
   statusMeta,
   type ExampleStatus,
 } from "@/examples/status"
-import { Icon, Icons, type IconData } from "@/icons/icons"
+import { Icon, type IconData } from "@/icons/icons"
+import {
+  ArrowExpand01Icon,
+  ChatGptIcon,
+  ClaudeIcon,
+  Copy01Icon,
+  Doc01Icon,
+  Edit02Icon,
+  GoogleGeminiIcon,
+  HeartIcon,
+  MoreHorizontalCircle01Icon,
+  Progress01Icon,
+  Share08Icon,
+  Trash,
+  TriangleIcon,
+} from "@/icons/huge-icons"
 
 /** Where the Open submenu can send the item. */
 export type OpenTarget = "fullscreen" | "v0" | "chatgpt" | "claude" | "gemini"
 
 const openTargets: { id: OpenTarget; label: string; icon: IconData }[] = [
-  { id: "fullscreen", label: "Full Screen", icon: Icons.arrowExpand },
-  { id: "v0", label: "V0", icon: Icons.v0 },
-  { id: "chatgpt", label: "ChatGPT", icon: Icons.chatGpt },
-  { id: "claude", label: "Claude", icon: Icons.claude },
-  { id: "gemini", label: "Gemini", icon: Icons.gemini },
+  { id: "fullscreen", label: "Full Screen", icon: ArrowExpand01Icon },
+  { id: "v0", label: "V0", icon: TriangleIcon },
+  { id: "chatgpt", label: "ChatGPT", icon: ChatGptIcon },
+  { id: "claude", label: "Claude", icon: ClaudeIcon },
+  { id: "gemini", label: "Gemini", icon: GoogleGeminiIcon },
 ]
 
 /**
@@ -97,7 +112,7 @@ export function ItemActions({
                   className={className}
                   aria-label={name ? `${name} actions` : "Actions"}
                 >
-                  <Icon icon={Icons.more} />
+                  <Icon icon={MoreHorizontalCircle01Icon} />
                 </Button>
               }
             />
@@ -111,12 +126,12 @@ export function ItemActions({
             <a href={docsHref} target="_blank" rel="noreferrer noopener" />
           }
         >
-          <Icon icon={Icons.doc} className="size-3.5" />
+          <Icon icon={Doc01Icon} className="size-3.5" />
           Docs
         </DropdownMenuItem>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <Icon icon={Icons.share} className="size-3.5" />
+            <Icon icon={Share08Icon} className="size-3.5" />
             Open
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="w-40">
@@ -132,17 +147,17 @@ export function ItemActions({
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuItem onClick={onEdit}>
-          <Icon icon={Icons.edit} className="size-3.5" />
+          <Icon icon={Edit02Icon} className="size-3.5" />
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onDuplicate}>
-          <Icon icon={Icons.copy} className="size-3.5" />
+          <Icon icon={Copy01Icon} className="size-3.5" />
           Duplicate
         </DropdownMenuItem>
         {/* Stays open so the heart can fill in place as feedback. */}
         <DropdownMenuItem closeOnClick={false} onClick={toggleFavorite}>
           <Icon
-            icon={Icons.heart}
+            icon={HeartIcon}
             className={
               isFavorite
                 ? "size-3.5 fill-rose-500! text-rose-500! hover:fill-rose-500! hover:text-rose-500!"
@@ -156,7 +171,7 @@ export function ItemActions({
 
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <Icon icon={Icons.progress} className="size-3.5" />
+            <Icon icon={Progress01Icon} className="size-3.5" />
             Status
             <span className="ml-auto text-xs text-muted-foreground">
               {statusMeta[current].label}
@@ -183,7 +198,7 @@ export function ItemActions({
         <DropdownMenuSeparator />
 
         <DropdownMenuItem variant="destructive" onClick={onDelete}>
-          <Icon icon={Icons.delete} className="size-3.5" />
+          <Icon icon={Trash} className="size-3.5" />
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

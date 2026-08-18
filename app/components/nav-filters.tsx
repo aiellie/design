@@ -26,7 +26,15 @@ import {
   exampleStatuses,
   type ExampleStatus,
 } from "@/examples/status"
-import { Icon, Icons } from "@/icons/icons"
+import { Icon } from "@/icons/icons"
+import {
+  FilterMailIcon,
+  Layers01Icon,
+  Minimize01Icon,
+  Progress01Icon,
+  RefreshIcon,
+  Sorting01Icon,
+} from "@/icons/huge-icons"
 
 export type NavSortBy = "default" | "name" | "status"
 export type NavGroupBy = "category" | "status" | "none"
@@ -118,7 +126,7 @@ export function NavFilters({
                   aria-label="Filter navigation"
                 >
                   <Icon
-                    icon={Icons.filter}
+                    icon={FilterMailIcon}
                     className={
                       isFiltering ? "size-3.5! text-primary" : "size-3.5!"
                     }
@@ -133,7 +141,7 @@ export function NavFilters({
       <DropdownMenuContent align="end" className="w-44">
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <Icon icon={Icons.sorting} className="size-3.5" />
+            <Icon icon={Sorting01Icon} className="size-3.5" />
             Sort by
             <span className="ml-auto text-xs text-muted-foreground">
               {optionLabel(sortOptions, sortBy)}
@@ -155,7 +163,7 @@ export function NavFilters({
 
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <Icon icon={Icons.layers} className="size-3.5" />
+            <Icon icon={Layers01Icon} className="size-3.5" />
             Group by
             <span className="ml-auto text-xs text-muted-foreground">
               {optionLabel(groupOptions, groupBy)}
@@ -177,7 +185,7 @@ export function NavFilters({
 
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <Icon icon={Icons.progress} className="size-3.5" />
+            <Icon icon={Progress01Icon} className="size-3.5" />
             Status
             <span className="ml-auto text-xs text-muted-foreground">
               {statusSummary}
@@ -203,7 +211,7 @@ export function NavFilters({
 
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <Icon icon={Icons.minimize} className="size-3.5" />
+            <Icon icon={Minimize01Icon} className="size-3.5" />
             Collapse
             <span className="ml-auto text-xs text-muted-foreground">
               {collapse ? optionLabel(collapseOptions, collapse) : "Custom"}
@@ -227,7 +235,7 @@ export function NavFilters({
 
         <DropdownMenuSeparator />
         <DropdownMenuItem disabled={!isFiltering} onClick={onReset}>
-          <Icon icon={Icons.refresh} className="size-3.5" />
+          <Icon icon={RefreshIcon} className="size-3.5" />
           Reset filters
         </DropdownMenuItem>
       </DropdownMenuContent>

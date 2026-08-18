@@ -23,10 +23,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { allExamples, exampleCategories } from "@/examples"
-import { Icon, Icons } from "@/icons/icons"
+import { Icon } from "@/icons/icons"
+import { HomeIcon, Search01Icon } from "@/icons/huge-icons"
 
 /** Static pages that live outside the example categories. */
-const pages = [{ slug: null, name: "Home", icon: Icons.home }] as const
+const pages = [{ slug: null, name: "Home", icon: HomeIcon }] as const
 
 /** 1-based page number for each example, in display order. */
 const pageNumberOf = new Map(
@@ -60,7 +61,7 @@ export function SearchCommand({
 
   React.useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey)) {
+      if (event.key?.toLowerCase() === "k" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault()
         setOpen((prev) => {
           if (prev) setSearch("")
@@ -142,7 +143,7 @@ export function SearchCommand({
                 aria-label="Search"
                 className="rounded-full"
               >
-                <Icon icon={Icons.search} />
+                <Icon icon={Search01Icon} />
               </Button>
             }
           />

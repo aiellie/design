@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { ColorIcons } from "@/icons/color-icons"  
+import { ColorIcons } from "@/icons/icons"  
 import {
   Combobox,
   ComboboxCollection,
@@ -16,8 +16,10 @@ import {
   ComboboxTrigger,
   ComboboxValue,
 } from "@/components/ui/combobox"
-import { Button } from "@/components/ui/button"
-import { InputGroupAddon } from "@/components/ui/input-group"
+import {
+  InputGroupAddon,
+  InputGroupButton,
+} from "@/components/ui/input-group"
 import {
   Tooltip,
   TooltipContent,
@@ -537,10 +539,11 @@ export function TailwindColorPicker({
             render={
               <ComboboxTrigger
                 id={id}
+                showTrigger={false}
                 render={
-                  <Button
-                    variant="outline"
-                    size="icon"
+                  <InputGroupButton
+                    variant="ghost"
+                    size="icon-xs"
                     disabled={disabled}
                     aria-label="tailwind-color-picker"
                     className={cn(className)}

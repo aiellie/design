@@ -67,11 +67,18 @@
   "code-language-selector": "shipped",
   "color-picker": "shipped",
   "color-format-selector": "shipped",
+  "tailwind-color-picker": "shipped",
+  "countries-select": "shipped",
+  "language-selector": "shipped",
   "environment-variables": "shipped",
   "test-results": "building",
   "schema-display": "building",
   "file-tree": "shipped",
   "stack-trace": "shipped",
   "code-command": "shipped",
-  "snippet": "shipped"
+  "snippet": "shipped",
+  "commit": "shipped",
+  "date-picker": "shipped",
+  "time-picker": "shipped",
+  "open-in-chat": "shipped"
 }

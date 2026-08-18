@@ -39,7 +39,7 @@ const daysAgo = (days: number) =>
 
 const commit = {
   author: "Aiellie",
-  avatar: "/avatars/elliegithub.png",
+  avatar: "/brand/github.avatar.png",
   fullHash: "9f4e2b1c8d0a3e5f7419b6c2d8053ae1",
   hash: "9f4e2b1",
   initials: "AI",
@@ -100,7 +100,7 @@ const handleCopyError = () => {
 
 export function CommitExample() {
   return (
-      <div className="w-full max-w-lg border-none">
+      <div className="w-full max-w-lg border-none mx-auto">
         <Commit >
           <CommitHeader>
             <CommitAuthor>

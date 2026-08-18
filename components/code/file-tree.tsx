@@ -1,6 +1,6 @@
 "use client"
 
-import { getIconForLanguageExtension } from "@/icons/code-icons"
+import { getIconForLanguageExtension } from "@/icons/icons"
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu"
 import { cn } from "@/lib/utils"
 import {

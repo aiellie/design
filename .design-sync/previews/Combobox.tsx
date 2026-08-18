@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/combobox"
 import { InputGroupAddon } from "@/components/ui/input-group"
 import { Label } from "@/components/ui/label"
-import { Icon, Icons } from "@/icons/icons"
+import { Icon } from "@/icons/icons"
+import { Search01Icon } from "@/icons/huge-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   DiscordIcon,
@@ -78,7 +79,7 @@ export function Showcase() {
               placeholder="Search"
             >
               <InputGroupAddon>
-                <Icon icon={Icons.search} strokeWidth={2} className="size-3.5" />
+                <Icon icon={Search01Icon} strokeWidth={2} className="size-3.5" />
               </InputGroupAddon>
             </ComboboxInput>
             <ComboboxEmpty>No integrations found.</ComboboxEmpty>

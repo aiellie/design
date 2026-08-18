@@ -34,7 +34,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { allExamples, exampleCategories, type FlatExample } from "@/examples"
-import { Icon, Icons, type IconData } from "@/icons/icons"
+import { Icon, type IconData } from "@/icons/icons"
+import { ChevronDownIcon, HeartIcon, HomeIcon, Search01Icon } from "@/icons/huge-icons"
 
 /** One row in the header combobox — an example, or the Home page. */
 type NavItem = {
@@ -43,7 +44,7 @@ type NavItem = {
   icon: IconData
 }
 
-const homeItem: NavItem = { slug: null, name: "Home", icon: Icons.home }
+const homeItem: NavItem = { slug: null, name: "Home", icon: HomeIcon }
 
 /** 1-based page number for each example, matching the ⌘N search shortcuts. */
 const pageNumberOf = new Map(
@@ -103,7 +104,7 @@ function FavoriteBadge() {
             aria-label="Favorited"
           >
             <Icon
-              icon={Icons.heart}
+              icon={HeartIcon}
               strokeWidth={2}
               className="fill-current text-current hover:text-current"
             />
@@ -165,7 +166,7 @@ export function DashboardHeader({
                           <Icon icon={selected.icon} className="size-4" />
                           {selected.name}
                           <Icon
-                            icon={Icons.chevronDown}
+                            icon={ChevronDownIcon}
                             className="size-3.5 text-muted-foreground"
                           />
                         </Button>
@@ -179,7 +180,7 @@ export function DashboardHeader({
                       >
                         <InputGroupAddon>
                           <Icon
-                            icon={Icons.search}
+                            icon={Search01Icon}
                             strokeWidth={2}
                             className="size-3.5"
                           />

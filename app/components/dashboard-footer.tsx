@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import type { FlatExample } from "@/examples"
-import { getIconForLanguageExtension } from "@/icons/code-icons"
+import { getIconForLanguageExtension } from "@/icons/icons"
 import {ArrowLeftIcon, ArrowRightIcon} from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
@@ -51,8 +51,8 @@ export function DashboardFooter({
                   onClick={() => previous && onSelect(previous.slug)}
                   aria-label="Previous example"
                 >
-                  <HugeiconsIcon icon={ArrowLeftIcon} className="text-muted-foreground" />
-                  strokeWidth={2}
+                  <HugeiconsIcon icon={ArrowLeftIcon} className="text-muted-foreground"                  strokeWidth={2}
+ />
                 </Button>
               }
             />

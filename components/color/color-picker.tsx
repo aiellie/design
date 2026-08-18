@@ -40,7 +40,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import { Icon, Icons } from "@/icons/icons";
+import { Icon } from "@/icons/icons"
+import { Search01Icon } from "@/icons/huge-icons"
 
 type Hsv = { h: number; s: number; v: number };
 
@@ -974,7 +975,7 @@ function ColorPopover({
               >
                 <InputGroupAddon>
                   <Icon
-                    icon={Icons.search}
+                    icon={Search01Icon}
                     strokeWidth={2}
                     className="size-3.5"
                   />

@@ -15,10 +15,22 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { CodeIcons } from "@/icons/code-icons"
-import { Emoji, flagEmojiGroups } from "@/icons/emojis"
-import { iconCategories } from "@/icons/icon-categories"
-import { Icon, iconRegistry } from "@/icons/icons"
+import * as HugeIcons from "@/icons/huge-icons"
+import {
+  BrandIcons,
+  CodeIcons,
+  ColorIcons,
+  Emoji,
+  flagEmojiGroups,
+  Icon,
+  packageIcons,
+  type IconData,
+} from "@/icons/icons"
+
+/** Every glyph in the brand set, keyed by its `@/icons/huge-icons` export name. */
+const hugeIconEntries = (
+  Object.entries(HugeIcons) as [string, IconData][]
+).sort(([a], [b]) => a.localeCompare(b, "en"))
 
 const codeIconLabels: Partial<Record<keyof typeof CodeIcons, string>> = {
   radix: "Radix UI",
@@ -46,6 +58,7 @@ const codeIconLabels: Partial<Record<keyof typeof CodeIcons, string>> = {
   lucide: "Lucide",
   hugeicons: "Hugeicons",
   cmdk: "cmdk",
+  next: "Next.js",
   inputOtp: "input-otp",
   resizablePanels: "react-resizable-panels",
   useStickToBottom: "use-stick-to-bottom",
@@ -76,6 +89,7 @@ const codeIconCategories: { label: string; names: (keyof typeof CodeIcons)[] }[]
       "baseui",
       "lucide",
       "hugeicons",
+      "next",
       "cmdk",
       "inputOtp",
       "resizablePanels",
@@ -89,7 +103,10 @@ const codeIconCategories: { label: string; names: (keyof typeof CodeIcons)[] }[]
       "recharts",
     ],
   },
-  
+  {
+    label: "Tooling",
+    names: ["npm", "yarn", "pnpm"],
+  },
 ]
 
 const codeIconSections = codeIconCategories.map(({ label, names }) => ({
@@ -101,8 +118,90 @@ const codeIconSections = codeIconCategories.map(({ label, names }) => ({
   })),
 }))
 
+const colorIconLabels: Record<keyof typeof ColorIcons, string> = {
+  hex: "HEX",
+  rgb: "RGB",
+  hsl: "HSL",
+  oklch: "OKLCH",
+  oklab: "OKLAB",
+  cmyk: "CMYK",
+  p3: "Display P3",
+  swatch: "Swatch",
+  tailwind: "Tailwind CSS",
+}
+
+const colorIconEntries = (
+  Object.keys(ColorIcons) as (keyof typeof ColorIcons)[]
+).map((name) => ({
+  name,
+  label: colorIconLabels[name],
+  IconComponent: ColorIcons[name],
+}))
+
+const brandIconLabels: Record<keyof typeof BrandIcons, string> = {
+  googleDrive: "Google Drive",
+  slack: "Slack",
+  google: "Google",
+  apple: "Apple",
+  paypal: "PayPal",
+}
+
+const brandIconSections = [
+  {
+    label: "Brands",
+    icons: (Object.keys(BrandIcons) as (keyof typeof BrandIcons)[]).map(
+      (name) => ({
+        name: name as string,
+        label: brandIconLabels[name],
+        IconComponent: BrandIcons[name],
+      })
+    ),
+  },
+  {
+    label: "Packages",
+    icons: Object.entries(packageIcons).map(([name, IconComponent]) => ({
+      name,
+      label: name,
+      IconComponent,
+    })),
+  },
+]
+
+const categories = [
+  { id: "hugeicons", label: "Hugeicons", icon: HugeIcons.SparklesIcon },
+  { id: "code", label: "Code", icon: HugeIcons.CodeSquareIcon },
+  { id: "color", label: "Color", icon: HugeIcons.PaintBoardIcon },
+  { id: "brands", label: "Brands", icon: HugeIcons.StarIcon },
+  { id: "emojis", label: "Emojis", icon: HugeIcons.SmileIcon },
+] as const
+
+type SvgIconEntry = {
+  name: string
+  label: string
+  IconComponent: React.ComponentType<React.HTMLAttributes<SVGElement>>
+}
+
+function SvgIconGrid({ icons }: { icons: SvgIconEntry[] }) {
+  return (
+    <div className="grid grid-cols-8 gap-3">
+      {icons.map(({ name, label, IconComponent }) => (
+        <Tooltip key={name}>
+          <TooltipTrigger
+            render={
+              <Card className="flex size-8 items-center justify-center p-0 shadow-none *:[svg]:size-4 text-muted-foreground hover:text-foreground transition-colors">
+                <IconComponent />
+              </Card>
+            }
+          />
+          <TooltipContent>{label}</TooltipContent>
+        </Tooltip>
+      ))}
+    </div>
+  )
+}
+
 export function IconsExample() {
-  const [activeTab, setActiveTab] = React.useState<string | null>("actions")
+  const [activeTab, setActiveTab] = React.useState<string | null>("hugeicons")
 
   return (
     <Tabs
@@ -111,7 +210,7 @@ export function IconsExample() {
       className="w-full"
     >
       <TabsList className="h-auto flex-wrap">
-        {iconCategories.map((category) => (
+        {categories.map((category) => (
           <Tooltip key={category.id} disabled={activeTab === category.id}>
             <TooltipTrigger
               render={
@@ -137,76 +236,74 @@ export function IconsExample() {
           </Tooltip>
         ))}
       </TabsList>
-      {iconCategories.map((category) => (
-        <TabsContent key={category.id} value={category.id}>
-          {category.id === "code" ? (
-            <div className="flex flex-col gap-5">
-              {codeIconSections.map((section) => (
-                <div key={section.label} className="flex flex-col gap-2">
-                  <div className="text-xs font-medium text-muted-foreground">
-                    {section.label}
-                  </div>
-                  <div className="grid grid-cols-8 gap-3">
-                    {section.icons.map(({ name, label, IconComponent }) => (
-                      <Tooltip key={name}>
-                        <TooltipTrigger
-                          render={
-                            <Card className="flex size-8 items-center justify-center p-0 shadow-none *:[svg]:size-4 text-muted-foreground hover:text-foreground transition-colors">
-                              <IconComponent />
-                            </Card>
-                          }
-                        />
-                        <TooltipContent>{label}</TooltipContent>
-                      </Tooltip>
-                    ))}
-                  </div>
-                </div>
-              ))}
+      <TabsContent value="hugeicons">
+        <div className="grid grid-cols-8 gap-3">
+          {hugeIconEntries.map(([name, icon]) => (
+            <Tooltip key={name}>
+              <TooltipTrigger
+                render={
+                  <Card className="flex size-8 items-center justify-center p-0 shadow-none *:[svg]:size-4">
+                    <Icon icon={icon} />
+                  </Card>
+                }
+              />
+              <TooltipContent>{name}</TooltipContent>
+            </Tooltip>
+          ))}
+        </div>
+      </TabsContent>
+      <TabsContent value="code">
+        <div className="flex flex-col gap-5">
+          {codeIconSections.map((section) => (
+            <div key={section.label} className="flex flex-col gap-2">
+              <div className="text-xs font-medium text-muted-foreground">
+                {section.label}
+              </div>
+              <SvgIconGrid icons={section.icons} />
             </div>
-          ) : category.id === "emojis" ? (
-            <div className="flex flex-col gap-5">
-              {flagEmojiGroups.map((group) => (
-                <div key={group.label} className="flex flex-col gap-2">
-                  <div className="text-xs font-medium text-muted-foreground">
-                    {group.label}
-                  </div>
-                  <div className="grid grid-cols-8 gap-3">
-                    {group.items.map(({ code, label, flag }) => (
-                      <Tooltip key={code}>
-                        <TooltipTrigger
-                          render={
-                            <Card className="flex size-8 items-center justify-center p-0 shadow-none">
-                              <Emoji emoji={flag} />
-                            </Card>
-                          }
-                        />
-                        <TooltipContent>{label}</TooltipContent>
-                      </Tooltip>
-                    ))}
-                  </div>
-                </div>
-              ))}
+          ))}
+        </div>
+      </TabsContent>
+      <TabsContent value="color">
+        <SvgIconGrid icons={colorIconEntries} />
+      </TabsContent>
+      <TabsContent value="brands">
+        <div className="flex flex-col gap-5">
+          {brandIconSections.map((section) => (
+            <div key={section.label} className="flex flex-col gap-2">
+              <div className="text-xs font-medium text-muted-foreground">
+                {section.label}
+              </div>
+              <SvgIconGrid icons={section.icons} />
             </div>
-          ) : (
-            <div className="grid grid-cols-8 gap-3">
-              {iconRegistry
-                .filter((entry) => entry.category === category.id)
-                .map(({ name, label, icon }) => (
-                  <Tooltip key={name}>
+          ))}
+        </div>
+      </TabsContent>
+      <TabsContent value="emojis">
+        <div className="flex flex-col gap-5">
+          {flagEmojiGroups.map((group) => (
+            <div key={group.label} className="flex flex-col gap-2">
+              <div className="text-xs font-medium text-muted-foreground">
+                {group.label}
+              </div>
+              <div className="grid grid-cols-8 gap-3">
+                {group.items.map(({ code, label, flag }) => (
+                  <Tooltip key={code}>
                     <TooltipTrigger
                       render={
-                        <Card className="flex size-8 items-center justify-center p-0 shadow-none *:[svg]:size-4">
-                          <Icon icon={icon} />
+                        <Card className="flex size-8 items-center justify-center p-0 shadow-none">
+                          <Emoji emoji={flag} />
                         </Card>
                       }
                     />
                     <TooltipContent>{label}</TooltipContent>
                   </Tooltip>
                 ))}
+              </div>
             </div>
-          )}
-        </TabsContent>
-      ))}
+          ))}
+        </div>
+      </TabsContent>
     </Tabs>
   )
 }

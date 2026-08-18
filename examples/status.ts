@@ -1,4 +1,11 @@
-import { Icons, type IconData } from "@/icons/icons"
+import type { IconData } from "@/icons/icons"
+import {
+  BubbleChatPreviewIcon,
+  CheckListIcon,
+  Edit02Icon,
+  Lightbulb,
+  Rocket01Icon,
+} from "@/icons/huge-icons"
 
 /** Workflow state of an example, from concept to final. */
 export type ExampleStatus =
@@ -28,7 +35,7 @@ export const exampleStatuses: ExampleStatusMeta[] = [
     id: "idea",
     label: "Idea",
     description: "Captured as a concept — no draft exists yet.",
-    icon: Icons.lightbulb,
+    icon: Lightbulb,
     color: "bg-muted-foreground",
     iconBg: "bg-muted-foreground/5",
     textColor: "text-muted-foreground",
@@ -37,7 +44,7 @@ export const exampleStatuses: ExampleStatusMeta[] = [
     id: "planned",
     label: "Planned",
     description: "Has a generated draft, queued for real work.",
-    icon: Icons.checkList,
+    icon: CheckListIcon,
     color: "bg-amber-500",
     iconBg: "bg-amber-500/5",
     textColor: "text-amber-500",
@@ -46,7 +53,7 @@ export const exampleStatuses: ExampleStatusMeta[] = [
     id: "building",
     label: "Building",
     description: "Actively being designed and edited.",
-    icon: Icons.edit,
+    icon: Edit02Icon,
     color: "bg-violet-500",
     iconBg: "bg-violet-500/5",
     textColor: "text-violet-500",
@@ -55,7 +62,7 @@ export const exampleStatuses: ExampleStatusMeta[] = [
     id: "reviewing",
     label: "Reviewing",
     description: "Work finished — awaiting a review pass.",
-    icon: Icons.bubbleChatPreview,
+    icon: BubbleChatPreviewIcon,
     color: "bg-blue-500",
     iconBg: "bg-blue-500/5",
     textColor: "text-blue-500",
@@ -64,7 +71,7 @@ export const exampleStatuses: ExampleStatusMeta[] = [
     id: "shipped",
     label: "Shipped",
     description: "Reviewed and final.",
-    icon: Icons.rocket,
+    icon: Rocket01Icon,
     color: "bg-emerald-500",
     iconBg: "bg-emerald-500/5",
     textColor: "text-emerald-500",

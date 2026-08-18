@@ -87,9 +87,9 @@ export function LoginForm({
             ) : (
               <form noValidate onSubmit={handleSubmit}>
                 <FieldGroup>
-                  <div className="flex flex-col items-start gap-0 text-center">
+                  <div className="flex flex-col items-start gap-1">
                     <h1 className="text-lg font-bold">Welcome to AI Ellie!</h1>
-                    <div className="text-balance text-muted-foreground">
+                    <div className="text-balance text-sm text-muted-foreground">
                       Log in or sign up
                     </div>
                   </div>
@@ -191,7 +191,7 @@ export function LoginForm({
           </div>
           <div className="relative hidden bg-muted md:block">
             <img
-              src="/brand/aiellie.clouds.png"
+              src="/brand/clouds.png"
               alt="AI Ellie clouds"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />

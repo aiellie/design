@@ -13,7 +13,8 @@ import {
 } from "@/components/color/color-format-selector"
 import { ComboboxEmpty, ComboboxInput } from "@/components/ui/combobox"
 import { InputGroupAddon } from "@/components/ui/input-group"
-import { Icon, Icons } from "@/icons/icons"
+import { Icon } from "@/icons/icons"
+import { Search01Icon } from "@/icons/huge-icons"
 
 export { ColorFormatSelectorExample as Showcase } from "@/examples/color/color-format-selector"
 
@@ -34,7 +35,7 @@ function FormatSelect({ value }: { value: string }) {
       <ColorFormatSelectorContent>
         <ComboboxInput showClear={true} showTrigger={false} placeholder="Search">
           <InputGroupAddon>
-            <Icon icon={Icons.search} strokeWidth={2} className="size-3.5" />
+            <Icon icon={Search01Icon} strokeWidth={2} className="size-3.5" />
           </InputGroupAddon>
         </ComboboxInput>
         <ComboboxEmpty>No formats found.</ComboboxEmpty>

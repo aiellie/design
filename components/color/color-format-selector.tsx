@@ -4,7 +4,7 @@ import type { ComponentProps } from "react"
 
 import { Combobox as ComboboxPrimitive } from "@base-ui/react"
 
-import { getIconForColorFormat } from "@/icons/color-icons"
+import { getIconForColorFormat } from "@/icons/icons"
 import {
   Combobox,
   ComboboxContent,

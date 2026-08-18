@@ -19,7 +19,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { InputGroupAddon } from "@/components/ui/input-group"
-import { Icon, Icons } from "@/icons/icons"
+import { Icon } from "@/icons/icons"
+import { Search01Icon } from "@/icons/huge-icons"
 
 type ColorFormat = {
   value: string
@@ -77,7 +78,7 @@ export function ColorFormatSelectorExample() {
               >
                 <InputGroupAddon>
                   <Icon
-                    icon={Icons.search}
+                    icon={Search01Icon}
                     strokeWidth={2}
                     className="size-3.5"
                   />

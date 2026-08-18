@@ -43,8 +43,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
-import { CodeIcons } from "@/icons/code-icons"
-import { Icon, Icons, type IconData } from "@/icons/icons"
+import { CodeIcons, Icon, type IconData } from "@/icons/icons"
+import {
+  AlertCircleIcon,
+  Analytics01Icon,
+  ColorsIcon,
+  Layers01Icon,
+  SidebarLeft01Icon,
+  TextIcon,
+} from "@/icons/huge-icons"
 import { themesCss } from "./themes-css"
 
 type SetKey = "brand" | "interface" | "text" | "status" | "chart" | "sidebar"
@@ -101,12 +108,12 @@ const sets: Record<SetKey, TokenSwatch[]> = {
 }
 
 const setMeta: Record<SetKey, { label: string; icon: IconData }> = {
-  brand: { label: "Brand", icon: Icons.colors },
-  interface: { label: "Interface", icon: Icons.layers },
-  text: { label: "Text", icon: Icons.text },
-  status: { label: "Status", icon: Icons.alert },
-  chart: { label: "Chart ramp", icon: Icons.analytics },
-  sidebar: { label: "Sidebar", icon: Icons.sidebarLeft },
+  brand: { label: "Brand", icon: ColorsIcon },
+  interface: { label: "Interface", icon: Layers01Icon },
+  text: { label: "Text", icon: TextIcon },
+  status: { label: "Status", icon: AlertCircleIcon },
+  chart: { label: "Chart ramp", icon: Analytics01Icon },
+  sidebar: { label: "Sidebar", icon: SidebarLeft01Icon },
 }
 
 const setKeys = Object.keys(setMeta) as SetKey[]

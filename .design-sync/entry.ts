@@ -98,6 +98,6 @@ export * from "../components/locale/time-picker"
 
 // Icons & utilities
 export * from "../icons/icons"
-export * from "../icons/brand-icons"
+export * from "../icons/huge-icons"
 export { HugeiconsIcon } from "@hugeicons/react"
 export { cn } from "../lib/utils"

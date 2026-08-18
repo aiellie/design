@@ -22,7 +22,7 @@ import { Home01Icon } from "@hugeicons/core-free-icons"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
 import { BookOpen01Icon, PaintBrush01Icon, GithubIcon, ComponentIcon, Route02Icon } from "@hugeicons/core-free-icons"
-import { CodeIcons } from "@/icons/code-icons"
+import { CodeIcons } from "@/icons/icons"
 
 export function BreadcrumbExample() {
   return (

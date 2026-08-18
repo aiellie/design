@@ -16,7 +16,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { exampleStatuses, statusMeta } from "@/examples/status"
-import { Icon, Icons } from "@/icons/icons"
+import { Icon } from "@/icons/icons"
+import { Tick02Icon } from "@/icons/huge-icons"
 import { Button } from "@/components/ui/button"
 
 /** Status badge that opens a menu to change the example's status. */
@@ -56,7 +57,7 @@ export function StatusSelect({ slug }: { slug: string }) {
               <span>{status.label}</span>
             </div>
             {current === status.id ? (
-              <Icon icon={Icons.check} className="ml-auto size-4" />
+              <Icon icon={Tick02Icon} className="ml-auto size-4" />
             ) : null}
           </DropdownMenuItem>
         ))}

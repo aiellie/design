@@ -24,7 +24,7 @@ import {
   ItemTitle,
 } from "@/components/ui/item"
 import { Switch } from "@/components/ui/switch"
-import { BrandIcons } from "@/icons/brand-icons"
+import { BrandIcons } from "@/icons/icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Briefcase01Icon,

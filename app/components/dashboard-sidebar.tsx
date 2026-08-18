@@ -41,7 +41,8 @@ import {
   type ComponentExample,
 } from "@/examples"
 import { exampleStatuses, type ExampleStatus } from "@/examples/status"
-import { Icon, Icons, type IconData } from "@/icons/icons"
+import { Icon, type IconData } from "@/icons/icons"
+import { ArrowDown01Icon, ArrowRight01Icon, GridViewIcon, HomeIcon } from "@/icons/huge-icons"
 import * as React from "react"
 
 /** One rendered nav section after grouping, filtering, and sorting. */
@@ -136,7 +137,7 @@ function buildNavGroups(
       {
         key: "all",
         title: "Components",
-        icon: Icons.grid,
+        icon: GridViewIcon,
         countLabel: `${shippedCount(examples)}/${examples.length}`,
         examples,
       },
@@ -312,7 +313,7 @@ export function DashboardSidebar({
                   isActive={selectedSlug === null}
                   onClick={() => onSelect(null)}
                 >
-                  <Icon icon={Icons.home} />
+                  <Icon icon={HomeIcon} />
                   <span>Home</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -413,7 +414,7 @@ function SidebarNavGroup({
             className="top-1.5 right-auto start-1 rounded-sm opacity-0 group-has-[:focus-visible]/category:opacity-100 group-hover/category:opacity-100"
           >
             <Icon
-              icon={open ? Icons.arrowDown : Icons.chevronRight}
+              icon={open ? ArrowDown01Icon : ArrowRight01Icon}
               className="size-3.5!"
             />
             <span className="sr-only">

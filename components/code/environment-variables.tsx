@@ -1,6 +1,6 @@
 "use client";
 
-import { CodeIcons } from "@/icons/code-icons";
+import { CodeIcons } from "@/icons/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";

@@ -1,6 +1,6 @@
 "use client";
 
-import { getIconForLanguageExtension } from "@/icons/code-icons";
+import { getIconForLanguageExtension } from "@/icons/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -301,6 +301,7 @@ export const CommitCopyButton = ({
         <HugeiconsIcon
           icon={isCopied ? Tick02Icon : Copy01Icon}
           strokeWidth={2}
+          className="text-muted-foreground"
         />
       )}
     </Button>

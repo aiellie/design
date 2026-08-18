@@ -23,8 +23,11 @@ function ComboboxValue({ ...props }: ComboboxPrimitive.Value.Props) {
 function ComboboxTrigger({
   className,
   children,
+  showTrigger = true,
   ...props
-}: ComboboxPrimitive.Trigger.Props) {
+}: ComboboxPrimitive.Trigger.Props & {
+  showTrigger?: boolean
+}) {
   return (
     <ComboboxPrimitive.Trigger
       data-slot="combobox-trigger"
@@ -32,7 +35,9 @@ function ComboboxTrigger({
       {...props}
     >
       {children}
-      <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} className="pointer-events-none size-4 text-muted-foreground" />
+      {showTrigger && (
+        <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} className="pointer-events-none size-4 text-muted-foreground" />
+      )}
     </ComboboxPrimitive.Trigger>
   )
 }

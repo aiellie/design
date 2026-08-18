@@ -1,6 +1,6 @@
 "use client";
 
-import { getIconForLanguageExtension } from "@/icons/code-icons";
+import { getIconForLanguageExtension } from "@/icons/icons";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";

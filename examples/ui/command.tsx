@@ -89,7 +89,7 @@ export function CommandExample() {
 
   React.useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === "j" && (e.metaKey || e.ctrlKey)) {
+      if (e.key?.toLowerCase() === "j" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
         setOpen((prev) => {
           if (prev) setSearch("")
