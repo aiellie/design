@@ -20,6 +20,9 @@ importers:
       '@hugeicons/react':
         specifier: latest
         version: 1.1.9(react@19.2.8)
+      '@radix-ui/react-use-controllable-state':
+        specifier: ^1.2.6
+        version: 1.2.6(@types/react@19.2.18)(react@19.2.8)
       '@shadcn/helpers':
         specifier: ^0.2.0
         version: 0.2.0(ai@7.0.64(zod@4.4.3))

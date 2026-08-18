@@ -87,6 +87,7 @@ import {
   SquareLock01Icon,
   Table01Icon,
   Tag01Icon,
+  MicIcon,
   Tap01Icon,
   TerminalIcon,
   TextFontIcon,
@@ -113,6 +114,7 @@ import { cn } from "@/lib/utils"
  */
 export const Icons = {
   dropper: DropperIcon,
+  mic: MicIcon,
   alert: AlertCircleIcon,
   analytics: Analytics01Icon,
   appWindow: AppWindowIcon,

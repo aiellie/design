@@ -96,7 +96,7 @@ export function SidebarExample() {
         logo: (
           <HugeiconsIcon
             icon={CommandIcon}
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         ),
         bg: "bg-blue-500 text-white",
@@ -107,7 +107,7 @@ export function SidebarExample() {
         logo: (
           <HugeiconsIcon
             icon={AudioWave01Icon}
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         ),
         bg: "bg-violet-500 text-white",
@@ -118,7 +118,7 @@ export function SidebarExample() {
         logo: (
           <HugeiconsIcon
             icon={Rocket01Icon}
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         ),
         bg: "bg-emerald-500 text-white",
@@ -131,7 +131,7 @@ export function SidebarExample() {
         icon: (
           <HugeiconsIcon
             icon={ComputerTerminalIcon}
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         ),
         isActive: true,
@@ -142,7 +142,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={Clock01Icon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -152,7 +152,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={StarIcon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -162,7 +162,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={Settings01Icon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -174,7 +174,7 @@ export function SidebarExample() {
         icon: (
           <HugeiconsIcon
             icon={BotIcon}
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         ),
         items: [
@@ -184,7 +184,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={SparklesIcon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -194,7 +194,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={Telescope01Icon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -204,7 +204,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={Atom01Icon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -216,7 +216,7 @@ export function SidebarExample() {
         icon: (
           <HugeiconsIcon
             icon={BookOpenIcon}
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         ),
         items: [
@@ -226,7 +226,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={BookOpen01Icon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -236,7 +236,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={Rocket01Icon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -246,7 +246,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={PlayCircleIcon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -256,7 +256,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={NoteIcon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -268,7 +268,7 @@ export function SidebarExample() {
         icon: (
           <HugeiconsIcon
             icon={SettingsIcon}
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         ),
         items: [
@@ -278,7 +278,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={Settings01Icon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -288,7 +288,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={UserGroup02Icon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -298,7 +298,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={CreditCardIcon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -308,7 +308,7 @@ export function SidebarExample() {
             icon: (
               <HugeiconsIcon
                 icon={DashboardSpeed01Icon}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ),
           },
@@ -322,7 +322,7 @@ export function SidebarExample() {
         icon: (
           <HugeiconsIcon
             icon={CropIcon}
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         ),
       },
@@ -332,7 +332,7 @@ export function SidebarExample() {
         icon: (
           <HugeiconsIcon
             icon={PieChartIcon}
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         ),
       },
@@ -342,7 +342,7 @@ export function SidebarExample() {
         icon: (
           <HugeiconsIcon
             icon={MapsIcon}
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         ),
       },
@@ -383,7 +383,7 @@ export function SidebarExample() {
                   </div>
                   <HugeiconsIcon
                     icon={UnfoldMoreIcon}
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                   />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
@@ -439,7 +439,7 @@ export function SidebarExample() {
                       <span>{item.title}</span>
                       <HugeiconsIcon
                         icon={ArrowRight01Icon}
-                        strokeWidth={2}
+                        strokeWidth={1.5}
                         className="ml-auto transition-transform duration-100 group-data-open/collapsible:rotate-90"
                       />
                     </CollapsibleTrigger>
@@ -477,7 +477,7 @@ export function SidebarExample() {
                     >
                       <HugeiconsIcon
                         icon={MoreHorizontalIcon}
-                        strokeWidth={2}
+                        strokeWidth={1.5}
                       />
                       <span className="sr-only">More</span>
                     </DropdownMenuTrigger>
@@ -490,7 +490,7 @@ export function SidebarExample() {
                         <DropdownMenuItem>
                           <HugeiconsIcon
                             icon={FolderOpenIcon}
-                            strokeWidth={2}
+                            strokeWidth={1.5}
                             className="size-3.5"
                           />
                           View project
@@ -498,7 +498,7 @@ export function SidebarExample() {
                         <DropdownMenuItem>
                           <HugeiconsIcon
                             icon={Share01Icon}
-                            strokeWidth={2}
+                            strokeWidth={1.5}
                             className="size-3.5"
                           />
                           Share project
@@ -509,7 +509,7 @@ export function SidebarExample() {
                         <DropdownMenuItem variant="destructive">
                           <HugeiconsIcon
                             icon={Delete02Icon}
-                            strokeWidth={2}
+                            strokeWidth={1.5}
                             className="size-3.5"
                           />
                           Delete project
@@ -525,7 +525,7 @@ export function SidebarExample() {
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
-              <DropdownMenu>
+              <DropdownMenu >
                 <DropdownMenuTrigger
                   render={
                     <SidebarMenuButton
@@ -546,10 +546,10 @@ export function SidebarExample() {
                   </div>
                   <HugeiconsIcon
                     icon={UnfoldMoreIcon}
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                   />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent >
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>
                       <Item size="xs">
@@ -574,7 +574,7 @@ export function SidebarExample() {
                     <DropdownMenuItem>
                       <HugeiconsIcon
                         icon={UserCircleIcon}
-                        strokeWidth={2}
+                        strokeWidth={1.5}
                         className="size-3.5"
                       />
                       Account
@@ -582,7 +582,7 @@ export function SidebarExample() {
                     <DropdownMenuItem>
                       <HugeiconsIcon
                         icon={CreditCardIcon}
-                        strokeWidth={2}
+                        strokeWidth={1.5}
                         className="size-3.5"
                       />
                       Billing
@@ -590,7 +590,7 @@ export function SidebarExample() {
                     <DropdownMenuItem>
                       <HugeiconsIcon
                         icon={Settings01Icon}
-                        strokeWidth={2}
+                        strokeWidth={1.5}
                         className="size-3.5"
                       />
                       Settings
@@ -601,7 +601,7 @@ export function SidebarExample() {
                     <DropdownMenuItem variant="destructive">
                       <HugeiconsIcon
                         icon={Logout01Icon}
-                        strokeWidth={2}
+                        strokeWidth={1.5}
                         className="size-3.5"
                       />
                       Log out

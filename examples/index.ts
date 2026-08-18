@@ -81,6 +81,7 @@ import { LanguageSelectorExample } from "@/examples/locale/language-selector"
 import { TimePickerExample } from "@/examples/locale/time-picker"
 import { WebPreviewExample } from "@/examples/web/web-preview"
 import type { ExampleStatus } from "./status"
+import { MicSelectorExample } from "@/examples/audio/mic-selector"
 
 export type { ExampleStatus }
 
@@ -782,6 +783,21 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Web Preview",
         component: WebPreviewExample,
         icon: Icons.browser,
+      },
+    ],
+  },
+  {
+    title: "Audio",
+    icon: Icons.mic,
+    iconBg: "bg-pink-500/5",
+    textColor: "text-pink-500",
+    borderColor: "border-pink-200/10",
+    examples: [
+      {
+        slug: "mic-selector",
+        name: "Mic Selector",
+        component: MicSelectorExample,
+        icon: Icons.mic,
       },
     ],
   },

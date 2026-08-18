@@ -17,6 +17,7 @@
     "@base-ui/react": "latest",
     "@hugeicons/core-free-icons": "latest",
     "@hugeicons/react": "latest",
+    "@radix-ui/react-use-controllable-state": "^1.2.6",
     "@shadcn/helpers": "^0.2.0",
     "@shadcn/react": "^0.3.0",
     "@streamdown/code": "^1.1.1",
