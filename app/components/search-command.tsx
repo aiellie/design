@@ -26,7 +26,7 @@ import { allExamples, exampleCategories } from "@/examples"
 import { Icon, Icons } from "@/icons/icons"
 
 /** Static pages that live outside the example categories. */
-const pages = [{ slug: null, name: "Overview", icon: Icons.grid }] as const
+const pages = [{ slug: null, name: "Home", icon: Icons.home }] as const
 
 /** 1-based page number for each example, in display order. */
 const pageNumberOf = new Map(

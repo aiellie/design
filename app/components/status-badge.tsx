@@ -35,6 +35,7 @@ export function StatusIcon({
   const meta = statusMeta[status]
   return (
     <span
+      data-slot="status-icon"
       className={cn(
         "inline-flex size-6 shrink-0 items-center justify-center rounded-md",
         meta.iconBg,
@@ -43,9 +44,11 @@ export function StatusIcon({
       )}
       aria-hidden
     >
+      {/* `!` beats the menu rule in uishadcn.css that mutes every item icon,
+          so the glyph keeps the status colour it inherits from the chip. */}
       <Icon
         icon={meta.icon}
-        className="size-3.5 text-current hover:text-current"
+        className="size-3.5 text-current! hover:text-current!"
       />
     </span>
   )

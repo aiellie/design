@@ -96,6 +96,8 @@ export interface ComponentExample {
    * Leave unset for examples with a single demo — the viewer renders those bare.
    */
   demos?: ExampleDemo[]
+  /** Pinned example — the header marks it with a heart badge. */
+  favorite?: boolean
 }
 
 export interface ExampleCategory {
@@ -218,6 +220,7 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Badge",
         component: BadgeExample,
         icon: Icons.tag,
+        favorite: true,
         demos: [
           {
             value: "badge-colors",
@@ -385,6 +388,7 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Dropdown Menu",
         component: DropdownMenuExample,
         icon: Icons.menu,
+        favorite: true,
       },
       {
         slug: "context-menu",
@@ -427,6 +431,7 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Tabs",
         component: TabsExample,
         icon: Icons.browser,
+        favorite: true,
       },
       {
         slug: "sidebar",
@@ -523,6 +528,7 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Item",
         component: ItemExample,
         icon: Icons.listView,
+        favorite: true,
       },
     ],
   },
@@ -595,12 +601,14 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Attachment",
         component: AttachmentExample,
         icon: Icons.attachment,
+        favorite: true,
       },
       {
         slug: "message",
         name: "Message",
         component: MessageExample,
         icon: Icons.message,
+        favorite: true,
       },
       {
         slug: "message-scroller",
@@ -619,6 +627,7 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Marker",
         component: MarkerExample,
         icon: Icons.highlighter,
+        favorite: true,
       },
       {
         slug: "questionnaire",

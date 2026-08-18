@@ -27,7 +27,7 @@ export function DashboardFooter({
   }
 
   return (
-    <footer className="sticky bottom-0 z-20 flex h-14 shrink-0 items-center gap-3 border-t bg-background/70 px-4 backdrop-blur-md">
+    <footer className="sticky bottom-0 z-20 flex h-12 shrink-0 items-center gap-3 border-t bg-background/70 px-4 backdrop-blur-md">
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <span className="size-3.5 shrink-0 items-center justify-center xl:flex [&_svg]:size-3.5">
           {getIconForLanguageExtension(

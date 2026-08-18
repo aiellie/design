@@ -3,6 +3,7 @@
 // sweep of trigger value states (ValueStates). Closed states are the graded
 // look; the open popup treatment lives with the single-mode combobox cards.
 import {
+  ColorFormatIcon,
   ColorFormatSelector,
   ColorFormatSelectorContent,
   ColorFormatSelectorItem,
@@ -10,6 +11,9 @@ import {
   ColorFormatSelectorTrigger,
   ColorFormatSelectorValue,
 } from "@/components/color/color-format-selector"
+import { ComboboxEmpty, ComboboxInput } from "@/components/ui/combobox"
+import { InputGroupAddon } from "@/components/ui/input-group"
+import { Icon, Icons } from "@/icons/icons"
 
 export { ColorFormatSelectorExample as Showcase } from "@/examples/color/color-format-selector"
 
@@ -18,13 +22,26 @@ const formats = ["hex", "rgb", "hsl", "oklch", "oklab", "cmyk", "p3"]
 function FormatSelect({ value }: { value: string }) {
   return (
     <ColorFormatSelector items={formats} defaultValue={value}>
-      <ColorFormatSelectorTrigger>
-        <ColorFormatSelectorValue />
+      <ColorFormatSelectorTrigger className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md bg-muted/70 transition-colors hover:bg-muted [&>svg]:hidden">
+        <ColorFormatSelectorValue>
+          {(selected) =>
+            typeof selected === "string" ? (
+              <ColorFormatIcon format={selected} />
+            ) : null
+          }
+        </ColorFormatSelectorValue>
       </ColorFormatSelectorTrigger>
       <ColorFormatSelectorContent>
+        <ComboboxInput showClear={true} showTrigger={false} placeholder="Search">
+          <InputGroupAddon>
+            <Icon icon={Icons.search} strokeWidth={2} className="size-3.5" />
+          </InputGroupAddon>
+        </ComboboxInput>
+        <ComboboxEmpty>No formats found.</ComboboxEmpty>
         <ColorFormatSelectorList>
           {(format: string) => (
             <ColorFormatSelectorItem key={format} value={format}>
+              <ColorFormatIcon format={format} />
               {format}
             </ColorFormatSelectorItem>
           )}

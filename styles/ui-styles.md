@@ -8,7 +8,7 @@ Every visual override we apply on top of stock shadcn, organized by component.
 - [`globals.css`](globals.css) — design tokens (colors, `--radius: 0.875rem`, `--brand-gradient`, fonts) and the `bg-brand-gradient` utility.
 - A few components carry their styling inline where the structure itself is custom — Dialog is documented here since its whole recipe lives in [`dialog.tsx`](../components/ui/dialog.tsx).
 
-**Line references** (e.g. `uishadcn.css:16`) point into the CSS so you can jump to the source of any rule.
+**Line references** (e.g. `uishadcn.css:108`) point into the CSS so you can jump to the source of any rule. `uishadcn.css` is split into nine numbered sections (§1 Globals → §9 Chat & AI); its header comment lists them.
 
 ---
 
@@ -35,17 +35,17 @@ Every visual override we apply on top of stock shadcn, organized by component.
 
 ## How the cascade tricks work
 
-Three things make this file work; know them before editing (`uishadcn.css:1-14`, `114-115`):
+Three things make this file work; know them before editing (`uishadcn.css:1-36`):
 
 1. **Unlayered `!important` beats layered utilities.** Most rules here are unlayered with `!` (e.g. `bg-foreground/10!`), which wins over the components' own Tailwind utilities — even stateful ones like `focus:bg-accent` — because those live in `@layer utilities`.
-2. **Destructive is the exception.** Menu Content components ship `**:data-[variant=destructive]:text-accent-foreground!` — that's `!important` *inside* `@layer utilities`, which beats unlayered `!important`. So the destructive rules must live in `@layer utilities` themselves, with higher specificity than that Content rule (`uishadcn.css:143`).
-3. **cmdk selected state uses raw CSS, not `@apply`.** cmdk stamps `data-selected="true"|"false"` as strings; the nested `[data-selected="true"]` + `@apply` combination was dropped by the build, so those rules are written as plain `color-mix()` declarations (`uishadcn.css:114-124`).
+2. **Destructive is the exception.** Menu Content components ship `**:data-[variant=destructive]:text-accent-foreground!` — that's `!important` *inside* `@layer utilities`, which beats unlayered `!important`. So the destructive rules must live in `@layer utilities` themselves, with higher specificity than that Content rule (`uishadcn.css:178`).
+3. **cmdk selected state uses raw CSS, not `@apply`.** cmdk stamps `data-selected="true"|"false"` as strings; the nested `[data-selected="true"]` + `@apply` combination was dropped by the build, so those rules are written as plain `color-mix()` declarations (`uishadcn.css:247-256`).
 
 ---
 
 ## Global: focus & invalid rings
 
-One rule normalizes every focus and error ring in the app to **`ring-1`** (`uishadcn.css:276-313`).
+One rule normalizes every focus and error ring in the app to **`ring-1`** (`uishadcn.css:43-80`).
 
 | Trigger | Applies to |
 |---|---|
@@ -62,7 +62,7 @@ One rule normalizes every focus and error ring in the app to **`ring-1`** (`uish
 
 ## Global: cursors
 
-`cursor: pointer` on every enabled interactive control (`uishadcn.css:315-331`):
+`cursor: pointer` on every enabled interactive control (`uishadcn.css:83-100`):
 
 - any `button` / `[role="button"]` not disabled
 - checkbox, radio-group-item, slider-thumb, switch, native-select
@@ -73,7 +73,7 @@ One rule normalizes every focus and error ring in the app to **`ring-1`** (`uish
 
 ## Menus & pickers — shared glass recipe
 
-One block skins all floating menu surfaces identically (`uishadcn.css:16-81`).
+One block skins all floating menu surfaces identically (`uishadcn.css:108-172`).
 
 **Applies to the content (and sub-content) of:** dropdown-menu · context-menu · menubar · select · combobox. Select has no extra rules beyond this shared recipe.
 
@@ -92,7 +92,7 @@ One block skins all floating menu surfaces identically (`uishadcn.css:16-81`).
 
 ## Destructive menu items
 
-For dropdown-menu, context-menu, and menubar items with `data-variant="destructive"` (`uishadcn.css:143-219`). Lives in `@layer utilities` — see [cascade tricks](#how-the-cascade-tricks-work) #2.
+For dropdown-menu, context-menu, and menubar items with `data-variant="destructive"` (`uishadcn.css:178-221`). Lives in `@layer utilities` — see [cascade tricks](#how-the-cascade-tricks-work) #2.
 
 | State | Rule |
 |---|---|
@@ -104,7 +104,7 @@ For dropdown-menu, context-menu, and menubar items with `data-variant="destructi
 
 ## Menubar
 
-Everything from the [shared glass recipe](#menus--pickers--shared-glass-recipe), plus: checkbox/radio **ticks move to the right** to match dropdown and context menus (`uishadcn.css:71-80`) — items get `pr-8 pl-1.5`, and the absolute indicator span moves to `right-2 left-auto`.
+Everything from the [shared glass recipe](#menus--pickers--shared-glass-recipe), plus: checkbox/radio **ticks move to the right** to match dropdown and context menus (`uishadcn.css:162-171`) — items get `pr-8 pl-1.5`, and the absolute indicator span moves to `right-2 left-auto`.
 
 ---
 
@@ -112,14 +112,14 @@ Everything from the [shared glass recipe](#menus--pickers--shared-glass-recipe),
 
 Content surface comes from the [shared glass recipe](#menus--pickers--shared-glass-recipe). Extras:
 
-- **Flush search header** (`uishadcn.css:104-112`): the input-group that is a direct child of `combobox-content` renders as a plain bottom-bordered row — `border-b border-border pb-1`, no side/top borders, `rounded-none`, `bg-background`, no shadow, no ring. It keeps `ring-0` even when focused, so only the global list surface reads as "the field".
+- **Flush search header** (`uishadcn.css:279-293`): the input-group that is a direct child of `combobox-content` renders as a plain bottom-bordered row — `border-b border-border pb-1`, no side/top borders, `rounded-none`, `bg-background`, no shadow, no ring. It keeps `ring-0` even when focused, so only the global list surface reads as "the field".
 - **Chips**: `combobox-chips` gets the global `ring-1` on focus-within or when it contains an invalid control (see [focus rings](#global-focus--invalid-rings)).
 
 ---
 
 ## Command palette (cmdk)
 
-`uishadcn.css:83-141`.
+`uishadcn.css:227-273`.
 
 | What | Rule |
 |---|---|
@@ -139,7 +139,7 @@ Dialog's recipe lives inline in [`dialog.tsx`](../components/ui/dialog.tsx) — 
 |---|---|
 | Overlay | `bg-black/10` + `backdrop-blur-xs` (when supported), fade in/out, `duration-100` |
 | Content | centered fixed panel, `w-full max-w-[calc(100%-2rem)] sm:max-w-sm`, `rounded-xl bg-popover p-4 text-sm` — **`ring-1 ring-foreground/10` instead of border + shadow**, zoom-95 + fade, `duration-100` |
-| Close button | ghost `size="icon-sm"` Button, `absolute top-2 right-2`, Cancel01 icon; forced to `text-muted-foreground` via CSS (`uishadcn.css:359-362`) — **the same rule covers `sheet-close`** |
+| Close button | ghost `size="icon-sm"` Button, `absolute top-2 right-2`, Cancel01 icon; forced to `text-muted-foreground` via CSS (`uishadcn.css:413-418`) — **the same rule covers `sheet-close`** |
 | Header | `flex flex-col gap-2` |
 | Footer | full-bleed band: `-mx-4 -mb-4 p-4 border-t bg-muted/50 rounded-b-xl`; stacks `flex-col-reverse` on mobile, right-aligned row on `sm+`; optional built-in outline Close via `showCloseButton` |
 | Title | `font-heading text-base font-medium leading-none` |
@@ -149,7 +149,7 @@ Dialog's recipe lives inline in [`dialog.tsx`](../components/ui/dialog.tsx) — 
 
 ## Toast
 
-`uishadcn.css:364-450`. `toast.tsx` stays stock — tints key off the `data-type` attribute Base UI stamps on the root.
+`uishadcn.css:424-511`. `toast.tsx` stays stock — tints key off the `data-type` attribute Base UI stamps on the root.
 
 **Density**
 
@@ -174,7 +174,7 @@ Buttons on tinted surfaces: the **close** button gets the alert example's *ghost
 
 ## Tabs
 
-Default-variant tabs list gets a bordered app-surface look instead of the stock muted pill (`uishadcn.css:237-250`):
+Default-variant tabs list gets a bordered app-surface look instead of the stock muted pill (`uishadcn.css:396-411`):
 
 | What | Rule |
 |---|---|
@@ -188,13 +188,13 @@ Selectors target `[role="tab"]` instead of `data-slot="tabs-trigger"` because a 
 
 ## Table
 
-Container gets `border` + `rounded-lg` (`uishadcn.css:252-254`).
+Container gets `border` + `rounded-lg` (`uishadcn.css:392-394`).
 
 ---
 
 ## Input, Textarea & Input Group
 
-`uishadcn.css:221-230`.
+`uishadcn.css:299-309`.
 
 | What | Rule |
 |---|---|
@@ -206,13 +206,13 @@ Container gets `border` + `rounded-lg` (`uishadcn.css:252-254`).
 
 ## Button Group
 
-`button-group-text` (the static text segment): `font-normal bg-background` (`uishadcn.css:232-235`).
+`button-group-text` (the static text segment): `font-normal bg-background` (`uishadcn.css:311-315`).
 
 ---
 
 ## Label, Field & Progress
 
-Weight/size normalization — labels are never bold (`uishadcn.css:256-274`):
+Weight/size normalization — labels are never bold (`uishadcn.css:344-367`):
 
 | Slot | Rule |
 |---|---|
@@ -226,7 +226,7 @@ Weight/size normalization — labels are never bold (`uishadcn.css:256-274`):
 
 ## Checkbox, Radio & Switch — destructive / invalid states
 
-`uishadcn.css:333-357`.
+`uishadcn.css:317-342`.
 
 | What | Rule |
 |---|---|

@@ -1,8 +1,12 @@
-
 "use client";
 
-import { Copy01Icon, DropperIcon, RotateCcw, Tick02Icon } from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
+import {
+  Copy01Icon,
+  DropperIcon,
+  RotateCcw,
+  Tick02Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   useCallback,
@@ -16,6 +20,27 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { createPortal } from "react-dom";
+
+import {
+  ColorFormatIcon,
+  ColorFormatSelector,
+  ColorFormatSelectorContent,
+  ColorFormatSelectorItem,
+  ColorFormatSelectorList,
+  ColorFormatSelectorTrigger,
+  ColorFormatSelectorValue,
+} from "@/components/color/color-format-selector";
+import { ComboboxEmpty, ComboboxInput } from "@/components/ui/combobox";
+import { InputGroupAddon } from "@/components/ui/input-group";
+import { toast } from "@/components/ui/toast";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { Icon, Icons } from "@/icons/icons";
 
 type Hsv = { h: number; s: number; v: number };
 
@@ -234,6 +259,144 @@ function hexToHsv(hex: string): Hsv {
     s: clamp(s, 0, 1) * 100,
     v: clamp(v, 0, 1) * 100,
   };
+}
+
+type ColorFormat = "hex" | "rgb" | "hsl" | "oklch" | "oklab";
+
+const COLOR_FORMATS: ColorFormat[] = ["hex", "rgb", "hsl", "oklch", "oklab"];
+
+/** Rounds for display without leaving trailing zeros behind. */
+const round = (value: number, places = 0) => Number(value.toFixed(places));
+
+function hexToRgb(hex: string): [number, number, number] {
+  const value = parseInt(hex.slice(1), 16);
+  return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
+}
+
+function rgbToHex([r, g, b]: [number, number, number]): string {
+  const channel = (x: number) =>
+    Math.round(clamp(x, 0, 255))
+      .toString(16)
+      .padStart(2, "0");
+  return `#${channel(r)}${channel(g)}${channel(b)}`;
+}
+
+function rgbToHsl([r, g, b]: [number, number, number]): [
+  number,
+  number,
+  number,
+] {
+  const rn = r / 255;
+  const gn = g / 255;
+  const bn = b / 255;
+  const max = Math.max(rn, gn, bn);
+  const min = Math.min(rn, gn, bn);
+  const l = (max + min) / 2;
+  const d = max - min;
+  if (d === 0) return [0, 0, l * 100];
+  const s = d / (1 - Math.abs(2 * l - 1));
+  const h =
+    max === rn
+      ? (gn - bn) / d + (gn < bn ? 6 : 0)
+      : max === gn
+        ? (bn - rn) / d + 2
+        : (rn - gn) / d + 4;
+  return [h * 60, s * 100, l * 100];
+}
+
+function hslToRgb(h: number, s: number, l: number): [number, number, number] {
+  const hn = ((h % 360) + 360) % 360;
+  const sn = clamp(s, 0, 100) / 100;
+  const ln = clamp(l, 0, 100) / 100;
+  const a = sn * Math.min(ln, 1 - ln);
+  const k = (n: number) => (n + hn / 30) % 12;
+  const f = (n: number) =>
+    (ln - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1))) * 255;
+  return [f(0), f(8), f(4)];
+}
+
+function hexToOklab(hex: string): [number, number, number] {
+  const [r, g, b] = hexToRgb(hex);
+  return linearSrgbToOklab(
+    srgbTransferInv(r / 255),
+    srgbTransferInv(g / 255),
+    srgbTransferInv(b / 255),
+  );
+}
+
+function oklabToHex(L: number, a: number, b: number): string {
+  const rgb = oklabToLinearSrgb(L, a, b);
+  return rgbToHex([
+    clamp(srgbTransfer(rgb[0]), 0, 1) * 255,
+    clamp(srgbTransfer(rgb[1]), 0, 1) * 255,
+    clamp(srgbTransfer(rgb[2]), 0, 1) * 255,
+  ]);
+}
+
+/** The picker holds hex; this is how that color reads in the chosen format. */
+function formatColor(hex: string, format: ColorFormat): string {
+  if (format === "rgb") {
+    const [r, g, b] = hexToRgb(hex);
+    return `rgb(${r} ${g} ${b})`;
+  }
+  if (format === "hsl") {
+    const [h, s, l] = rgbToHsl(hexToRgb(hex));
+    return `hsl(${round(h)} ${round(s)}% ${round(l)}%)`;
+  }
+  if (format === "oklab") {
+    const [L, a, b] = hexToOklab(hex);
+    return `oklab(${round(L * 100, 1)}% ${round(a, 3)} ${round(b, 3)})`;
+  }
+  if (format === "oklch") {
+    const [L, a, b] = hexToOklab(hex);
+    const c = Math.hypot(a, b);
+    const h = c < 1e-4 ? 0 : ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360;
+    return `oklch(${round(L * 100, 1)}% ${round(c, 3)} ${round(h, 1)})`;
+  }
+  return hex;
+}
+
+/** Reads any supported notation back to hex, not just the selected one. */
+function parseColor(input: string): string | null {
+  const raw = input.trim().toLowerCase();
+  const hex = normalizeHex(raw);
+  if (hex) return hex;
+  const call = raw.match(/^([a-z]+)\(([^)]*)\)$/);
+  if (!call) return null;
+  const parts = call[2]
+    .split("/")[0]
+    .trim()
+    .split(/[\s,]+/)
+    .filter(Boolean);
+  if (parts.length < 3) return null;
+  const [x, y, z] = parts.map(parseFloat);
+  if (![x, y, z].every(Number.isFinite)) return null;
+  const pct = parts.map((part) => part.endsWith("%"));
+  switch (call[1]) {
+    case "rgb":
+    case "rgba":
+      return rgbToHex([
+        pct[0] ? (x / 100) * 255 : x,
+        pct[1] ? (y / 100) * 255 : y,
+        pct[2] ? (z / 100) * 255 : z,
+      ]);
+    case "hsl":
+    case "hsla":
+      return rgbToHex(hslToRgb(x, y, z));
+    case "oklch": {
+      const c = pct[1] ? (y / 100) * 0.4 : y;
+      const h = (z * Math.PI) / 180;
+      return oklabToHex(pct[0] ? x / 100 : x, c * Math.cos(h), c * Math.sin(h));
+    }
+    case "oklab":
+      return oklabToHex(
+        pct[0] ? x / 100 : x,
+        pct[1] ? (y / 100) * 0.4 : y,
+        pct[2] ? (z / 100) * 0.4 : z,
+      );
+    default:
+      return null;
+  }
 }
 
 const THUMB_SHADOW = "0 0 0 1px rgba(0,0,0,0.14), 0 1px 3px rgba(0,0,0,0.25)";
@@ -554,12 +717,16 @@ function ColorPopover({
   value,
   onValueChange,
   onClose,
+  format,
+  onFormatChange,
 }: {
   id: string;
   anchorRef: React.RefObject<HTMLButtonElement | null>;
   value: string;
   onValueChange: (hex: string) => void;
   onClose: () => void;
+  format: ColorFormat;
+  onFormatChange: (format: ColorFormat) => void;
 }) {
   const popRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<{
@@ -569,30 +736,69 @@ function ColorPopover({
   } | null>(null);
   const shouldReduceMotion = useReducedMotion();
   const eyeDropper = useEyeDropper();
+  const { isCopied, copyToClipboard } = useCopyToClipboard();
+  const [formatOpen, setFormatOpen] = useState(false);
 
   const initial = normalizeHex(value) ?? "#ffffff";
   const [state, setState] = useState<{ hsv: Hsv; draft: string; seen: string }>(
-    () => ({ hsv: hexToHsv(initial), draft: initial, seen: initial }),
+    () => ({
+      hsv: hexToHsv(initial),
+      draft: formatColor(initial, format),
+      seen: initial,
+    }),
   );
 
   const incoming = normalizeHex(value);
   if (incoming && incoming !== state.seen) {
-    setState({ hsv: hexToHsv(incoming), draft: incoming, seen: incoming });
+    setState({
+      hsv: hexToHsv(incoming),
+      draft: formatColor(incoming, format),
+      seen: incoming,
+    });
   }
+
+  const current = hsvToHex(state.hsv);
+  const formatted = formatColor(current, format);
 
   const apply = (next: Hsv) => {
     const hex = hsvToHex(next);
-    setState({ hsv: next, draft: hex, seen: hex });
+    setState({ hsv: next, draft: formatColor(hex, format), seen: hex });
     onValueChange(hex);
   };
 
   const commitDraft = () => {
-    const hex = normalizeHex(state.draft);
-    if (hex && hex !== hsvToHex(state.hsv)) {
+    // Untouched text re-parses lossily in the rounded formats, so skip it.
+    const hex =
+      state.draft.trim() === formatted ? null : parseColor(state.draft);
+    if (hex && hex !== current) {
       apply(hexToHsv(hex));
     } else {
-      setState((prev) => ({ ...prev, draft: hsvToHex(prev.hsv) }));
+      setState((prev) => ({
+        ...prev,
+        draft: formatColor(hsvToHex(prev.hsv), format),
+      }));
     }
+  };
+
+  const copy = async () => {
+    const copied = await copyToClipboard(formatted);
+    toast.add(
+      copied
+        ? { title: "Copied color", description: formatted, type: "success" }
+        : {
+            title: "Could not copy",
+            description: "The clipboard is unavailable here.",
+            type: "error",
+          },
+    );
+  };
+
+  const changeFormat = (next: ColorFormat) => {
+    onFormatChange(next);
+    setState((prev) => ({
+      ...prev,
+      draft: formatColor(hsvToHex(prev.hsv), next),
+    }));
   };
 
   const place = useCallback(() => {
@@ -635,6 +841,11 @@ function ColorPopover({
   useEffect(() => {
     const handleDown = (e: PointerEvent) => {
       const target = e.target as Node;
+      const element = target instanceof Element ? target : target.parentElement;
+      // The format list portals to the body, so it reads as an outside press.
+      if (element?.closest('[data-slot="color-format-selector-content"]')) {
+        return;
+      }
       if (
         !popRef.current?.contains(target) &&
         !anchorRef.current?.contains(target)
@@ -668,7 +879,7 @@ function ColorPopover({
       }
       transition={{ type: "spring", duration: 0.4, bounce: 0 }}
       onKeyDown={(e) => {
-        if (e.key === "Escape") {
+        if (e.key === "Escape" && !formatOpen) {
           e.stopPropagation();
           onClose();
         }
@@ -725,43 +936,150 @@ function ColorPopover({
           </motion.div>
         </div>
       </div>
-      <div className="flex items-center gap-1.5">
-        <input
-          type="text"
-          value={state.draft}
-          onChange={(e) =>
-            setState((prev) => ({ ...prev, draft: e.target.value }))
-          }
-          onBlur={commitDraft}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") e.currentTarget.blur();
-          }}
-          aria-label="Hex color"
-          spellCheck={false}
-          autoComplete="off"
-          className="h-7 w-full min-w-0 rounded-md bg-muted/70 px-2 text-[12px] font-medium text-foreground/90 outline-none transition-colors hover:bg-muted focus:bg-muted"
-          style={{ fontVariantNumeric: "tabular-nums" }}
-        />
-        {eyeDropper && (
-          <button
-            type="button"
-            aria-label="Pick a color from the screen"
-            title="Pick a color from the screen"
-            onClick={() => {
-              new eyeDropper()
-                .open()
-                .then((result) => {
-                  const hex = normalizeHex(result.sRGBHex);
-                  if (hex) apply(hexToHsv(hex));
-                })
-                .catch(() => {});
+      <TooltipProvider>
+        <div className="flex items-center gap-1.5">
+          <ColorFormatSelector
+            items={COLOR_FORMATS}
+            value={format}
+            onValueChange={(next) => {
+              if (typeof next === "string") changeFormat(next as ColorFormat);
             }}
-            className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md bg-muted/70 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            open={formatOpen}
+            onOpenChange={setFormatOpen}
           >
-            <HugeiconsIcon icon={DropperIcon} aria-hidden className="size-3.5" />
-          </button>
-        )}
-      </div>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <ColorFormatSelectorTrigger
+                    aria-label={`Color format: ${format}`}
+                    className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md bg-muted/70 transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&>svg]:hidden"
+                  >
+                    <ColorFormatSelectorValue>
+                      {(selected) =>
+                        typeof selected === "string" ? (
+                          <ColorFormatIcon format={selected} />
+                        ) : null
+                      }
+                    </ColorFormatSelectorValue>
+                  </ColorFormatSelectorTrigger>
+                }
+              />
+              <TooltipContent>Color format</TooltipContent>
+            </Tooltip>
+            <ColorFormatSelectorContent align="start" className="min-w-36">
+              <ComboboxInput
+                showClear={true}
+                showTrigger={false}
+                placeholder="Search"
+              >
+                <InputGroupAddon>
+                  <Icon
+                    icon={Icons.search}
+                    strokeWidth={2}
+                    className="size-3.5"
+                  />
+                </InputGroupAddon>
+              </ComboboxInput>
+              <ComboboxEmpty>No formats found.</ComboboxEmpty>
+              <ColorFormatSelectorList>
+                {(item: ColorFormat) => (
+                  <ColorFormatSelectorItem key={item} value={item}>
+                    <ColorFormatIcon format={item} />
+                    {item}
+                  </ColorFormatSelectorItem>
+                )}
+              </ColorFormatSelectorList>
+            </ColorFormatSelectorContent>
+          </ColorFormatSelector>
+          <input
+            type="text"
+            value={state.draft}
+            onChange={(e) =>
+              setState((prev) => ({ ...prev, draft: e.target.value }))
+            }
+            onBlur={commitDraft}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") e.currentTarget.blur();
+            }}
+            aria-label={`Color value in ${format}`}
+            spellCheck={false}
+            autoComplete="off"
+            className="h-7 min-w-0 flex-1 rounded-md bg-muted/70 px-2 text-[12px] font-medium text-foreground/90 outline-none transition-colors hover:bg-muted focus:bg-muted"
+            style={{ fontVariantNumeric: "tabular-nums" }}
+          />
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <button
+                  type="button"
+                  aria-label={isCopied ? "Color copied" : `Copy ${formatted}`}
+                  onClick={() => {
+                    void copy();
+                  }}
+                  className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md bg-muted/70 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                >
+                  <AnimatePresence initial={false} mode="wait">
+                    <motion.span
+                      key={isCopied ? "copied" : "copy"}
+                      initial={
+                        shouldReduceMotion
+                          ? { opacity: 0 }
+                          : { opacity: 0, scale: 0.6 }
+                      }
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={
+                        shouldReduceMotion
+                          ? { opacity: 0 }
+                          : { opacity: 0, scale: 0.6 }
+                      }
+                      transition={{ duration: 0.14, ease: EASE }}
+                      className="flex items-center justify-center"
+                    >
+                      <HugeiconsIcon
+                        icon={isCopied ? Tick02Icon : Copy01Icon}
+                        aria-hidden
+                        className="size-3.5"
+                      />
+                    </motion.span>
+                  </AnimatePresence>
+                </button>
+              }
+            />
+            <TooltipContent>
+              {isCopied ? "Copied" : `Copy ${formatted}`}
+            </TooltipContent>
+          </Tooltip>
+          {eyeDropper && (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <button
+                    type="button"
+                    aria-label="Pick a color from the screen"
+                    onClick={() => {
+                      new eyeDropper()
+                        .open()
+                        .then((result) => {
+                          const hex = normalizeHex(result.sRGBHex);
+                          if (hex) apply(hexToHsv(hex));
+                        })
+                        .catch(() => {});
+                    }}
+                    className="inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md bg-muted/70 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  >
+                    <HugeiconsIcon
+                      icon={DropperIcon}
+                      aria-hidden
+                      className="size-3.5"
+                    />
+                  </button>
+                }
+              />
+              <TooltipContent>Pick a color from the screen</TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+      </TooltipProvider>
     </motion.div>,
     document.body,
   );
@@ -783,6 +1101,7 @@ export function ColorRow({
   onReset?: () => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [format, setFormat] = useState<ColorFormat>("hex");
   const toggleRef = useRef<HTMLButtonElement>(null);
   const popoverId = useId();
 
@@ -798,15 +1117,27 @@ export function ColorRow({
       </span>
       <span className="flex items-center gap-2">
         {onReset && (
-          <button
-            type="button"
-            onClick={onReset}
-            aria-label={`Reset ${label}`}
-            title="Reset"
-            className="inline-flex size-5 cursor-pointer items-center justify-center rounded-full text-muted-foreground/60 transition-colors hover:bg-foreground/10 hover:text-foreground"
-          >
-            <HugeiconsIcon icon={RotateCcw} aria-hidden className="size-3" />
-          </button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <button
+                    type="button"
+                    onClick={onReset}
+                    aria-label={`Reset ${label}`}
+                    className="inline-flex size-5 cursor-pointer items-center justify-center rounded-full text-muted-foreground/60 transition-colors hover:bg-foreground/10 hover:text-foreground"
+                  >
+                    <HugeiconsIcon
+                      icon={RotateCcw}
+                      aria-hidden
+                      className="size-3"
+                    />
+                  </button>
+                }
+              />
+              <TooltipContent>Reset {label}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
         <button
           ref={toggleRef}
@@ -838,6 +1169,8 @@ export function ColorRow({
             value={value}
             onValueChange={onValueChange}
             onClose={close}
+            format={format}
+            onFormatChange={setFormat}
           />
         )}
       </AnimatePresence>

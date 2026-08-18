@@ -1,367 +1,85 @@
 /*
- * Glass + destructive overrides for dropdown / context / menubar / select / combobox.
- * Also tabs list surface and table container. Keeps components/ui/{dropdown,context}-menu.tsx,
- * menubar.tsx, select.tsx, combobox.tsx, tabs.tsx, and table.tsx closer to stock shadcn.
+ * uishadcn.css — the skin over stock shadcn.
  *
- * Glass / focus: unlayered !important beats normal (non-!) utilities
- * like focus:bg-accent on items.
+ * Every rule is keyed on a `data-slot` attribute so the components in
+ * components/ui/ stay as close to stock as possible. Imported by globals.css;
+ * the prose companion — what each rule does and why — is styles/ui-styles.md.
  *
- * Destructive: Content also ships
- *   **:data-[variant=destructive]:text-accent-foreground!
- * Those are !important inside @layer utilities, which beat unlayered
- * !important. So destructive must live in @layer utilities with higher
- * specificity than that Content rule.
+ * Three cascade facts make this file work. Read them before editing:
+ *
+ * 1. Unlayered `!important` beats layered utilities. Nearly everything here is
+ *    unlayered with `!` (e.g. `bg-foreground/10!`), which wins over a
+ *    component's own Tailwind utilities — even stateful ones like
+ *    `focus:bg-accent` — because those live in @layer utilities.
+ *
+ * 2. Destructive menu items are the exception. Menu Content ships
+ *    `**:data-[variant=destructive]:text-accent-foreground!`, which is
+ *    !important *inside* @layer utilities and therefore beats unlayered
+ *    !important. So those rules live in @layer utilities themselves (§2b),
+ *    with higher specificity than the Content rule.
+ *
+ * 3. cmdk's selected state is raw CSS, not @apply. cmdk stamps
+ *    data-selected / aria-selected as the strings "true" | "false", and
+ *    nesting [data-selected="true"] + @apply was dropped by the build — so
+ *    those rules are written as plain color-mix() declarations (§3).
+ *
+ * Contents
+ *   1  Globals ............. focus / invalid rings, cursors
+ *   2  Menus & pickers ..... shared glass recipe, destructive items
+ *   3  Command palette ..... cmdk
+ *   4  Combobox ........... flush search header
+ *   5  Form controls ...... input, button group, choice controls, label weights
+ *   6  Buttons ............ destructive
+ *   7  Surfaces ........... card, table, tabs, dialog & sheet
+ *   8  Toast .............. density, type tints
+ *   9  Chat & AI .......... bubble, attachment, message scroller
  */
 
- [data-slot="dropdown-menu-content"],
- [data-slot="dropdown-menu-sub-content"],
- [data-slot="context-menu-content"],
- [data-slot="context-menu-sub-content"],
- [data-slot="menubar-content"],
- [data-slot="menubar-sub-content"],
- [data-slot="select-content"],
- [data-slot="combobox-content"] {
-   @apply relative animate-none! bg-popover/70;
- 
-   &::before {
-     content: "";
-     @apply pointer-events-none absolute inset-0 -z-1 rounded-[inherit] backdrop-blur-2xl backdrop-saturate-150;
-   }
- 
-   [data-slot$="-item"],
-   [data-slot$="-trigger"],
-   [data-slot$="-checkbox-item"],
-   [data-slot$="-radio-item"]
-   {
-     @apply cursor-pointer;
-   }
- 
-   [data-slot$="-item"] svg,
-   [data-slot$="-trigger"] svg,
-   [data-slot$="-checkbox-item"] svg,
-   [data-slot$="-radio-item"] svg {
-     @apply size-3.5! text-muted-foreground!;
-   }
- 
-   [data-slot$="-item"]:focus svg,
-   [data-slot$="-item"][data-highlighted] svg,
-   [data-slot$="-checkbox-item"]:focus svg,
-   [data-slot$="-checkbox-item"][data-highlighted] svg,
-   [data-slot$="-radio-item"]:focus svg,
-   [data-slot$="-radio-item"][data-highlighted] svg,
-   [data-slot$="-trigger"]:focus svg,
-   [data-slot$="-trigger"][aria-expanded="true"] svg {
-     @apply text-accent-foreground!;
-   }
- 
-   [data-slot$="-item"]:focus,
-   [data-slot$="-item"][data-highlighted] {
-     @apply bg-foreground/10!;
-   }
- 
-   [data-slot$="-separator"] {
-     @apply bg-foreground/5!;
-   }
- 
-   [data-slot$="-trigger"]:focus,
-   [data-slot$="-trigger"][aria-expanded="true"] {
-     @apply bg-foreground/10!;
-   }
- 
-   /* Menubar ticks on the right (match dropdown / context) */
-   [data-slot="menubar-checkbox-item"],
-   [data-slot="menubar-radio-item"] {
-     @apply pr-8! pl-1.5!;
-   }
- 
-   [data-slot="menubar-checkbox-item"] > span.absolute,
-   [data-slot="menubar-radio-item"] > span.absolute {
-     @apply right-2! left-auto!;
-   }
- }
- 
- [data-slot="command"] {
-   @apply p-0;
- 
-   [data-slot="command-item"] {
-     @apply cursor-pointer;
-   }
- 
-   [data-slot="command-item"] svg {
-     @apply size-3.5! text-muted-foreground!;
-   }
- 
-   [data-slot="command-input-wrapper"]
-     {
-     @apply border-b border-border! pb-1!;
-   }
- 
-   [data-slot="command-input-wrapper"] [data-slot="input-group"] {
-     @apply border-none! bg-background!;
-   }
- }
- 
- [data-slot="combobox-content"] > [data-slot="input-group"] {
-   @apply mx-0! border-b border-border! pb-1!;
-   @apply border-x-0! border-t-0! rounded-none! bg-background! shadow-none! ring-0!;
- }
+/* ==========================================================================
+   1  Globals
+   ========================================================================== */
 
- [data-slot="combobox-content"] > [data-slot="input-group"]:focus-within,
- [data-slot="combobox-content"] > [data-slot="input-group"]:has([data-slot="input-group-control"]:focus-visible) {
-   @apply border-border! ring-0!;
- }
- 
- /* cmdk sets data-selected / aria-selected as "true"|"false".
-  * Raw color (not @apply) — nested [data-selected="true"] + @apply was dropped. */
- [data-slot="command"] [data-slot="command-item"][data-selected="true"],
- [data-slot="command"] [data-slot="command-item"][aria-selected="true"] {
-   background-color: color-mix(
-     in oklab,
-     var(--foreground) 10%,
-     transparent
-   ) !important;
-   color: var(--foreground) !important;
- }
- 
- [data-slot="command"] [data-slot="command-item"][data-selected="true"] svg,
- [data-slot="command"] [data-slot="command-item"][aria-selected="true"] svg {
-   color: var(--foreground) !important;
- }
- 
- /* Matched characters while searching */
- [data-slot="command"] [data-slot="command-item"] mark {
-   background-color: color-mix(
-     in oklab,
-     var(--foreground) 14%,
-     transparent
-   );
-   color: inherit;
-   border-radius: 0.2em;
-   padding: 0;
- }
- 
- @layer utilities {
-   :is(
-     [data-slot="dropdown-menu-content"],
-     [data-slot="dropdown-menu-sub-content"],
-     [data-slot="context-menu-content"],
-     [data-slot="context-menu-sub-content"],
-     [data-slot="menubar-content"],
-     [data-slot="menubar-sub-content"]
-   )
-     [data-slot$="-item"][data-variant="destructive"],
-   :is(
-     [data-slot="dropdown-menu-content"],
-     [data-slot="dropdown-menu-sub-content"],
-     [data-slot="context-menu-content"],
-     [data-slot="context-menu-sub-content"],
-     [data-slot="menubar-content"],
-     [data-slot="menubar-sub-content"]
-   )
-     [data-slot$="-item"][data-variant="destructive"]
-     * {
-     color: var(--destructive) !important;
-   }
- 
-   :is(
-     [data-slot="dropdown-menu-content"],
-     [data-slot="dropdown-menu-sub-content"],
-     [data-slot="context-menu-content"],
-     [data-slot="context-menu-sub-content"],
-     [data-slot="menubar-content"],
-     [data-slot="menubar-sub-content"]
-   )
-     [data-slot$="-item"][data-variant="destructive"]:focus,
-   :is(
-     [data-slot="dropdown-menu-content"],
-     [data-slot="dropdown-menu-sub-content"],
-     [data-slot="context-menu-content"],
-     [data-slot="context-menu-sub-content"],
-     [data-slot="menubar-content"],
-     [data-slot="menubar-sub-content"]
-   )
-     [data-slot$="-item"][data-variant="destructive"][data-highlighted] {
-     background-color: color-mix(
-       in oklab,
-       var(--destructive) 5%,
-       transparent
-     ) !important;
-     color: var(--destructive) !important;
-   }
- 
-   :is(
-     [data-slot="dropdown-menu-content"],
-     [data-slot="dropdown-menu-sub-content"],
-     [data-slot="context-menu-content"],
-     [data-slot="context-menu-sub-content"],
-     [data-slot="menubar-content"],
-     [data-slot="menubar-sub-content"]
-   )
-     [data-slot$="-item"][data-variant="destructive"]
-     svg {
-     color: var(--destructive) !important;
-   }
- 
-   [data-slot="dropdown-menu-item"][data-variant="destructive"]:focus
-     [data-slot="dropdown-menu-shortcut"],
-   [data-slot="dropdown-menu-item"][data-variant="destructive"][data-highlighted]
-     [data-slot="dropdown-menu-shortcut"],
-   [data-slot="context-menu-item"][data-variant="destructive"]:focus
-     [data-slot="context-menu-shortcut"],
-   [data-slot="context-menu-item"][data-variant="destructive"][data-highlighted]
-     [data-slot="context-menu-shortcut"],
-   [data-slot="menubar-item"][data-variant="destructive"]:focus
-     [data-slot="menubar-shortcut"],
-   [data-slot="menubar-item"][data-variant="destructive"][data-highlighted]
-     [data-slot="menubar-shortcut"] {
-     color: var(--destructive) !important;
-   }
- }
- 
- [data-slot="textarea"],
- [data-slot="input"],
- [data-slot="input-group-control"]
-   {
-   @apply text-sm!;
- }
- [data-slot="input-group"] [data-slot="button"] {
-  @apply text-xs!;
-  @apply font-normal!;
-}
-
- [data-slot="button-group-text"] {
-  @apply font-normal!;
-  @apply bg-background!;
-}
-
- [data-slot="tabs-list"][data-variant="default"] {
-   @apply bg-background!;
-   @apply border!;
- }
-
- /* TooltipTrigger render replaces data-slot="tabs-trigger" with tooltip-trigger. */
- [data-slot="tabs-list"][data-variant="default"] [role="tab"][data-active] {
-   @apply bg-muted!;
-   box-shadow: none !important;
- }
-
- [data-slot="tabs-list"][data-variant="default"] [role="tab"]:hover {
-   @apply bg-muted!;
- }
-
- [data-slot="table-container"] {
-   @apply border! rounded-lg!;
- }
-
- /* Stock CardFooter uses bg-muted/50. */
- [data-slot="card-footer"] {
-   @apply bg-background!;
- }
-  /* Stock CardFooter uses bg-muted/50. */
-  [data-slot="card"] {
-    @apply rounded-xl!;
-  }
-
- /* Stock MessageScrollerButton uses icon-sm radius. */
- [data-slot="message-scroller-button"] {
-   @apply rounded-full!;
- }
-
- /* Stock AttachmentActions uses top-3 / right-3 when vertical. */
- [data-slot="attachment"][data-orientation="vertical"] [data-slot="attachment-actions"] {
-   @apply top-0! right-0!;
- }
-
- [data-slot="attachment"]:has([data-slot="attachment-media"][data-variant="image"])
-   [data-slot="attachment-actions"] {
-   @apply pointer-events-none opacity-0 transition-opacity;
- }
-
- [data-slot="attachment"]:has([data-slot="attachment-media"][data-variant="image"]):hover
-   [data-slot="attachment-actions"],
- [data-slot="attachment"]:has([data-slot="attachment-media"][data-variant="image"])
-   [data-slot="attachment-actions"]:focus-within {
-   @apply pointer-events-auto opacity-100;
- }
-
- /* Stock destructive bubble content uses bg-destructive/10. */
- [data-slot="bubble"][data-variant="destructive"] [data-slot="bubble-content"] {
-   @apply bg-destructive/5!;
- }
-
- [data-slot="bubble"][data-variant="outline"] [data-slot="bubble-content"] {
-   @apply border-border! border-dashed!;
- }
-
- /* Stock destructive button uses bg-destructive/10. */
- [data-slot="button"][data-variant="destructive"],
- [data-slot="alert-dialog-action"][data-variant="destructive"] {
-   @apply bg-destructive/5! hover:bg-destructive/10!;
- }
- 
- /*[data-slot="label"] {
-   @apply font-normal!;
- }
-
- [data-slot="field-label"] {
-   @apply font-normal! text-sm!;
- }*/
-
- [data-slot="field-description"] {
-   @apply text-xs!;
- }
-
- [data-slot="progress-label"] {
-   @apply font-normal!;
- }
-
- [data-slot="accordion-trigger"] {
-   @apply font-normal!;
- }
-
- [data-slot="progress-value"] {
-   @apply text-xs!;
- }
- 
- :is(
-   [data-slot="accordion-trigger"],
-   [data-slot="button"],
-   [data-slot="bubble-content"]:is(button, a),
-   [data-slot="checkbox"],
-   [data-slot="input"],
-   [data-slot="native-select"],
-   [data-slot="navigation-menu-trigger"],
-   [data-slot="navigation-menu-link"],
-   [data-slot="questionnaire-input"],
-   [data-slot="radio-group-item"],
-   [data-slot="select-trigger"],
-   [data-slot="slider-thumb"],
-   [data-slot="switch"],
-   [data-slot="textarea"]
- ):focus-visible,
- :is(
-   [data-slot="button"],
-   [data-slot="checkbox"],
-   [data-slot="input"],
-   [data-slot="native-select"],
-   [data-slot="questionnaire-input"],
-   [data-slot="radio-group-item"],
-   [data-slot="select-trigger"],
-   [data-slot="switch"],
-   [data-slot="textarea"],
+/* Every focus and invalid ring in the app narrows to ring-1. */
+:is(
+  [data-slot="accordion-trigger"],
+  [data-slot="button"],
+  [data-slot="bubble-content"]:is(button, a),
+  [data-slot="checkbox"],
+  [data-slot="input"],
+  [data-slot="native-select"],
+  [data-slot="navigation-menu-trigger"],
+  [data-slot="navigation-menu-link"],
+  [data-slot="questionnaire-input"],
+  [data-slot="radio-group-item"],
+  [data-slot="select-trigger"],
+  [data-slot="slider-thumb"],
+  [data-slot="switch"],
+  [data-slot="textarea"]
+):focus-visible,
+:is(
+  [data-slot="button"],
+  [data-slot="checkbox"],
+  [data-slot="input"],
+  [data-slot="native-select"],
+  [data-slot="questionnaire-input"],
+  [data-slot="radio-group-item"],
+  [data-slot="select-trigger"],
+  [data-slot="switch"],
+  [data-slot="textarea"]
   /* [data-slot="input-otp-slot"] */
- )[aria-invalid="true"],
- [data-slot="combobox-chips"]:focus-within,
- [data-slot="combobox-chips"]:has([aria-invalid="true"]),
- [data-slot="input-group"]:has([data-slot="input-group-control"]:focus-visible),
- [data-slot="input-group"]:has([data-slot][aria-invalid="true"]),
- [data-slot="input-otp"]:has([aria-invalid="true"]),
- [data-slot="questionnaire-choice"]:has(> input:focus-visible),
- [data-slot="input-otp-slot"][data-active="true"],
- [data-slot="slider-thumb"]:is(:hover, :active) {
-   @apply ring-1!;
- }
- 
+)[aria-invalid="true"],
+[data-slot="combobox-chips"]:focus-within,
+[data-slot="combobox-chips"]:has([aria-invalid="true"]),
+[data-slot="input-group"]:has([data-slot="input-group-control"]:focus-visible),
+[data-slot="input-group"]:has([data-slot][aria-invalid="true"]),
+[data-slot="input-otp"]:has([aria-invalid="true"]),
+[data-slot="questionnaire-choice"]:has(> input:focus-visible),
+[data-slot="input-otp-slot"][data-active="true"],
+[data-slot="slider-thumb"]:is(:hover, :active) {
+  @apply ring-1!;
+}
+
+/* Pointer cursor on every enabled interactive control. */
 button:not(:disabled, [data-disabled]),
 [role="button"]:not(:disabled, [data-disabled]),
 [data-slot="checkbox"]:not(:disabled, [data-disabled]),
@@ -375,13 +93,237 @@ button:not(:disabled, [data-disabled]),
   cursor: pointer;
 }
 
+/* …and keep it while the scrollbar is being dragged. */
 [data-slot="scroll-area-scrollbar"]:active,
 [data-slot="scroll-area-thumb"]:active {
   cursor: pointer;
 }
 
-/* Card tint for rows whose control is a checked destructive variant —
- * mirrors FieldLabel's has-data-checked:border-primary/30 + bg-primary/5. */
+/* ==========================================================================
+   2  Menus & pickers
+   ========================================================================== */
+
+/* 2a  Shared glass recipe — one block skins every floating menu surface:
+ * dropdown-menu, context-menu, menubar, select, combobox. */
+[data-slot="dropdown-menu-content"],
+[data-slot="dropdown-menu-sub-content"],
+[data-slot="context-menu-content"],
+[data-slot="context-menu-sub-content"],
+[data-slot="menubar-content"],
+[data-slot="menubar-sub-content"],
+[data-slot="select-content"],
+[data-slot="combobox-content"] {
+  @apply relative animate-none! bg-popover/70;
+
+  &::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 -z-1 rounded-[inherit] backdrop-blur-2xl backdrop-saturate-150;
+  }
+
+  [data-slot$="-item"],
+  [data-slot$="-trigger"],
+  [data-slot$="-checkbox-item"],
+  [data-slot$="-radio-item"] {
+    @apply cursor-pointer;
+  }
+
+  [data-slot$="-item"] svg,
+  [data-slot$="-trigger"] svg,
+  [data-slot$="-checkbox-item"] svg,
+  [data-slot$="-radio-item"] svg {
+    @apply size-3.5! text-muted-foreground!;
+  }
+
+  [data-slot$="-item"]:focus svg,
+  [data-slot$="-item"][data-highlighted] svg,
+  [data-slot$="-checkbox-item"]:focus svg,
+  [data-slot$="-checkbox-item"][data-highlighted] svg,
+  [data-slot$="-radio-item"]:focus svg,
+  [data-slot$="-radio-item"][data-highlighted] svg,
+  [data-slot$="-trigger"]:focus svg,
+  [data-slot$="-trigger"][aria-expanded="true"] svg {
+    @apply text-accent-foreground!;
+  }
+
+  /* Status glyphs carry their own status colour — the extra attribute keeps
+   * them out of the muted/highlighted icon rules above. */
+  [data-slot$="-item"] [data-slot="status-icon"] svg,
+  [data-slot$="-trigger"] [data-slot="status-icon"] svg {
+    @apply text-current!;
+  }
+
+  [data-slot$="-item"]:focus,
+  [data-slot$="-item"][data-highlighted] {
+    @apply bg-foreground/10!;
+  }
+
+  [data-slot$="-separator"] {
+    @apply bg-foreground/5!;
+  }
+
+  [data-slot$="-trigger"]:focus,
+  [data-slot$="-trigger"][aria-expanded="true"] {
+    @apply bg-foreground/10!;
+  }
+
+  /* Menubar ticks on the right (match dropdown / context). */
+  [data-slot="menubar-checkbox-item"],
+  [data-slot="menubar-radio-item"] {
+    @apply pr-8! pl-1.5!;
+  }
+
+  [data-slot="menubar-checkbox-item"] > span.absolute,
+  [data-slot="menubar-radio-item"] > span.absolute {
+    @apply right-2! left-auto!;
+  }
+}
+
+/* 2b  Destructive items — dropdown, context menu, menubar.
+ * In @layer utilities, with raw declarations, so they outrank Content's own
+ * layered !important (cascade fact 2). Nesting resolves to `:is(<the six
+ * contents>) <item>`, the same specificity the flat form had. */
+@layer utilities {
+  [data-slot="dropdown-menu-content"],
+  [data-slot="dropdown-menu-sub-content"],
+  [data-slot="context-menu-content"],
+  [data-slot="context-menu-sub-content"],
+  [data-slot="menubar-content"],
+  [data-slot="menubar-sub-content"] {
+    /* Rest — the label and every descendant, icons included. */
+    [data-slot$="-item"][data-variant="destructive"],
+    [data-slot$="-item"][data-variant="destructive"] * {
+      color: var(--destructive) !important;
+    }
+
+    [data-slot$="-item"][data-variant="destructive"]:focus,
+    [data-slot$="-item"][data-variant="destructive"][data-highlighted] {
+      background-color: color-mix(
+        in oklab,
+        var(--destructive) 5%,
+        transparent
+      ) !important;
+      color: var(--destructive) !important;
+    }
+
+    [data-slot$="-item"][data-variant="destructive"] svg {
+      color: var(--destructive) !important;
+    }
+  }
+
+  /* Shortcut text inside a focused / highlighted destructive item. */
+  [data-slot="dropdown-menu-item"][data-variant="destructive"]:focus
+    [data-slot="dropdown-menu-shortcut"],
+  [data-slot="dropdown-menu-item"][data-variant="destructive"][data-highlighted]
+    [data-slot="dropdown-menu-shortcut"],
+  [data-slot="context-menu-item"][data-variant="destructive"]:focus
+    [data-slot="context-menu-shortcut"],
+  [data-slot="context-menu-item"][data-variant="destructive"][data-highlighted]
+    [data-slot="context-menu-shortcut"],
+  [data-slot="menubar-item"][data-variant="destructive"]:focus
+    [data-slot="menubar-shortcut"],
+  [data-slot="menubar-item"][data-variant="destructive"][data-highlighted]
+    [data-slot="menubar-shortcut"] {
+    color: var(--destructive) !important;
+  }
+}
+
+/* ==========================================================================
+   3  Command palette (cmdk)
+   ========================================================================== */
+
+[data-slot="command"] {
+  @apply p-0;
+
+  [data-slot="command-item"] {
+    @apply cursor-pointer;
+  }
+
+  [data-slot="command-item"] svg {
+    @apply size-3.5! text-muted-foreground!;
+  }
+
+  [data-slot="command-input-wrapper"] {
+    @apply border-b border-border! pb-1!;
+  }
+
+  [data-slot="command-input-wrapper"] [data-slot="input-group"] {
+    @apply border-none! bg-background!;
+  }
+}
+
+/* Selected item — raw color, not @apply (cascade fact 3). */
+[data-slot="command"] [data-slot="command-item"][data-selected="true"],
+[data-slot="command"] [data-slot="command-item"][aria-selected="true"] {
+  background-color: color-mix(
+    in oklab,
+    var(--foreground) 10%,
+    transparent
+  ) !important;
+  color: var(--foreground) !important;
+}
+
+[data-slot="command"] [data-slot="command-item"][data-selected="true"] svg,
+[data-slot="command"] [data-slot="command-item"][aria-selected="true"] svg {
+  color: var(--foreground) !important;
+}
+
+/* Matched characters while searching. */
+[data-slot="command"] [data-slot="command-item"] mark {
+  background-color: color-mix(
+    in oklab,
+    var(--foreground) 14%,
+    transparent
+  );
+  color: inherit;
+  border-radius: 0.2em;
+  padding: 0;
+}
+
+/* ==========================================================================
+   4  Combobox
+   ========================================================================== */
+
+/* Flush search header: the input-group directly inside combobox-content
+ * renders as a plain bottom-bordered row, never as a field of its own. */
+[data-slot="combobox-content"] > [data-slot="input-group"] {
+  @apply mx-0! border-b border-border! pb-1!;
+  @apply border-x-0! border-t-0! rounded-none! bg-background! shadow-none! ring-0!;
+}
+
+/* …and stays ringless when focused, overriding the global ring-1 in §1. */
+[data-slot="combobox-content"] > [data-slot="input-group"]:focus-within,
+[data-slot="combobox-content"]
+  > [data-slot="input-group"]:has(
+    [data-slot="input-group-control"]:focus-visible
+  ) {
+  @apply border-border! ring-0!;
+}
+
+/* ==========================================================================
+   5  Form controls
+   ========================================================================== */
+
+/* 5a  Input, textarea & input group */
+[data-slot="textarea"],
+[data-slot="input"],
+[data-slot="input-group-control"] {
+  @apply text-sm!;
+}
+
+[data-slot="input-group"] [data-slot="button"] {
+  @apply text-xs!;
+  @apply font-normal!;
+}
+
+/* 5b  Button group — the static text segment. */
+[data-slot="button-group-text"] {
+  @apply font-normal!;
+  @apply bg-background!;
+}
+
+/* 5c  Checkbox, radio & switch — destructive / invalid states.
+ * The card tint mirrors FieldLabel's has-data-checked:border-primary/30
+ * + bg-primary/5 recipe. */
 [data-slot="field-label"]:has([data-variant="destructive"][data-checked]) {
   @apply border-destructive/30! bg-destructive/5! dark:border-destructive/20! dark:bg-destructive/10!;
 }
@@ -405,97 +347,208 @@ button:not(:disabled, [data-disabled]),
   span {
   @apply bg-white!;
 }
- 
- [data-slot="dialog-content"] [data-slot="dialog-close"].absolute,
- [data-slot="sheet-content"] [data-slot="sheet-close"].absolute {
-   @apply text-muted-foreground!;
- }
 
- [data-slot="toast-content"] {
-   @apply py-2! px-3!;
- }
+/* 5d  Weight & size normalization — labels are never bold. */
+/*[data-slot="label"] {
+  @apply font-normal!;
+}
 
- [data-slot="toast-action"] {
-   @apply h-6! gap-1! rounded-[min(var(--radius-md),10px)]! px-2! text-xs! [&_svg:not([class*='size-'])]:size-3!;
- }
+[data-slot="field-label"] {
+  @apply font-normal! text-sm!;
+}*/
 
- [data-slot="toast-close"] {
-   @apply size-6! rounded-[min(var(--radius-md),10px)]! [&_svg:not([class*='size-'])]:size-3!;
- }
+[data-slot="field-description"] {
+  @apply text-xs!;
+}
 
- /*
-  * Toast type tints — same palette as the alert example, keyed on the
-  * data-type attribute Base UI stamps on the root, so toast.tsx stays stock.
-  *
-  * The tint is mixed INTO --popover with color-mix rather than laid over it
-  * at 5% alpha: toasts float above page content and their surface has to
-  * stay opaque.
-  *
-  * The close button gets the alert example's `ghost` recipe, the action
-  * button its `solid` recipe — a stock outline/ghost button resolves its
-  * hover to `muted`/`foreground`, which lands as a grey smudge on a tinted
-  * surface. These rules are unlayered, so they beat the buttons' own
-  * (layered) utilities without needing !important.
-  */
- [data-slot="toast"][data-type="success"] {
-   @apply border-emerald-200 text-emerald-700 dark:border-emerald-400/20 dark:text-emerald-400;
-   background-color: color-mix(in oklab, var(--color-emerald-500) 5%, var(--popover));
- }
- .dark [data-slot="toast"][data-type="success"] {
-   background-color: color-mix(in oklab, var(--color-emerald-400) 6%, var(--popover));
- }
- [data-slot="toast"][data-type="success"] [data-slot="toast-close"] {
-   @apply text-emerald-700/70 hover:bg-emerald-600/10 hover:text-emerald-800 dark:text-emerald-400/70 dark:hover:bg-emerald-400/10 dark:hover:text-emerald-300;
- }
- [data-slot="toast"][data-type="success"] [data-slot="toast-action"] {
-   @apply border-transparent bg-emerald-600/10 text-emerald-700 hover:bg-emerald-600/15 hover:text-emerald-800 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-400/20 dark:hover:text-emerald-200;
- }
+[data-slot="progress-label"] {
+  @apply font-normal!;
+}
 
- [data-slot="toast"][data-type="info"] {
-   @apply border-blue-200 text-blue-700 dark:border-blue-400/20 dark:text-blue-400;
-   background-color: color-mix(in oklab, var(--color-blue-500) 5%, var(--popover));
- }
- .dark [data-slot="toast"][data-type="info"] {
-   background-color: color-mix(in oklab, var(--color-blue-400) 6%, var(--popover));
- }
- [data-slot="toast"][data-type="info"] [data-slot="toast-close"] {
-   @apply text-blue-700/70 hover:bg-blue-600/10 hover:text-blue-800 dark:text-blue-400/70 dark:hover:bg-blue-400/10 dark:hover:text-blue-300;
- }
- [data-slot="toast"][data-type="info"] [data-slot="toast-action"] {
-   @apply border-transparent bg-blue-600/10 text-blue-700 hover:bg-blue-600/15 hover:text-blue-800 dark:bg-blue-400/10 dark:text-blue-300 dark:hover:bg-blue-400/20 dark:hover:text-blue-200;
- }
+[data-slot="accordion-trigger"] {
+  @apply font-normal!;
+}
 
- [data-slot="toast"][data-type="warning"] {
-   @apply border-amber-200 text-amber-700 dark:border-amber-400/20 dark:text-amber-400;
-   background-color: color-mix(in oklab, var(--color-amber-500) 5%, var(--popover));
- }
- .dark [data-slot="toast"][data-type="warning"] {
-   background-color: color-mix(in oklab, var(--color-amber-400) 6%, var(--popover));
- }
- [data-slot="toast"][data-type="warning"] [data-slot="toast-close"] {
-   @apply text-amber-700/70 hover:bg-amber-600/10 hover:text-amber-800 dark:text-amber-400/70 dark:hover:bg-amber-400/10 dark:hover:text-amber-300;
- }
- [data-slot="toast"][data-type="warning"] [data-slot="toast-action"] {
-   @apply border-transparent bg-amber-600/10 text-amber-700 hover:bg-amber-600/15 hover:text-amber-800 dark:bg-amber-400/10 dark:text-amber-300 dark:hover:bg-amber-400/20 dark:hover:text-amber-200;
- }
+[data-slot="progress-value"] {
+  @apply text-xs!;
+}
 
- [data-slot="toast"][data-type="error"] {
-   @apply border-red-200 text-destructive dark:border-red-400/20 dark:text-red-400;
-   background-color: color-mix(in oklab, var(--destructive) 3%, var(--popover));
- }
- .dark [data-slot="toast"][data-type="error"] {
-   background-color: color-mix(in oklab, var(--color-red-400) 6%, var(--popover));
- }
- [data-slot="toast"][data-type="error"] [data-slot="toast-description"] {
-   @apply text-destructive/90 dark:text-red-400/90;
- }
- [data-slot="toast"][data-type="error"] [data-slot="toast-icon"] svg {
-   @apply text-current;
- }
- [data-slot="toast"][data-type="error"] [data-slot="toast-close"] {
-   @apply text-destructive/70 hover:bg-destructive/10 hover:text-destructive dark:text-red-400/70 dark:hover:bg-red-400/10 dark:hover:text-red-300;
- }
- [data-slot="toast"][data-type="error"] [data-slot="toast-action"] {
-   @apply border-transparent bg-destructive/10 text-destructive hover:bg-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30;
- }
- 
+/* ==========================================================================
+   6  Buttons
+   ========================================================================== */
+
+/* Stock destructive button uses bg-destructive/10. */
+[data-slot="button"][data-variant="destructive"],
+[data-slot="alert-dialog-action"][data-variant="destructive"] {
+  @apply bg-destructive/5! hover:bg-destructive/10!;
+}
+
+/* ==========================================================================
+   7  Surfaces
+   ========================================================================== */
+
+[data-slot="card"] {
+  @apply rounded-xl!;
+}
+
+/* Stock CardFooter uses bg-muted/50. */
+[data-slot="card-footer"] {
+  @apply bg-background!;
+}
+
+[data-slot="table-container"] {
+  @apply border! rounded-lg!;
+}
+
+/* Default-variant tabs: a bordered app surface, not the stock muted pill. */
+[data-slot="tabs-list"][data-variant="default"] {
+  @apply bg-background!;
+  @apply border!;
+}
+
+/* TooltipTrigger render replaces data-slot="tabs-trigger" with tooltip-trigger,
+ * so these key off [role="tab"]. */
+[data-slot="tabs-list"][data-variant="default"] [role="tab"][data-active] {
+  @apply bg-muted!;
+  box-shadow: none !important;
+}
+
+[data-slot="tabs-list"][data-variant="default"] [role="tab"]:hover {
+  @apply bg-muted!;
+}
+
+/* Dialog's own recipe lives in components/ui/dialog.tsx; only the close
+ * button is forced from here — the same rule covers Sheet. */
+[data-slot="dialog-content"] [data-slot="dialog-close"].absolute,
+[data-slot="sheet-content"] [data-slot="sheet-close"].absolute {
+  @apply text-muted-foreground!;
+}
+
+/* ==========================================================================
+   8  Toast
+   ========================================================================== */
+
+/* 8a  Density */
+[data-slot="toast-content"] {
+  @apply py-2! px-3!;
+}
+
+[data-slot="toast-action"] {
+  @apply h-6! gap-1! rounded-[min(var(--radius-md),10px)]! px-2! text-xs! [&_svg:not([class*='size-'])]:size-3!;
+}
+
+[data-slot="toast-close"] {
+  @apply size-6! rounded-[min(var(--radius-md),10px)]! [&_svg:not([class*='size-'])]:size-3!;
+}
+
+/*
+ * 8b  Type tints — same palette as the alert example, keyed on the
+ * data-type attribute Base UI stamps on the root, so toast.tsx stays stock.
+ *
+ * The tint is mixed INTO --popover with color-mix rather than laid over it
+ * at 5% alpha: toasts float above page content and their surface has to
+ * stay opaque.
+ *
+ * The close button gets the alert example's `ghost` recipe, the action
+ * button its `solid` recipe — a stock outline/ghost button resolves its
+ * hover to `muted`/`foreground`, which lands as a grey smudge on a tinted
+ * surface. These rules are unlayered, so they beat the buttons' own
+ * (layered) utilities without needing !important.
+ */
+[data-slot="toast"][data-type="success"] {
+  @apply border-emerald-200 text-emerald-700 dark:border-emerald-400/20 dark:text-emerald-400;
+  background-color: color-mix(in oklab, var(--color-emerald-500) 5%, var(--popover));
+}
+.dark [data-slot="toast"][data-type="success"] {
+  background-color: color-mix(in oklab, var(--color-emerald-400) 6%, var(--popover));
+}
+[data-slot="toast"][data-type="success"] [data-slot="toast-close"] {
+  @apply text-emerald-700/70 hover:bg-emerald-600/10 hover:text-emerald-800 dark:text-emerald-400/70 dark:hover:bg-emerald-400/10 dark:hover:text-emerald-300;
+}
+[data-slot="toast"][data-type="success"] [data-slot="toast-action"] {
+  @apply border-transparent bg-emerald-600/10 text-emerald-700 hover:bg-emerald-600/15 hover:text-emerald-800 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:bg-emerald-400/20 dark:hover:text-emerald-200;
+}
+
+[data-slot="toast"][data-type="info"] {
+  @apply border-blue-200 text-blue-700 dark:border-blue-400/20 dark:text-blue-400;
+  background-color: color-mix(in oklab, var(--color-blue-500) 5%, var(--popover));
+}
+.dark [data-slot="toast"][data-type="info"] {
+  background-color: color-mix(in oklab, var(--color-blue-400) 6%, var(--popover));
+}
+[data-slot="toast"][data-type="info"] [data-slot="toast-close"] {
+  @apply text-blue-700/70 hover:bg-blue-600/10 hover:text-blue-800 dark:text-blue-400/70 dark:hover:bg-blue-400/10 dark:hover:text-blue-300;
+}
+[data-slot="toast"][data-type="info"] [data-slot="toast-action"] {
+  @apply border-transparent bg-blue-600/10 text-blue-700 hover:bg-blue-600/15 hover:text-blue-800 dark:bg-blue-400/10 dark:text-blue-300 dark:hover:bg-blue-400/20 dark:hover:text-blue-200;
+}
+
+[data-slot="toast"][data-type="warning"] {
+  @apply border-amber-200 text-amber-700 dark:border-amber-400/20 dark:text-amber-400;
+  background-color: color-mix(in oklab, var(--color-amber-500) 5%, var(--popover));
+}
+.dark [data-slot="toast"][data-type="warning"] {
+  background-color: color-mix(in oklab, var(--color-amber-400) 6%, var(--popover));
+}
+[data-slot="toast"][data-type="warning"] [data-slot="toast-close"] {
+  @apply text-amber-700/70 hover:bg-amber-600/10 hover:text-amber-800 dark:text-amber-400/70 dark:hover:bg-amber-400/10 dark:hover:text-amber-300;
+}
+[data-slot="toast"][data-type="warning"] [data-slot="toast-action"] {
+  @apply border-transparent bg-amber-600/10 text-amber-700 hover:bg-amber-600/15 hover:text-amber-800 dark:bg-amber-400/10 dark:text-amber-300 dark:hover:bg-amber-400/20 dark:hover:text-amber-200;
+}
+
+[data-slot="toast"][data-type="error"] {
+  @apply border-red-200 text-destructive dark:border-red-400/20 dark:text-red-400;
+  background-color: color-mix(in oklab, var(--destructive) 3%, var(--popover));
+}
+.dark [data-slot="toast"][data-type="error"] {
+  background-color: color-mix(in oklab, var(--color-red-400) 6%, var(--popover));
+}
+[data-slot="toast"][data-type="error"] [data-slot="toast-description"] {
+  @apply text-destructive/90 dark:text-red-400/90;
+}
+[data-slot="toast"][data-type="error"] [data-slot="toast-icon"] svg {
+  @apply text-current;
+}
+[data-slot="toast"][data-type="error"] [data-slot="toast-close"] {
+  @apply text-destructive/70 hover:bg-destructive/10 hover:text-destructive dark:text-red-400/70 dark:hover:bg-red-400/10 dark:hover:text-red-300;
+}
+[data-slot="toast"][data-type="error"] [data-slot="toast-action"] {
+  @apply border-transparent bg-destructive/10 text-destructive hover:bg-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30;
+}
+
+/* ==========================================================================
+   9  Chat & AI
+   ========================================================================== */
+
+/* Stock destructive bubble content uses bg-destructive/10. */
+[data-slot="bubble"][data-variant="destructive"] [data-slot="bubble-content"] {
+  @apply bg-destructive/5!;
+}
+
+[data-slot="bubble"][data-variant="outline"] [data-slot="bubble-content"] {
+  @apply border-border! border-dashed!;
+}
+
+/* Stock AttachmentActions uses top-3 / right-3 when vertical. */
+[data-slot="attachment"][data-orientation="vertical"] [data-slot="attachment-actions"] {
+  @apply top-0! right-0!;
+}
+
+/* Image attachments reveal their actions on hover / focus only. */
+[data-slot="attachment"]:has([data-slot="attachment-media"][data-variant="image"])
+  [data-slot="attachment-actions"] {
+  @apply pointer-events-none opacity-0 transition-opacity;
+}
+
+[data-slot="attachment"]:has([data-slot="attachment-media"][data-variant="image"]):hover
+  [data-slot="attachment-actions"],
+[data-slot="attachment"]:has([data-slot="attachment-media"][data-variant="image"])
+  [data-slot="attachment-actions"]:focus-within {
+  @apply pointer-events-auto opacity-100;
+}
+
+/* Stock MessageScrollerButton uses icon-sm radius. */
+[data-slot="message-scroller-button"] {
+  @apply rounded-full!;
+}

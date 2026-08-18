@@ -2,17 +2,16 @@
 
 import * as React from "react"
 
-import { ColorFormatIcon } from "@/components/color/color-format-selector"
-import { Button } from "@/components/ui/button"
 import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-  ComboboxTrigger,
-} from "@/components/ui/combobox"
+  ColorFormatIcon,
+  ColorFormatSelector,
+  ColorFormatSelectorContent,
+  ColorFormatSelectorItem,
+  ColorFormatSelectorList,
+  ColorFormatSelectorTrigger,
+} from "@/components/color/color-format-selector"
+import { Button } from "@/components/ui/button"
+import { ComboboxEmpty, ComboboxInput } from "@/components/ui/combobox"
 import {
   Field,
   FieldDescription,
@@ -51,8 +50,12 @@ export function ColorFormatSelectorExample() {
       <FieldGroup className="w-full max-w-sm">
         <Field>
           <FieldLabel htmlFor="color-format-selector">Color format</FieldLabel>
-          <Combobox items={formats} value={format} onValueChange={setFormat}>
-            <ComboboxTrigger
+          <ColorFormatSelector
+            items={formats}
+            value={format}
+            onValueChange={setFormat}
+          >
+            <ColorFormatSelectorTrigger
               render={
                 <Button
                   id="color-format-selector"
@@ -66,7 +69,7 @@ export function ColorFormatSelectorExample() {
                 </Button>
               }
             />
-            <ComboboxContent>
+            <ColorFormatSelectorContent>
               <ComboboxInput
                 showClear={true}
                 showTrigger={false}
@@ -81,16 +84,16 @@ export function ColorFormatSelectorExample() {
                 </InputGroupAddon>
               </ComboboxInput>
               <ComboboxEmpty>No formats found.</ComboboxEmpty>
-              <ComboboxList>
+              <ColorFormatSelectorList>
                 {(item: ColorFormat) => (
-                  <ComboboxItem key={item.value} value={item}>
+                  <ColorFormatSelectorItem key={item.value} value={item}>
                     <ColorFormatIcon format={item.value} />
                     {item.label}
-                  </ComboboxItem>
+                  </ColorFormatSelectorItem>
                 )}
-              </ComboboxList>
-            </ComboboxContent>
-          </Combobox>
+              </ColorFormatSelectorList>
+            </ColorFormatSelectorContent>
+          </ColorFormatSelector>
           {format && (
             <div className="flex h-8 items-center gap-2 rounded-lg bg-muted/60 px-3">
               <span
