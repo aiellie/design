@@ -27,7 +27,6 @@ const codeIconLabels: Partial<Record<keyof typeof CodeIcons, string>> = {
   yarn: "Yarn",
   pnpm: "pnpm",
   react: "React",
-  tailwind: "Tailwind CSS",
   google: "Google",
   apple: "Apple",
   paypal: "PayPal",
@@ -83,7 +82,6 @@ const codeIconCategories: { label: string; names: (keyof typeof CodeIcons)[] }[]
     label: "UI",
     names: [
       "react",
-      "tailwind",
       "radix",
       "aria",
       "baseui",

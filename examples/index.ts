@@ -65,13 +65,20 @@ import { ToggleExample } from "@/examples/ui/toggle"
 import { ToggleGroupExample } from "@/examples/ui/toggle-group"
 import { TooltipExample } from "@/examples/ui/tooltip"
 import { Icons, type IconData } from "@/icons/icons"
+import { ArtifactExample } from "@/examples/code/artifact"
 import { CodeBlockExample } from "@/examples/code/code-block"
 import { CodeLanguageSelectorExample } from "@/examples/code/code-language-selector"
+import { EnvironmentVariablesExample } from "@/examples/code/environment-variables"
+import { FileTreeExample } from "@/examples/code/file-tree"
+import { StackTraceExample } from "@/examples/code/stack-trace"
+import { TerminalExample } from "@/examples/code/terminal"
+import { SnippetExample } from "@/examples/code/snippet"
 import { ColorFormatSelectorExample } from "@/examples/color/color-format-selector"
 import { ColorPickerExample } from "@/examples/color/color-picker"
 import { CountriesSelectExample } from "@/examples/locale/countries-select"
 import { LanguageSelectorExample } from "@/examples/locale/language-selector"
 import { TimePickerExample } from "@/examples/locale/time-picker"
+import { WebPreviewExample } from "@/examples/web/web-preview"
 import type { ExampleStatus } from "./status"
 
 export type { ExampleStatus }
@@ -143,7 +150,16 @@ export function exampleFilePath(slug: string): string {
   if (slug === "colors") return "examples/styles/colors.tsx"
   if (slug === "typeset") return "examples/styles/typeset.tsx"
   if (slug === "icons") return "examples/icons/icons.tsx"
-  if (slug === "code-block" || slug === "code-language-selector")
+  if (
+    slug === "artifact" ||
+    slug === "code-block" ||
+    slug === "code-language-selector" ||
+    slug === "environment-variables" ||
+    slug === "file-tree" ||
+    slug === "snippet" ||
+    slug === "stack-trace" ||
+    slug === "terminal"
+  )
     return `examples/code/${slug}.tsx`
   if (slug === "color-picker" || slug === "color-format-selector")
     return `examples/color/${slug}.tsx`
@@ -153,6 +169,7 @@ export function exampleFilePath(slug: string): string {
     slug === "time-picker"
   )
     return `examples/locale/${slug}.tsx`
+  if (slug === "web-preview") return `examples/web/${slug}.tsx`
   return `examples/ui/${slug}.tsx`
 }
 
@@ -171,11 +188,32 @@ export const exampleCategories: ExampleCategory[] = [
         icon: Icons.colors,
       },
       {
+        slug: "color-picker",
+        name: "Color Picker",
+        component: ColorPickerExample,
+        icon: Icons.dropper,
+      },
+      {
+        slug: "color-format-selector",
+        name: "Color Format Selector",
+        component: ColorFormatSelectorExample,
+        icon: Icons.sorting,
+      },
+      {
         slug: "typeset",
         name: "Typeset",
         component: TypesetExample,
         icon: Icons.text,
       },
+    ],
+  },
+  {
+    title: "Icons",
+    icon: Icons.smile,
+    iconBg: "bg-orange-500/5",
+    textColor: "text-orange-500",
+    borderColor: "border-orange-200/10",
+    examples: [
       {
         slug: "icons",
         name: "Icons",
@@ -656,26 +694,41 @@ export const exampleCategories: ExampleCategory[] = [
         component: CodeLanguageSelectorExample,
         icon: Icons.sorting,
       },
-    ],
-  },
-  {
-    title: "Color",
-    icon: Icons.colors,
-    iconBg: "bg-rose-500/5",
-    textColor: "text-rose-500",
-    borderColor: "border-rose-200/10",
-    examples: [
       {
-        slug: "color-picker",
-        name: "Color Picker",
-        component: ColorPickerExample,
-        icon: Icons.colors,
+        slug: "file-tree",
+        name: "File Tree",
+        component: FileTreeExample,
+        icon: Icons.folder,
       },
       {
-        slug: "color-format-selector",
-        name: "Color Format Selector",
-        component: ColorFormatSelectorExample,
-        icon: Icons.sorting,
+        slug: "environment-variables",
+        name: "Environment Variables",
+        component: EnvironmentVariablesExample,
+        icon: Icons.key,
+      },
+      {
+        slug: "terminal",
+        name: "Terminal",
+        component: TerminalExample,
+        icon: Icons.terminal,
+      },
+      {
+        slug: "stack-trace",
+        name: "Stack Trace",
+        component: StackTraceExample,
+        icon: Icons.bug,
+      },
+      {
+        slug: "snippet",
+        name: "Snippet",
+        component: SnippetExample,
+        icon: Icons.code,
+      },
+      {
+        slug: "artifact",
+        name: "Artifact",
+        component: ArtifactExample,
+        icon: Icons.doc,
       },
     ],
   },
@@ -703,6 +756,21 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Time Picker",
         component: TimePickerExample,
         icon: Icons.clock,
+      },
+    ],
+  },
+  {
+    title: "Web",
+    icon: Icons.browser,
+    iconBg: "bg-sky-500/5",
+    textColor: "text-sky-500",
+    borderColor: "border-sky-200/10",
+    examples: [
+      {
+        slug: "web-preview",
+        name: "Web Preview",
+        component: WebPreviewExample,
+        icon: Icons.browser,
       },
     ],
   },
