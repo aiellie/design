@@ -14,8 +14,10 @@ import {
   ComboboxLabel,
   ComboboxList,
   ComboboxTrigger,
+  ComboboxValue,
 } from "@/components/ui/combobox"
 import { Button } from "@/components/ui/button"
+import { InputGroupAddon } from "@/components/ui/input-group"
 import {
   Tooltip,
   TooltipContent,
@@ -23,6 +25,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
+import { Search01Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 
 /** The eleven steps every Tailwind ramp is cut into. */
 export const TAILWIND_SHADES = [
@@ -526,7 +530,7 @@ export function TailwindColorPicker({
       onValueChange={onValueChange}
       disabled={disabled}
       name={name}
-    >
+      >
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger
@@ -545,17 +549,35 @@ export function TailwindColorPicker({
               />
             }
           >
-            <ColorIcons.tailwind className="size-4" />
+            <ComboboxValue>
+              {(selected: string | null) => {
+                const color = selected ? getTailwindColor(selected) : undefined
+                return color ? (
+                  <TailwindSwatch color={color} />
+                ) : (
+                  <ColorIcons.tailwind className="size-4" />
+                )
+              }}
+            </ComboboxValue>
           </TooltipTrigger>
           <TooltipContent>tailwind-color-picker</TooltipContent>
         </Tooltip>
       </TooltipProvider>
       <ComboboxContent className="w-64">
         <ComboboxInput
+          showClear={true}
           showTrigger={false}
           placeholder="Search colors"
           className="h-8! rounded-none! border-x-0 border-t-0 border-input/30 bg-background shadow-none! *:data-[slot=input-group-addon]:ps-2!"
-        />
+        >
+          <InputGroupAddon align="inline-start">
+            <HugeiconsIcon
+              className="size-4 text-muted-foreground"
+              icon={Search01Icon}
+              strokeWidth={2}
+            />
+          </InputGroupAddon>
+        </ComboboxInput>
         <ComboboxEmpty>No colors found.</ComboboxEmpty>
         <ComboboxList>
           {(group: (typeof TAILWIND_COLOR_GROUPS)[number]) => (

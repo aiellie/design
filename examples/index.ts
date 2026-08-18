@@ -75,6 +75,7 @@ import { TerminalExample } from "@/examples/code/terminal"
 import { SnippetExample } from "@/examples/code/snippet"
 import { ColorFormatSelectorExample } from "@/examples/color/color-format-selector"
 import { ColorPickerExample } from "@/examples/color/color-picker"
+import { TailwindColorPickerExample } from "@/examples/color/tailwind-color-picker"
 import { CountriesSelectExample } from "@/examples/locale/countries-select"
 import { LanguageSelectorExample } from "@/examples/locale/language-selector"
 import { TimePickerExample } from "@/examples/locale/time-picker"
@@ -161,7 +162,11 @@ export function exampleFilePath(slug: string): string {
     slug === "terminal"
   )
     return `examples/code/${slug}.tsx`
-  if (slug === "color-picker" || slug === "color-format-selector")
+  if (
+    slug === "color-picker" ||
+    slug === "color-format-selector" ||
+    slug === "tailwind-color-picker"
+  )
     return `examples/color/${slug}.tsx`
   if (
     slug === "countries-select" ||
@@ -198,6 +203,12 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Color Format Selector",
         component: ColorFormatSelectorExample,
         icon: Icons.sorting,
+      },
+      {
+        slug: "tailwind-color-picker",
+        name: "Tailwind Color Picker",
+        component: TailwindColorPickerExample,
+        icon: Icons.dropper,
       },
       {
         slug: "typeset",
