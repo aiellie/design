@@ -11,7 +11,7 @@ export function ExampleViewer({ example }: { example: FlatExample }) {
   const Example = example.component
 
   return (
-    <div className="bg-background bg-dotted flex  flex-col p-4 min-h-[calc(100svh-6.5rem)] lg:p-6">
+    <div className="bg-background bg-dotted flex  flex-col p-4 min-h-[calc(100svh-6.5rem)] lg:p-4">
       {/* One demo renders bare — tabs would be a control with nothing to
           switch to, and the example keeps the full height to centre in. */}
       {demos.length > 1 ? (
