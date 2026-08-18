@@ -38,6 +38,7 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -48,7 +49,38 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { BotIcon, ComputerTerminalIcon, BookOpenIcon, SettingsIcon, CropIcon, PieChartIcon, MapsIcon, UnfoldMoreIcon, ArrowRight01Icon } from "@hugeicons/core-free-icons"
+import {
+  ArrowRight01Icon,
+  Atom01Icon,
+  AudioWave01Icon,
+  BookOpen01Icon,
+  BookOpenIcon,
+  BotIcon,
+  Clock01Icon,
+  CommandIcon,
+  ComputerTerminalIcon,
+  CreditCardIcon,
+  CropIcon,
+  DashboardSpeed01Icon,
+  Delete02Icon,
+  FolderOpenIcon,
+  Logout01Icon,
+  MapsIcon,
+  MoreHorizontalIcon,
+  NoteIcon,
+  PieChartIcon,
+  PlayCircleIcon,
+  Rocket01Icon,
+  Settings01Icon,
+  SettingsIcon,
+  Share01Icon,
+  SparklesIcon,
+  StarIcon,
+  Telescope01Icon,
+  UnfoldMoreIcon,
+  UserCircleIcon,
+  UserGroup02Icon,
+} from "@hugeicons/core-free-icons"
 
 export function SidebarExample() {
   const data = {
@@ -61,14 +93,35 @@ export function SidebarExample() {
       {
         name: "Acme Inc",
         plan: "Enterprise",
+        logo: (
+          <HugeiconsIcon
+            icon={CommandIcon}
+            strokeWidth={2}
+          />
+        ),
+        bg: "bg-blue-500 text-white",
       },
       {
         name: "Acme Corp.",
         plan: "Startup",
+        logo: (
+          <HugeiconsIcon
+            icon={AudioWave01Icon}
+            strokeWidth={2}
+          />
+        ),
+        bg: "bg-violet-500 text-white",
       },
       {
         name: "Evil Corp.",
         plan: "Free",
+        logo: (
+          <HugeiconsIcon
+            icon={Rocket01Icon}
+            strokeWidth={2}
+          />
+        ),
+        bg: "bg-emerald-500 text-white",
       },
     ],
     navMain: [
@@ -86,14 +139,32 @@ export function SidebarExample() {
           {
             title: "History",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={Clock01Icon}
+                strokeWidth={2}
+              />
+            ),
           },
           {
             title: "Starred",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={StarIcon}
+                strokeWidth={2}
+              />
+            ),
           },
           {
             title: "Settings",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={Settings01Icon}
+                strokeWidth={2}
+              />
+            ),
           },
         ],
       },
@@ -110,14 +181,32 @@ export function SidebarExample() {
           {
             title: "Genesis",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={SparklesIcon}
+                strokeWidth={2}
+              />
+            ),
           },
           {
             title: "Explorer",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={Telescope01Icon}
+                strokeWidth={2}
+              />
+            ),
           },
           {
             title: "Quantum",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={Atom01Icon}
+                strokeWidth={2}
+              />
+            ),
           },
         ],
       },
@@ -134,18 +223,42 @@ export function SidebarExample() {
           {
             title: "Introduction",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={BookOpen01Icon}
+                strokeWidth={2}
+              />
+            ),
           },
           {
             title: "Get Started",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={Rocket01Icon}
+                strokeWidth={2}
+              />
+            ),
           },
           {
             title: "Tutorials",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={PlayCircleIcon}
+                strokeWidth={2}
+              />
+            ),
           },
           {
             title: "Changelog",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={NoteIcon}
+                strokeWidth={2}
+              />
+            ),
           },
         ],
       },
@@ -162,18 +275,42 @@ export function SidebarExample() {
           {
             title: "General",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={Settings01Icon}
+                strokeWidth={2}
+              />
+            ),
           },
           {
             title: "Team",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={UserGroup02Icon}
+                strokeWidth={2}
+              />
+            ),
           },
           {
             title: "Billing",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={CreditCardIcon}
+                strokeWidth={2}
+              />
+            ),
           },
           {
             title: "Limits",
             url: "#",
+            icon: (
+              <HugeiconsIcon
+                icon={DashboardSpeed01Icon}
+                strokeWidth={2}
+              />
+            ),
           },
         ],
       },
@@ -234,36 +371,9 @@ export function SidebarExample() {
                     size="icon-sm"
                     render={<span />}
                     nativeButton={false}
-                    className="size-8"
+                    className={`size-8 ${activeTeam.bg}`}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 256 256"
-                    >
-                      <rect width="256" height="256" fill="none"></rect>
-                      <line
-                        x1="208"
-                        y1="128"
-                        x2="128"
-                        y2="208"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="32"
-                      ></line>
-                      <line
-                        x1="192"
-                        y1="40"
-                        x2="40"
-                        y2="192"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="32"
-                      ></line>
-                    </svg>
+                    {activeTeam.logo}
                   </Button>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">
@@ -285,8 +395,24 @@ export function SidebarExample() {
                       <DropdownMenuItem
                         key={team.name}
                         onClick={() => setActiveTeam(team)}
+                        className="gap-2 p-1.5"
                       >
-                        {team.name}
+                        <Button
+                          size="icon-xs"
+                          render={<span />}
+                          nativeButton={false}
+                          className={`${team.bg} [&_svg]:text-white!`}
+                        >
+                          {team.logo}
+                        </Button>
+                        <span className="grid flex-1 text-left leading-tight">
+                          <span className="truncate font-medium">
+                            {team.name}
+                          </span>
+                          <span className="truncate text-xs text-muted-foreground">
+                            {team.plan}
+                          </span>
+                        </span>
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuGroup>
@@ -324,7 +450,8 @@ export function SidebarExample() {
                             <SidebarMenuSubButton
                               render={<a href={subItem.url} />}
                             >
-                              {subItem.title}
+                              {subItem.icon}
+                              <span>{subItem.title}</span>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
@@ -342,8 +469,54 @@ export function SidebarExample() {
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton render={<a href={item.url} />}>
                     {item.icon}
-                    {item.name}
+                    <span>{item.name}</span>
                   </SidebarMenuButton>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      render={<SidebarMenuAction showOnHover />}
+                    >
+                      <HugeiconsIcon
+                        icon={MoreHorizontalIcon}
+                        strokeWidth={2}
+                      />
+                      <span className="sr-only">More</span>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      align="start"
+                      side="right"
+                      className="w-44"
+                    >
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem>
+                          <HugeiconsIcon
+                            icon={FolderOpenIcon}
+                            strokeWidth={2}
+                            className="size-3.5"
+                          />
+                          View project
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <HugeiconsIcon
+                            icon={Share01Icon}
+                            strokeWidth={2}
+                            className="size-3.5"
+                          />
+                          Share project
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem variant="destructive">
+                          <HugeiconsIcon
+                            icon={Delete02Icon}
+                            strokeWidth={2}
+                            className="size-3.5"
+                          />
+                          Delete project
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -398,13 +571,41 @@ export function SidebarExample() {
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>Account</DropdownMenuItem>
-                    <DropdownMenuItem>Billing</DropdownMenuItem>
-                    <DropdownMenuItem>Settings</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <HugeiconsIcon
+                        icon={UserCircleIcon}
+                        strokeWidth={2}
+                        className="size-3.5"
+                      />
+                      Account
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <HugeiconsIcon
+                        icon={CreditCardIcon}
+                        strokeWidth={2}
+                        className="size-3.5"
+                      />
+                      Billing
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <HugeiconsIcon
+                        icon={Settings01Icon}
+                        strokeWidth={2}
+                        className="size-3.5"
+                      />
+                      Settings
+                    </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem variant="destructive">Log out</DropdownMenuItem>
+                    <DropdownMenuItem variant="destructive">
+                      <HugeiconsIcon
+                        icon={Logout01Icon}
+                        strokeWidth={2}
+                        className="size-3.5"
+                      />
+                      Log out
+                    </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>

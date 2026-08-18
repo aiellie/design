@@ -377,8 +377,12 @@ button:not(:disabled, [data-disabled]),
    6  Buttons
    ========================================================================== */
 
-/* Stock destructive button uses bg-destructive/10. */
+/* Stock destructive button uses bg-destructive/10.
+ * TooltipTrigger render replaces data-slot="button" with tooltip-trigger
+ * (same merge that tabs work around in §7), so icon buttons wrapped in a
+ * tooltip still need the tint. */
 [data-slot="button"][data-variant="destructive"],
+[data-slot="tooltip-trigger"][data-variant="destructive"],
 [data-slot="alert-dialog-action"][data-variant="destructive"] {
   @apply bg-destructive/5! hover:bg-destructive/10!;
 }
