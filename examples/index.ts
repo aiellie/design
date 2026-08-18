@@ -158,8 +158,8 @@ export function exampleFilePath(slug: string): string {
 
 export const exampleCategories: ExampleCategory[] = [
   {
-    title: "Foundations",
-    icon: Icons.layers,
+    title: "Styles",
+    icon: Icons.style,
     iconBg: "bg-violet-500/5",
     textColor: "text-violet-500",
     borderColor: "border-violet-200/10",
@@ -180,7 +180,7 @@ export const exampleCategories: ExampleCategory[] = [
         slug: "icons",
         name: "Icons",
         component: IconsExample,
-        icon: Icons.grid,
+        icon: Icons.smile,
       },
     ],
   },

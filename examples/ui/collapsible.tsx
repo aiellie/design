@@ -15,7 +15,7 @@ export function CollapsibleExample() {
   const [open, setOpen] = React.useState(false)
 
   return (
-    <div className="w-full max-w-md space-y-3">
+    <div className="mx-auto w-full max-w-md space-y-3">
       <Collapsible
         open={open}
         onOpenChange={setOpen}

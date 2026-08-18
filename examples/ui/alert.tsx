@@ -57,7 +57,7 @@ const solid = {
 
 export function AlertExample() {
   return (
-    <div className="grid w-full max-w-md gap-4 items-center justify-center">
+    <div className="mx-auto grid w-full max-w-md gap-4">
       {/* The action cluster is absolutely positioned in the top-end corner, so
           each alert reserves enough end padding for it to clear the title. The
           `!` is there to beat the component's own `has-[alert-action]:pe-18`,

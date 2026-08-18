@@ -27,7 +27,7 @@ export function TypesetExample() {
   }, [])
 
   return (
-    <div className="typeset typeset-docs max-w-[33em]">
+    <div className="typeset typeset-docs mx-auto max-w-[33em]">
       <h1>Writing component docs</h1>
       <p>
         Everything inside this container is styled by{" "}

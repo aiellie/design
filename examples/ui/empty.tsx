@@ -30,7 +30,7 @@ import {
 
 export function EmptyExample() {
   return (
-    <div className="grid w-full max-w-3xl gap-4 md:grid-cols-2">
+    <div className="mx-auto grid w-full max-w-3xl gap-4 md:grid-cols-2">
       {/* Default — icon media, paired actions, quiet learn-more link */}
       <Empty className="border md:col-span-2">
         <EmptyHeader>

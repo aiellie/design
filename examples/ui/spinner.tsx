@@ -27,7 +27,7 @@ import {
 
 export function SpinnerExample() {
   return (
-    <div className="grid w-full max-w-3xl gap-4 md:grid-cols-2">
+    <div className="mx-auto grid w-full max-w-3xl gap-4 md:grid-cols-2">
       {/* Item — spinner in a muted list row with trailing meta */}
       <Item variant="muted" className="md:col-span-2">
         <ItemMedia>

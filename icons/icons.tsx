@@ -92,6 +92,7 @@ import {
   Trash,
   TriangleIcon,
   UserCircleIcon,
+  DarkModeIcon
 } from "@hugeicons/core-free-icons"
 
 import type { IconCategoryId } from "./icon-categories"
@@ -195,6 +196,7 @@ export const Icons = {
   userCircle: UserCircleIcon,
   v0: TriangleIcon,
   home: HomeIcon,
+  style: DarkModeIcon,
 } as const
 
 export type IconName = keyof typeof Icons
