@@ -1,6 +1,7 @@
 "use client"
 
 import { NavUser } from "@/app/components/nav-user"
+import { ItemActions } from "@/app/components/item-actions"
 import { StatusDot } from "@/app/components/status-badge"
 import { statusOf, useStatuses } from "@/app/components/status-provider"
 import { Progress } from "@/components/ui/progress"
@@ -118,11 +119,19 @@ export function DashboardSidebar({
                         <Icon icon={example.icon} />
                         <span>{example.name}</span>
                       </SidebarMenuButton>
-                      <SidebarMenuBadge>
+                      {/* The dot gives way to the actions menu on hover (and
+                          stays away while that menu is open). Touch devices
+                          have no hover, so they get the menu outright. */}
+                      <SidebarMenuBadge className="transition-opacity max-md:hidden group-hover/menu-item:opacity-0 group-focus-within/menu-item:opacity-0 group-has-data-popup-open/menu-item:opacity-0">
                         <StatusDot
                           status={statusOf(statuses, example.slug)}
                         />
                       </SidebarMenuBadge>
+                      <ItemActions
+                        slug={example.slug}
+                        name={example.name}
+                        className="absolute top-0.5 right-1 transition-opacity group-data-[collapsible=icon]:hidden data-popup-open:opacity-100 md:opacity-0 md:group-focus-within/menu-item:opacity-100 md:group-hover/menu-item:opacity-100"
+                      />
                     </SidebarMenuItem>
                   ))}
                 </SidebarMenu>
