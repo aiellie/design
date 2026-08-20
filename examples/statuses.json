@@ -76,6 +76,7 @@
   "file-tree": "shipped",
   "stack-trace": "shipped",
   "code-command": "shipped",
+  "terminal": "shipped",
   "snippet": "shipped",
   "commit": "shipped",
   "date-picker": "shipped",

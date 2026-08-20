@@ -126,7 +126,7 @@ export function TerminalExample() {
   }
 
   return (
-    <div className="w-full max-w-2xl">
+    <div className="w-full max-w-2xl mx-auto justify-center">
       <Terminal
         isStreaming={streaming}
         onClear={() =>
@@ -148,7 +148,7 @@ export function TerminalExample() {
           ))}
           <TerminalTabAdd onSelect={addTab} />
           <div className="ms-auto flex items-center gap-1">
-            <TerminalStatus>Running…</TerminalStatus>
+            <TerminalStatus>Running</TerminalStatus>
             <TerminalActions>
               <TerminalCopyButton />
               <TerminalClearButton />

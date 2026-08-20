@@ -64,11 +64,28 @@ const clamp = (value: number, min: number, max: number) =>
 
 function normalizeHex(input: string): string | null {
   const raw = input.trim().replace(/^#/, "").toLowerCase();
-  if (/^[0-9a-f]{6}$/.test(raw)) return `#${raw}`;
-  if (/^[0-9a-f]{3}$/.test(raw)) {
-    return `#${raw[0]}${raw[0]}${raw[1]}${raw[1]}${raw[2]}${raw[2]}`;
+  if (/^[0-9a-f]{6}$/.test(raw) || /^[0-9a-f]{8}$/.test(raw)) return `#${raw}`;
+  if (/^[0-9a-f]{3}$/.test(raw) || /^[0-9a-f]{4}$/.test(raw)) {
+    return `#${[...raw].map((c) => c + c).join("")}`;
   }
   return null;
+}
+
+/** Splits #rrggbb or #rrggbbaa into an opaque hex plus an alpha percentage. */
+function splitAlpha(hex: string): { hex: string; alpha: number } {
+  if (hex.length < 9) return { hex, alpha: 100 };
+  return {
+    hex: hex.slice(0, 7),
+    alpha: (parseInt(hex.slice(7), 16) / 255) * 100,
+  };
+}
+
+function withAlpha(hex: string, alpha: number): string {
+  if (alpha >= 100) return hex;
+  const a = Math.round((clamp(alpha, 0, 100) / 100) * 255)
+    .toString(16)
+    .padStart(2, "0");
+  return `${hex}${a}`;
 }
 
 const K1 = 0.206;
@@ -334,69 +351,108 @@ function oklabToHex(L: number, a: number, b: number): string {
 }
 
 /** The picker holds hex; this is how that color reads in the chosen format. */
-function formatColor(hex: string, format: ColorFormat): string {
+function formatColor(hex: string, format: ColorFormat, alpha = 100): string {
+  const suffix = alpha < 100 ? ` / ${round(alpha)}%` : "";
   if (format === "rgb") {
     const [r, g, b] = hexToRgb(hex);
-    return `rgb(${r} ${g} ${b})`;
+    return `rgb(${r} ${g} ${b}${suffix})`;
   }
   if (format === "hsl") {
     const [h, s, l] = rgbToHsl(hexToRgb(hex));
-    return `hsl(${round(h)} ${round(s)}% ${round(l)}%)`;
+    return `hsl(${round(h)} ${round(s)}% ${round(l)}%${suffix})`;
   }
   if (format === "oklab") {
     const [L, a, b] = hexToOklab(hex);
-    return `oklab(${round(L * 100, 1)}% ${round(a, 3)} ${round(b, 3)})`;
+    return `oklab(${round(L * 100, 1)}% ${round(a, 3)} ${round(b, 3)}${suffix})`;
   }
   if (format === "oklch") {
     const [L, a, b] = hexToOklab(hex);
     const c = Math.hypot(a, b);
     const h = c < 1e-4 ? 0 : ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360;
-    return `oklch(${round(L * 100, 1)}% ${round(c, 3)} ${round(h, 1)})`;
+    return `oklch(${round(L * 100, 1)}% ${round(c, 3)} ${round(h, 1)}${suffix})`;
   }
-  return hex;
+  return withAlpha(hex, alpha);
 }
 
-/** Reads any supported notation back to hex, not just the selected one. */
-function parseColor(input: string): string | null {
+/** Reads any supported notation back to hex + alpha, not just the selected one. */
+function parseColor(input: string): { hex: string; alpha: number } | null {
   const raw = input.trim().toLowerCase();
   const hex = normalizeHex(raw);
-  if (hex) return hex;
+  if (hex) return splitAlpha(hex);
   const call = raw.match(/^([a-z]+)\(([^)]*)\)$/);
-  if (!call) return null;
-  const parts = call[2]
-    .split("/")[0]
-    .trim()
-    .split(/[\s,]+/)
-    .filter(Boolean);
+  if (!call) return parseCssColor(raw);
+  const [body, slash] = call[2].split("/");
+  const parts = body.trim().split(/[\s,]+/).filter(Boolean);
   if (parts.length < 3) return null;
   const [x, y, z] = parts.map(parseFloat);
   if (![x, y, z].every(Number.isFinite)) return null;
+  // Alpha arrives as "/ 50%" in modern syntax or a fourth part in rgba/hsla.
+  const alphaPart = slash?.trim() ?? parts[3];
+  let alpha = 100;
+  if (alphaPart !== undefined) {
+    const n = parseFloat(alphaPart);
+    if (!Number.isFinite(n)) return null;
+    alpha = clamp(alphaPart.endsWith("%") ? n : n * 100, 0, 100);
+  }
   const pct = parts.map((part) => part.endsWith("%"));
+  const withA = (opaque: string) => ({ hex: opaque, alpha });
   switch (call[1]) {
     case "rgb":
     case "rgba":
-      return rgbToHex([
-        pct[0] ? (x / 100) * 255 : x,
-        pct[1] ? (y / 100) * 255 : y,
-        pct[2] ? (z / 100) * 255 : z,
-      ]);
+      return withA(
+        rgbToHex([
+          pct[0] ? (x / 100) * 255 : x,
+          pct[1] ? (y / 100) * 255 : y,
+          pct[2] ? (z / 100) * 255 : z,
+        ]),
+      );
     case "hsl":
     case "hsla":
-      return rgbToHex(hslToRgb(x, y, z));
+      return withA(rgbToHex(hslToRgb(x, y, z)));
     case "oklch": {
       const c = pct[1] ? (y / 100) * 0.4 : y;
       const h = (z * Math.PI) / 180;
-      return oklabToHex(pct[0] ? x / 100 : x, c * Math.cos(h), c * Math.sin(h));
+      return withA(
+        oklabToHex(pct[0] ? x / 100 : x, c * Math.cos(h), c * Math.sin(h)),
+      );
     }
     case "oklab":
-      return oklabToHex(
-        pct[0] ? x / 100 : x,
-        pct[1] ? (y / 100) * 0.4 : y,
-        pct[2] ? (z / 100) * 0.4 : z,
+      return withA(
+        oklabToHex(
+          pct[0] ? x / 100 : x,
+          pct[1] ? (y / 100) * 0.4 : y,
+          pct[2] ? (z / 100) * 0.4 : z,
+        ),
       );
     default:
-      return null;
+      return parseCssColor(raw);
   }
+}
+
+let cssColorCtx: CanvasRenderingContext2D | null | undefined;
+
+/** Falls back to the browser for anything else CSS knows, e.g. "tomato". */
+function parseCssColor(raw: string): { hex: string; alpha: number } | null {
+  if (typeof document === "undefined") return null;
+  cssColorCtx ??= document.createElement("canvas").getContext("2d");
+  const ctx = cssColorCtx;
+  if (!ctx) return null;
+  const resolve = (sentinel: string) => {
+    ctx.fillStyle = sentinel;
+    ctx.fillStyle = raw;
+    return String(ctx.fillStyle);
+  };
+  const resolved = resolve("#010203");
+  // An invalid color leaves the sentinel in place, so two sentinels disagree.
+  if (resolved !== resolve("#040506")) return null;
+  const asHex = normalizeHex(resolved);
+  if (asHex) return splitAlpha(asHex);
+  const rgba = resolved.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)$/);
+  if (!rgba) return null;
+  return {
+    hex: rgbToHex([+rgba[1], +rgba[2], +rgba[3]]),
+    alpha: clamp(parseFloat(rgba[4]) * 100, 0, 100),
+  };
 }
 
 const THUMB_SHADOW = "0 0 0 1px rgba(0,0,0,0.14), 0 1px 3px rgba(0,0,0,0.25)";
@@ -697,6 +753,99 @@ function BrightnessBand({
   );
 }
 
+const CHECKER =
+  "repeating-conic-gradient(#c9c9c9 0% 25%, #fff 0% 50%)";
+
+function AlphaSlider({
+  hex,
+  alpha,
+  onChange,
+}: {
+  hex: string;
+  alpha: number;
+  onChange: (alpha: number) => void;
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [dragging, setDragging] = useState(false);
+
+  const fromPointer = useCallback(
+    (clientX: number) => {
+      const rect = trackRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const t = (clientX - rect.left - 8) / (rect.width - 16);
+      onChange(clamp(t, 0, 1) * 100);
+    },
+    [onChange],
+  );
+
+  const handlePointerDown = (e: ReactPointerEvent) => {
+    e.preventDefault();
+    try {
+      trackRef.current?.setPointerCapture(e.pointerId);
+    } catch {}
+    setDragging(true);
+    fromPointer(e.clientX);
+  };
+
+  const handlePointerMove = (e: ReactPointerEvent) => {
+    if (!dragging) return;
+    if (e.pointerType === "mouse" && e.buttons === 0) {
+      setDragging(false);
+      return;
+    }
+    fromPointer(e.clientX);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    let delta = 0;
+    if (e.key === "ArrowRight" || e.key === "ArrowUp") delta = 2;
+    else if (e.key === "ArrowLeft" || e.key === "ArrowDown") delta = -2;
+    else if (e.key === "PageUp") delta = 10;
+    else if (e.key === "PageDown") delta = -10;
+    else if (e.key === "Home") delta = -alpha;
+    else if (e.key === "End") delta = 100 - alpha;
+    else return;
+    e.preventDefault();
+    onChange(clamp(alpha + delta, 0, 100));
+  };
+
+  return (
+    <div
+      ref={trackRef}
+      role="slider"
+      aria-label="Opacity"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(alpha)}
+      aria-valuetext={`Opacity ${Math.round(alpha)}%`}
+      tabIndex={0}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={() => setDragging(false)}
+      onPointerCancel={() => setDragging(false)}
+      onLostPointerCapture={() => setDragging(false)}
+      onKeyDown={handleKeyDown}
+      className="relative h-3.5 cursor-pointer rounded-full ring-1 ring-foreground/10 ring-inset outline-offset-2 focus-visible:outline-2 focus-visible:outline-ring"
+      style={{
+        touchAction: "none",
+        backgroundImage: `linear-gradient(to right, transparent, ${hex}), ${CHECKER}`,
+        backgroundSize: "auto, 7px 7px",
+      }}
+    >
+      <div
+        className="pointer-events-none absolute top-1/2 size-4 rounded-full border-2 border-white transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
+        style={{
+          left: `calc((100% - 16px) * ${alpha / 100})`,
+          backgroundImage: `linear-gradient(${withAlpha(hex, alpha)}, ${withAlpha(hex, alpha)}), ${CHECKER}`,
+          backgroundSize: "auto, 6px 6px",
+          boxShadow: THUMB_SHADOW,
+          transform: `translateY(-50%) scale(${dragging ? 1.2 : 1})`,
+        }}
+      />
+    </div>
+  );
+}
+
 const emptySubscribe = () => () => {};
 
 interface EyeDropperConstructor {
@@ -739,43 +888,68 @@ function ColorPopover({
   const { isCopied, copyToClipboard } = useCopyToClipboard();
   const [formatOpen, setFormatOpen] = useState(false);
 
-  const initial = normalizeHex(value) ?? "#ffffff";
-  const [state, setState] = useState<{ hsv: Hsv; draft: string; seen: string }>(
-    () => ({
-      hsv: hexToHsv(initial),
-      draft: formatColor(initial, format),
-      seen: initial,
-    }),
-  );
+  const initialFull = normalizeHex(value) ?? "#ffffff";
+  const initial = splitAlpha(initialFull);
+  const [state, setState] = useState<{
+    hsv: Hsv;
+    alpha: number;
+    draft: string;
+    seen: string;
+  }>(() => ({
+    hsv: hexToHsv(initial.hex),
+    alpha: initial.alpha,
+    draft: formatColor(initial.hex, format, initial.alpha),
+    seen: initialFull,
+  }));
 
   const incoming = normalizeHex(value);
   if (incoming && incoming !== state.seen) {
+    const split = splitAlpha(incoming);
     setState({
-      hsv: hexToHsv(incoming),
-      draft: formatColor(incoming, format),
+      hsv: hexToHsv(split.hex),
+      alpha: split.alpha,
+      draft: formatColor(split.hex, format, split.alpha),
       seen: incoming,
     });
   }
 
   const current = hsvToHex(state.hsv);
-  const formatted = formatColor(current, format);
+  const formatted = formatColor(current, format, state.alpha);
 
-  const apply = (next: Hsv) => {
+  const apply = (next: Hsv, alpha = state.alpha) => {
     const hex = hsvToHex(next);
-    setState({ hsv: next, draft: formatColor(hex, format), seen: hex });
-    onValueChange(hex);
+    const full = withAlpha(hex, alpha);
+    setState({
+      hsv: next,
+      alpha,
+      draft: formatColor(hex, format, alpha),
+      seen: full,
+    });
+    onValueChange(full);
+  };
+
+  /** Keeps typed and eyedropped colors exact instead of re-rounding them. */
+  const applyHex = (hex: string, alpha: number) => {
+    const full = withAlpha(hex, alpha);
+    setState({
+      hsv: hexToHsv(hex),
+      alpha,
+      draft: formatColor(hex, format, alpha),
+      seen: full,
+    });
+    onValueChange(full);
   };
 
   const commitDraft = () => {
     // Untouched text re-parses lossily in the rounded formats, so skip it.
-    const hex =
+    const parsed =
       state.draft.trim() === formatted ? null : parseColor(state.draft);
-    if (hex && hex !== current) {
-      apply(hexToHsv(hex));
+    if (parsed && withAlpha(parsed.hex, parsed.alpha) !== state.seen) {
+      applyHex(parsed.hex, parsed.alpha);
     } else {
       setState((prev) => ({
         ...prev,
-        draft: formatColor(hsvToHex(prev.hsv), format),
+        draft: formatColor(hsvToHex(prev.hsv), format, prev.alpha),
       }));
     }
   };
@@ -797,7 +971,7 @@ function ColorPopover({
     onFormatChange(next);
     setState((prev) => ({
       ...prev,
-      draft: formatColor(hsvToHex(prev.hsv), next),
+      draft: formatColor(hsvToHex(prev.hsv), next, prev.alpha),
     }));
   };
 
@@ -936,6 +1110,11 @@ function ColorPopover({
           </motion.div>
         </div>
       </div>
+      <AlphaSlider
+        hex={current}
+        alpha={state.alpha}
+        onChange={(alpha) => apply(state.hsv, alpha)}
+      />
       <TooltipProvider>
         <div className="flex items-center gap-1.5">
           <ColorFormatSelector
@@ -1061,7 +1240,7 @@ function ColorPopover({
                         .open()
                         .then((result) => {
                           const hex = normalizeHex(result.sRGBHex);
-                          if (hex) apply(hexToHsv(hex));
+                          if (hex) applyHex(splitAlpha(hex).hex, state.alpha);
                         })
                         .catch(() => {});
                     }}
@@ -1132,7 +1311,10 @@ export function ColorPicker({
         </span>
         <span
           className="size-4.5 rounded-full border border-border/70"
-          style={{ background: value }}
+          style={{
+            backgroundImage: `linear-gradient(${value}, ${value}), ${CHECKER}`,
+            backgroundSize: "auto, 6px 6px",
+          }}
         />
       </button>
       <AnimatePresence>

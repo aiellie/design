@@ -1,5 +1,6 @@
 "use client"
 
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -15,6 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { toast } from "@/components/ui/toast"
 import { highlightCode } from "@/lib/highlight-code"
 import { cn } from "@/lib/utils"
 import {
@@ -98,11 +100,46 @@ export const TerminalTitle = ({
   </div>
 )
 
-export type TerminalStatusProps = HTMLAttributes<HTMLDivElement>
+/**
+ * Status palettes from the Badge example. The dot carries the state, so the
+ * label can stay a plain noun (`Running`) rather than repeating it in colour.
+ */
+const TERMINAL_STATUS_STYLES = {
+  live: "border-blue-500/20 bg-blue-50 text-blue-700 dark:border-blue-400/20 dark:bg-blue-950 dark:text-blue-300",
+  degraded:
+    "border-amber-500/20 bg-amber-50 text-amber-700 dark:border-amber-400/20 dark:bg-amber-950 dark:text-amber-300",
+  offline:
+    "border-slate-500/20 bg-slate-50 text-slate-700 dark:border-slate-400/20 dark:bg-slate-900 dark:text-slate-300",
+} as const
+
+export type TerminalStatusTone = keyof typeof TERMINAL_STATUS_STYLES
+
+function TerminalStatusDot({ pulse = false }: { pulse?: boolean }) {
+  return (
+    <span
+      data-icon="inline-start"
+      className="relative flex size-1.5 shrink-0 items-center justify-center"
+    >
+      {pulse && (
+        <span className="absolute inline-flex size-full animate-ping rounded-full bg-current opacity-60 motion-reduce:hidden" />
+      )}
+      <span
+        aria-hidden
+        className="absolute inline-flex size-full rounded-full border border-current/30"
+      />
+      <span className="relative inline-flex size-1 rounded-full bg-current" />
+    </span>
+  )
+}
+
+export type TerminalStatusProps = ComponentProps<typeof Badge> & {
+  status?: TerminalStatusTone
+}
 
 export const TerminalStatus = ({
   className,
   children,
+  status = "live",
   ...props
 }: TerminalStatusProps) => {
   const { isStreaming } = useContext(TerminalContext)
@@ -112,15 +149,10 @@ export const TerminalStatus = ({
   }
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-2 text-xs text-muted-foreground",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </div>
+    <Badge className={cn(TERMINAL_STATUS_STYLES[status], className)} {...props}>
+      <TerminalStatusDot pulse={status !== "offline"} />
+      {children ?? "Running"}
+    </Badge>
   )
 }
 
@@ -299,14 +331,11 @@ export const TerminalTabAdd = ({
           <DropdownMenuLabel>New tab</DropdownMenuLabel>
           {TERMINAL_TAB_OPTIONS.map((option) => (
             <DropdownMenuItem
-              className="gap-2.5 px-2 py-1.5"
               key={option.type}
               onClick={() => onSelect?.(option.type)}
             >
               <HugeiconsIcon
-                className="size-4 shrink-0 text-muted-foreground"
                 icon={option.icon}
-                strokeWidth={1.5}
               />
               {option.label}
             </DropdownMenuItem>
@@ -339,6 +368,7 @@ export const TerminalCopyButton = ({
 
   const copyToClipboard = useCallback(async () => {
     if (typeof window === "undefined" || !navigator?.clipboard?.writeText) {
+      toast.add({ title: "Could not copy output", type: "error" })
       onError?.(new Error("Clipboard API not available"))
       return
     }
@@ -346,9 +376,11 @@ export const TerminalCopyButton = ({
     try {
       await navigator.clipboard.writeText(output)
       setIsCopied(true)
+      toast.add({ title: "Copied output", type: "success" })
       onCopy?.()
       timeoutRef.current = window.setTimeout(() => setIsCopied(false), timeout)
     } catch (error) {
+      toast.add({ title: "Could not copy output", type: "error" })
       onError?.(error as Error)
     }
   }, [output, onCopy, onError, timeout])
@@ -658,3 +690,4 @@ export const Terminal = ({
     </TerminalContext.Provider>
   )
 }
+
