@@ -56,7 +56,7 @@ const StreamingDemo = () => {
   }, [isStreaming, startedAt]);
 
   return (
-    <div className="flex w-full max-w-md flex-col gap-3">
+    <div className="flex w-full max-w-2xl mx-auto justify-center flex-col gap-3">
       <JSXPreview isStreaming={isStreaming} jsx={STREAMED_JSX.slice(0, length)}>
         <JSXPreviewContent />
         <JSXPreviewError />
@@ -69,6 +69,7 @@ const StreamingDemo = () => {
         }}
         size="sm"
         variant="outline"
+        className="w-fit mx-auto"
       >
         {isStreaming ? "Streaming…" : "Replay stream"}
       </Button>
@@ -77,5 +78,7 @@ const StreamingDemo = () => {
 };
 
 export function JsxPreviewExample() {
-  return <StreamingDemo />;
+  return <div className="w-full max-w-2xl mx-auto justify-center">
+    <StreamingDemo />
+  </div>;
 }

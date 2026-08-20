@@ -49,7 +49,7 @@ function MenuIcon({ icon }: { icon: MenuIconSource }) {
     const Brand = icon
     return <Brand className="size-3.5" />
   }
-  return <HugeiconsIcon icon={icon} strokeWidth={2} className="size-3.5" />
+  return <HugeiconsIcon icon={icon}  className="size-3.5" />
 }
 
 const projects = [
@@ -136,7 +136,7 @@ export function AddMenuExample() {
         <DropdownMenuTrigger
           render={
             <Button variant="outline" size="icon" className="rounded-full">
-              <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} />
+              <HugeiconsIcon icon={PlusSignIcon} />
             </Button>
           }
         />

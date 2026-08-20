@@ -168,8 +168,9 @@ export function PackageInfoExample() {
                     render={
                       <Button
                         aria-label={pkg.name}
-                        size="icon"
+                        size="icon-sm"
                         variant="outline"
+                        className="rounded-full"
                       >
                         {pkg.icon}
                       </Button>

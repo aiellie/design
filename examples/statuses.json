@@ -47,7 +47,7 @@
   "chart": "planned",
   "calendar": "shipped",
   "avatar": "shipped",
-  "card": "planned",
+  "card": "shipped",
   "item": "shipped",
   "separator": "shipped",
   "aspect-ratio": "shipped",
@@ -86,5 +86,11 @@
   "login-form": "shipped",
   "rate-limits": "shipped",
   "mic-selector": "shipped",
-  "autocomplete": "shipped"
+  "autocomplete": "shipped",
+  "jsx-preview": "shipped",
+  "context": "shipped",
+  "add-menu":"shipped",
+  "approval-menu":"shipped",
+  "web-preview":"shipped",
+  "orb":"shipped"
 }

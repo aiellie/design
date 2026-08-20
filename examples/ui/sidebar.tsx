@@ -62,7 +62,7 @@ import {
   CreditCardIcon,
   CropIcon,
   DashboardSpeed01Icon,
-  Delete02Icon,
+  Trash,
   FolderOpenIcon,
   Logout01Icon,
   MapsIcon,
@@ -508,7 +508,7 @@ export function SidebarExample() {
                       <DropdownMenuGroup>
                         <DropdownMenuItem variant="destructive">
                           <HugeiconsIcon
-                            icon={Delete02Icon}
+                            icon={Trash}
                             strokeWidth={1.5}
                             className="size-3.5"
                           />
