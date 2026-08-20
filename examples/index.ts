@@ -101,6 +101,7 @@ import {
   Folder01Icon,
   GitBranchIcon,
   GlobalIcon,
+  HandIcon,
   HelpCircleIcon,
   HelpSquareIcon,
   HighlighterIcon,
@@ -130,6 +131,7 @@ import {
   Route01Icon,
   RowInsertIcon,
   SearchList01Icon,
+  SentIcon,
   SidebarBottomIcon,
   SidebarLeft01Icon,
   SidebarRight01Icon,
@@ -187,6 +189,8 @@ import { OrbExample } from "@/examples/audio/orb"
 import { ModelSelectorExample } from "./models/model-selector"
 import { AutocompleteExample } from "@/examples/ellieui/autocomplete"
 import { ContextExample } from "./chat/context"
+import { ApprovalMenuExample } from "./chat/approval-menu"
+import { MessageInputExample } from "./chat/message-input"
 import { PromptInputExample } from "./chat/prompt-input"
 export type { ExampleStatus }
 
@@ -285,6 +289,14 @@ export function exampleFilePath(slug: string): string {
   )
     return `examples/locale/${slug}.tsx`
   if (slug === "web-preview") return `examples/web/${slug}.tsx`
+  if (
+    slug === "open-in-chat" ||
+    slug === "context" ||
+    slug === "prompt-input" ||
+    slug === "message-input" ||
+    slug === "approval-menu"
+  )
+    return `examples/chat/${slug}.tsx`
   return `examples/ui/${slug}.tsx`
 }
 
@@ -847,6 +859,18 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Prompt Input",
         component: PromptInputExample,
         icon: Chatting01Icon,
+      },
+      {
+        slug: "message-input",
+        name: "Message Input",
+        component: MessageInputExample,
+        icon: SentIcon,
+      },
+      {
+        slug: "approval-menu",
+        name: "Approval Menu",
+        component: ApprovalMenuExample,
+        icon: HandIcon,
       },
     ],
   },
