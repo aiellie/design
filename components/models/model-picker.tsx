@@ -5,6 +5,11 @@ import {
   ModelSelectorLogoGroup,
   ModelSelectorName,
 } from "@/components/models/model-selector";
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+} from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -171,30 +176,47 @@ export const ModelPicker = ({
             <DropdownMenuTrigger
               render={
                 <Button
-                  variant="outline"
+                  variant="ghost"
+                  size="icon"
                   aria-label={summary}
-                  className={cn("gap-2 px-2.5", className)}
+                  className={cn("rounded-full", className)}
                   {...props}
                 >
-                  {selected && <ChefIcon slug={selected.chefSlug} />}
-                  <EffortBars effort={effort} chef={chef} />
-                  {fastMode && (
-                    <HugeiconsIcon
-                      icon={ZapIcon}
-                      strokeWidth={2}
-                      className={cn(
-                        "size-3.5",
-                        chef?.fastClass ?? "fill-current text-foreground"
+                  <Avatar>
+                    <AvatarFallback>
+                      {selected && (
+                        <ChefIcon
+                          slug={selected.chefSlug}
+                          className="size-4"
+                        />
                       )}
-                    />
-                  )}
-                  {thinking && (
-                    <HugeiconsIcon
-                      icon={Brain02Icon}
-                      strokeWidth={2}
-                      className="size-3.5 fill-current text-foreground"
-                    />
-                  )}
+                    </AvatarFallback>
+                    {fastMode && (
+                      <AvatarBadge
+                        className={cn(
+                          "text-white",
+                          chef?.colorClass,
+                          // Sit next to the thinking badge when both are shown.
+                          thinking && "right-2"
+                        )}
+                      >
+                        <HugeiconsIcon
+                          icon={ZapIcon}
+                          strokeWidth={2}
+                          className="fill-current"
+                        />
+                      </AvatarBadge>
+                    )}
+                    {thinking && (
+                      <AvatarBadge>
+                        <HugeiconsIcon
+                          icon={Brain02Icon}
+                          strokeWidth={2}
+                          className="fill-current"
+                        />
+                      </AvatarBadge>
+                    )}
+                  </Avatar>
                 </Button>
               }
             />
