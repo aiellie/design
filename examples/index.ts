@@ -134,6 +134,7 @@ import {
   SidebarLeft01Icon,
   SidebarRight01Icon,
   SlidersHorizontalIcon,
+  SwipeDown01Icon,
   SmileIcon,
   SolidLine01Icon,
   SparklesIcon,
@@ -186,6 +187,7 @@ import { OrbExample } from "@/examples/audio/orb"
 import { ModelSelectorExample } from "./models/model-selector"
 import { AutocompleteExample } from "@/examples/ellieui/autocomplete"
 import { ContextExample } from "./chat/context"
+import { PromptInputExample } from "./chat/prompt-input"
 export type { ExampleStatus }
 
 /** One demo inside an example — a tab in the viewer when there's more than one. */
@@ -807,7 +809,7 @@ export const exampleCategories: ExampleCategory[] = [
         slug: "message-scroller",
         name: "Message Scroller",
         component: MessageScrollerExample,
-        icon: Chatting01Icon,
+        icon: SwipeDown01Icon,
       },
       {
         slug: "bubble",
@@ -839,6 +841,12 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Context",
         component: ContextExample,
         icon: Progress02Icon,
+      },
+      {
+        slug: "prompt-input",
+        name: "Prompt Input",
+        component: PromptInputExample,
+        icon: Chatting01Icon,
       },
     ],
   },
