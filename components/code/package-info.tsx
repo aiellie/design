@@ -106,7 +106,8 @@ export const PackageInfo = ({
             <PackageInfoIcon />
             <PackageInfoInfo>
               <PackageInfoName />
-              <PackageInfoVersion />
+              {/* The change type badge already carries the versions. */}
+              {!changeType && <PackageInfoVersion />}
             </PackageInfoInfo>
             <PackageInfoChangeType />
           </PackageInfoHeader>
@@ -298,16 +299,22 @@ export const PackageInfoChangeType = ({
   children,
   ...props
 }: PackageInfoChangeTypeProps) => {
-  const { changeType } = useContext(PackageInfoContext);
+  const { changeType, currentVersion, newVersion } =
+    useContext(PackageInfoContext);
 
   if (!changeType) {
     return null;
   }
 
+  // The change type colors and glyphs the badge; the versions are its label,
+  // falling back to the type's name when neither version is known.
+  const hasVersions = Boolean(currentVersion || newVersion);
+
   return (
     <Badge
       className={cn(
-        "shrink-0 capitalize",
+        "shrink-0",
+        hasVersions ? "font-mono" : "capitalize",
         changeTypeStyles[changeType],
         className
       )}
@@ -320,7 +327,31 @@ export const PackageInfoChangeType = ({
         icon={changeTypeIcons[changeType]}
         strokeWidth={2}
       />
-      {children ?? changeType}
+      {children ??
+        (hasVersions ? (
+          <>
+            {currentVersion && (
+              <span
+                className={cn(
+                  "opacity-70",
+                  changeType === "removed" && "line-through"
+                )}
+              >
+                {currentVersion}
+              </span>
+            )}
+            {currentVersion && newVersion && (
+              <HugeiconsIcon
+                className="shrink-0 rtl:rotate-180"
+                icon={ArrowRight01Icon}
+                strokeWidth={2}
+              />
+            )}
+            {newVersion && <span>{newVersion}</span>}
+          </>
+        ) : (
+          changeType
+        ))}
     </Badge>
   );
 };

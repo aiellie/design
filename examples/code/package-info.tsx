@@ -17,7 +17,6 @@ import {
   PackageInfoIcon,
   PackageInfoInfo,
   PackageInfoName,
-  PackageInfoVersion,
 } from "@/components/code/package-info"
 import { Button } from "@/components/ui/button"
 import {
@@ -99,13 +98,17 @@ const handleCopyError = () => {
 }
 
 function PackageInfoCard({ pkg }: { pkg: Package }) {
+  // The version badge leaves the header too narrow for prose, so the
+  // description drops into the collapsible body alongside the dependencies.
+  const hasContent = Boolean(pkg.description || pkg.dependencies)
+
   return (
     <PackageInfo
       changeType={pkg.changeType}
       className="border-none bg-transparent"
       currentVersion={pkg.currentVersion}
-      defaultOpen={Boolean(pkg.dependencies)}
-      disabled={!pkg.dependencies}
+      defaultOpen={hasContent}
+      disabled={!hasContent}
       name={pkg.name}
       newVersion={pkg.newVersion}
     >
@@ -113,10 +116,6 @@ function PackageInfoCard({ pkg }: { pkg: Package }) {
         <PackageInfoIcon>{pkg.icon}</PackageInfoIcon>
         <PackageInfoInfo>
           <PackageInfoName />
-          <PackageInfoVersion />
-          {pkg.description && (
-            <PackageInfoDescription>{pkg.description}</PackageInfoDescription>
-          )}
         </PackageInfoInfo>
         <PackageInfoChangeType />
         <PackageInfoActions>
@@ -133,19 +132,24 @@ function PackageInfoCard({ pkg }: { pkg: Package }) {
             <TooltipContent>Copy command</TooltipContent>
           </Tooltip>
         </PackageInfoActions>
-        {pkg.dependencies && <PackageInfoExpandButton />}
+        {hasContent && <PackageInfoExpandButton />}
       </PackageInfoHeader>
-      {pkg.dependencies && (
-        <PackageInfoContent>
-          <PackageInfoDependencies>
-            {pkg.dependencies.map((dependency) => (
-              <PackageInfoDependency
-                key={dependency.name}
-                name={dependency.name}
-                version={dependency.version}
-              />
-            ))}
-          </PackageInfoDependencies>
+      {hasContent && (
+        <PackageInfoContent className="space-y-3">
+          {pkg.description && (
+            <PackageInfoDescription>{pkg.description}</PackageInfoDescription>
+          )}
+          {pkg.dependencies && (
+            <PackageInfoDependencies>
+              {pkg.dependencies.map((dependency) => (
+                <PackageInfoDependency
+                  key={dependency.name}
+                  name={dependency.name}
+                  version={dependency.version}
+                />
+              ))}
+            </PackageInfoDependencies>
+          )}
         </PackageInfoContent>
       )}
     </PackageInfo>

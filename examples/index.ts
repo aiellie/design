@@ -124,6 +124,7 @@ import {
   Navigation03Icon,
   NoteIcon,
   Notification03Icon,
+  PlusSignIcon,
   Progress01Icon,
   Progress02Icon,
   RadioButtonIcon,
@@ -155,6 +156,8 @@ import {
   ToggleOnIcon,
   TranslateIcon,
   UserCircleIcon,
+  QueueIcon,
+  AddIcon,
 } from "@hugeicons/core-free-icons"
 import { ArtifactExample } from "@/examples/code/artifact"
 import { CodeBlockExample } from "@/examples/code/code-block"
@@ -186,12 +189,16 @@ import { Brain01Icon, Orbit01Icon } from "@hugeicons/core-free-icons"
 import { RateLimitsExample } from "./models/rate-limits"
 import { LimitationIcon } from "@hugeicons/core-free-icons"
 import { OrbExample } from "@/examples/audio/orb"
+import { ModelPickerExample } from "./models/model-picker"
 import { ModelSelectorExample } from "./models/model-selector"
+import { CpuIcon } from "@hugeicons/core-free-icons"
+import { AddMenuExample } from "@/examples/ellieui/add-menu"
 import { AutocompleteExample } from "@/examples/ellieui/autocomplete"
 import { ContextExample } from "./chat/context"
 import { ApprovalMenuExample } from "./chat/approval-menu"
 import { MessageInputExample } from "./chat/message-input"
 import { PromptInputExample } from "./chat/prompt-input"
+import { QueueExample } from "./chat/queue"
 export type { ExampleStatus }
 
 /** One demo inside an example — a tab in the viewer when there's more than one. */
@@ -289,12 +296,21 @@ export function exampleFilePath(slug: string): string {
   )
     return `examples/locale/${slug}.tsx`
   if (slug === "web-preview") return `examples/web/${slug}.tsx`
+  if (slug === "autocomplete" || slug === "add-menu")
+    return `examples/ellieui/${slug}.tsx`
+  if (
+    slug === "rate-limits" ||
+    slug === "model-selector" ||
+    slug === "model-picker"
+  )
+    return `examples/models/${slug}.tsx`
   if (
     slug === "open-in-chat" ||
     slug === "context" ||
     slug === "prompt-input" ||
     slug === "message-input" ||
-    slug === "approval-menu"
+    slug === "approval-menu" ||
+    slug === "queue"
   )
     return `examples/chat/${slug}.tsx`
   return `examples/ui/${slug}.tsx`
@@ -872,6 +888,18 @@ export const exampleCategories: ExampleCategory[] = [
         component: ApprovalMenuExample,
         icon: HandIcon,
       },
+      {
+        slug: "queue",
+        name: "Queue",
+        component: QueueExample,
+        icon: QueueIcon,
+      },
+      {
+        slug: "add-menu",
+        name: "Add Menu",
+        component: AddMenuExample,
+        icon: AddIcon,
+      },
     ],
   },
   {
@@ -1075,6 +1103,12 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Model Selector",
         component: ModelSelectorExample,
         icon: BotIcon,
+      },
+      {
+        slug: "model-picker",
+        name: "Model Picker",
+        component: ModelPickerExample,
+        icon: CpuIcon,
       },
     ],
   },

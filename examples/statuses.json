@@ -70,6 +70,7 @@
   "tailwind-color-picker": "shipped",
   "countries-select": "shipped",
   "language-selector": "shipped",
+  "artifact": "shipped",
   "environment-variables": "shipped",
   "test-results": "building",
   "schema-display": "building",
