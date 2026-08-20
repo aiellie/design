@@ -75,6 +75,7 @@ import {
   ArrowExpand01Icon,
   ArrowLeftRightIcon,
   Attachment01Icon,
+  BotIcon,
   BlurIcon,
   BrowserIcon,
   BubbleChatIcon,
@@ -149,7 +150,7 @@ import {
   ToggleOnIcon,
   TranslateIcon,
   UserCircleIcon,
-} from "@/icons/huge-icons"
+} from "@hugeicons/core-free-icons"
 import { ArtifactExample } from "@/examples/code/artifact"
 import { CodeBlockExample } from "@/examples/code/code-block"
 import { CodeLanguageSelectorExample } from "@/examples/code/code-language-selector"
@@ -180,6 +181,7 @@ import { Brain01Icon, Orbit01Icon } from "@hugeicons/core-free-icons"
 import { RateLimitsExample } from "./models/rate-limits"
 import { LimitationIcon } from "@hugeicons/core-free-icons"
 import { OrbExample } from "@/examples/audio/orb"
+import { ModelSelectorExample } from "./models/model-selector"
 export type { ExampleStatus }
 
 /** One demo inside an example — a tab in the viewer when there's more than one. */
@@ -1019,6 +1021,12 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Rate Limits",
         component: RateLimitsExample,
         icon: LimitationIcon,
+      },
+      {
+        slug: "model-selector",
+        name: "Model Selector",
+        component: ModelSelectorExample,
+        icon: BotIcon,
       },
     ],
   },
