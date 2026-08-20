@@ -141,9 +141,20 @@ const colorIconEntries = (
 const brandIconLabels: Record<keyof typeof BrandIcons, string> = {
   googleDrive: "Google Drive",
   slack: "Slack",
+  gmail: "Gmail",
+  googleCalendar: "Google Calendar",
+  googleSheets: "Google Sheets",
+  googleSlides: "Google Slides",
+  googleDocs: "Google Docs",
   google: "Google",
   apple: "Apple",
   paypal: "PayPal",
+  github: "GitHub",
+  openai: "OpenAI",
+  claude: "Claude",
+  cursor: "Cursor",
+  scira: "Scira",
+  v0: "v0"
 }
 
 const brandIconSections = [
