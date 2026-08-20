@@ -5,6 +5,7 @@ import {
   MessageInputField,
   MessageInputSubmit,
 } from "@/components/chat/message-input";
+import { AddMenuExample } from "@/examples/ellieui/add-menu";
 import type { ChatStatus } from "ai";
 import { useEffect, useRef, useState } from "react";
 
@@ -37,8 +38,11 @@ const Example = () => {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-sm flex-col gap-4">
+    <div className="mx-auto flex w-full max-w-sm flex-row gap-4">
       <MessageInput onSubmit={handleSubmit}>
+        <div className="flex flex-row gap-2">
+          <AddMenuExample />
+        </div>
         <MessageInputField />
         <MessageInputSubmit status={status} onStop={handleStop} />
       </MessageInput>

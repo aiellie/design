@@ -1,7 +1,7 @@
 {
   "colors": "idea",
   "typeset": "planned",
-  "icons": "planned",
+  "icons": "shipped",
   "button": "shipped",
   "button-group": "shipped",
   "toggle": "shipped",
@@ -60,6 +60,7 @@
   "attachment": "shipped",
   "message": "shipped",
   "message-scroller": "planned",
+  "message-input": "shipped",
   "bubble": "shipped",
   "marker": "shipped",
   "questionnaire": "shipped",
@@ -92,5 +93,6 @@
   "add-menu":"shipped",
   "approval-menu":"shipped",
   "web-preview":"shipped",
-  "orb":"shipped"
+  "orb":"shipped",
+  "queue":"shipped"
 }

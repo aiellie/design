@@ -23,12 +23,7 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@/components/ui/input-group"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Tooltip,
   TooltipContent,
@@ -159,13 +154,6 @@ const brandIconLabels: Record<keyof typeof BrandIcons, string> = {
   v0: "v0"
 }
 
-const categories = [
-  { id: "hugeicons", label: "Hugeicons", icon: HugeIcons.SparklesIcon },
-  { id: "code", label: "Code", icon: HugeIcons.CodeSquareIcon },
-  { id: "color", label: "Color", icon: HugeIcons.PaintBoardIcon },
-  { id: "brands", label: "Brands", icon: HugeIcons.StarIcon },
-] as const
-
 /** Lowercased, punctuation-free haystack so "arrow up" matches `ArrowUp01Icon`. */
 function normalize(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "")
@@ -238,8 +226,8 @@ const brandIconSections: IconSection[] = [
   },
 ]
 
-/** Everything the search sweeps across, in tab order. */
-const searchSections: IconSection[] = [
+/** Every section, in display order; search sweeps across all of them. */
+const iconSections: IconSection[] = [
   { label: "Hugeicons", tiles: hugeIconTiles },
   ...codeIconSections.map((section) => ({
     ...section,
@@ -281,7 +269,7 @@ function TileGrid({ tiles }: { tiles: IconTileData[] }) {
 
 function SectionedTileGrid({ sections }: { sections: IconSection[] }) {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 p-0.5">
       {sections.map((section) => (
         <div key={section.label} className="flex flex-col gap-2">
           <div className="text-xs font-medium text-muted-foreground">
@@ -295,13 +283,12 @@ function SectionedTileGrid({ sections }: { sections: IconSection[] }) {
 }
 
 export function IconsExample() {
-  const [activeTab, setActiveTab] = React.useState<string | null>("hugeicons")
   const [query, setQuery] = React.useState("")
 
   const results = React.useMemo(() => {
     const terms = query.split(/\s+/).map(normalize).filter(Boolean)
     if (terms.length === 0) return null
-    return searchSections
+    return iconSections
       .map((section) => ({
         ...section,
         tiles: section.tiles.filter((tile) =>
@@ -348,72 +335,26 @@ export function IconsExample() {
             </InputGroupAddon>
           )}
         </InputGroup>
-        {results ? (
-          results.length > 0 ? (
-            <SectionedTileGrid sections={results} />
-          ) : (
-            <Empty className="border">
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <HugeiconsIcon
-                    icon={HugeIcons.Search01Icon}
-                    strokeWidth={2}
-                  />
-                </EmptyMedia>
-                <EmptyTitle>No icons found</EmptyTitle>
-                <EmptyDescription>
-                  No matches for &ldquo;{query.trim()}&rdquo;. Try a different
-                  search.
-                </EmptyDescription>
-              </EmptyHeader>
-            </Empty>
-          )
+        {results && results.length === 0 ? (
+          <Empty className="border">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <HugeiconsIcon
+                  icon={HugeIcons.Search01Icon}
+                  strokeWidth={2}
+                />
+              </EmptyMedia>
+              <EmptyTitle>No icons found</EmptyTitle>
+              <EmptyDescription>
+                No matches for &ldquo;{query.trim()}&rdquo;. Try a different
+                search.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : (
-          <Tabs
-            value={activeTab}
-            onValueChange={(value) => setActiveTab(value as string)}
-            className="w-full"
-          >
-            <TabsList className="h-auto flex-wrap">
-              {categories.map((category) => (
-                <Tooltip key={category.id} disabled={activeTab === category.id}>
-                  <TooltipTrigger
-                    render={
-                      <TabsTrigger
-                        value={category.id}
-                        className="group/trigger flex-none gap-0"
-                        onClick={() => {
-                          if (activeTab === category.id) {
-                            setActiveTab(null)
-                          }
-                        }}
-                      >
-                        <HugeiconsIcon icon={category.icon} strokeWidth={2} />
-                        <span className="inline-grid grid-cols-[0fr] transition-[grid-template-columns] duration-300 ease-out group-data-active/trigger:grid-cols-[1fr]">
-                          <span className="min-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-opacity duration-300 group-data-active/trigger:pl-1.5 group-data-active/trigger:opacity-100">
-                            {category.label}
-                          </span>
-                        </span>
-                      </TabsTrigger>
-                    }
-                  />
-                  <TooltipContent>{category.label}</TooltipContent>
-                </Tooltip>
-              ))}
-            </TabsList>
-            <TabsContent value="hugeicons">
-              <TileGrid tiles={hugeIconTiles} />
-            </TabsContent>
-            <TabsContent value="code">
-              <SectionedTileGrid sections={codeIconSections} />
-            </TabsContent>
-            <TabsContent value="color">
-              <TileGrid tiles={colorIconTiles} />
-            </TabsContent>
-            <TabsContent value="brands">
-              <SectionedTileGrid sections={brandIconSections} />
-            </TabsContent>
-          </Tabs>
+          <ScrollArea className="-me-2 pe-2 *:data-[slot=scroll-area-viewport]:max-h-90">
+            <SectionedTileGrid sections={results ?? iconSections} />
+          </ScrollArea>
         )}
       </CardContent>
     </Card>

@@ -871,12 +871,6 @@ export const exampleCategories: ExampleCategory[] = [
         icon: Progress02Icon,
       },
       {
-        slug: "prompt-input",
-        name: "Prompt Input",
-        component: PromptInputExample,
-        icon: Chatting01Icon,
-      },
-      {
         slug: "message-input",
         name: "Message Input",
         component: MessageInputExample,
@@ -900,6 +894,12 @@ export const exampleCategories: ExampleCategory[] = [
         component: AddMenuExample,
         icon: AddIcon,
       },
+          /*   {
+        slug: "prompt-input",
+        name: "Prompt Input",
+        component: PromptInputExample,
+        icon: Chatting01Icon,
+      },*/
     ],
   },
   {
