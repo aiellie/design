@@ -84,5 +84,6 @@
   "open-in-chat": "shipped",
   "login-form": "shipped",
   "rate-limits": "shipped",
-  "mic-selector": "shipped"
+  "mic-selector": "shipped",
+  "autocomplete": "shipped"
 }

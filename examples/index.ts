@@ -135,6 +135,7 @@ import {
   SlidersHorizontalIcon,
   SmileIcon,
   SolidLine01Icon,
+  SparklesIcon,
   Sorting01Icon,
   SquareLock01Icon,
   Table01Icon,
@@ -182,6 +183,8 @@ import { RateLimitsExample } from "./models/rate-limits"
 import { LimitationIcon } from "@hugeicons/core-free-icons"
 import { OrbExample } from "@/examples/audio/orb"
 import { ModelSelectorExample } from "./models/model-selector"
+import { AutocompleteExample } from "@/examples/ellieui/autocomplete"
+import { ContextExample } from "./chat/context"
 export type { ExampleStatus }
 
 /** One demo inside an example — a tab in the viewer when there's more than one. */
@@ -535,6 +538,12 @@ export const exampleCategories: ExampleCategory[] = [
     type: "ui",
     examples: [
       {
+        slug: "autocomplete",
+        name: "Autocomplete",
+        component: AutocompleteExample,
+        icon: SearchList01Icon,
+      },
+      {
         slug: "dropdown-menu",
         name: "Dropdown Menu",
         component: DropdownMenuExample,
@@ -822,6 +831,12 @@ export const exampleCategories: ExampleCategory[] = [
         slug: "open-in-chat",
         name: "Open in Chat",
         component: OpenInChatExample,
+        icon: Chatting01Icon,
+      },
+      {
+        slug: "context",
+        name: "Context",
+        component: ContextExample,
         icon: Chatting01Icon,
       },
     ],
