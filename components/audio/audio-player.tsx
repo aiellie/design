@@ -182,16 +182,16 @@ export const AudioPlayerPlayButton = ({
           {...props}
         >
           <HugeiconsIcon
-            className="size-4 fill-none"
+            className="size-4 fill-none text-muted-foreground"
             icon={PlayIcon}
             slot="play"
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
           <HugeiconsIcon
-            className="size-4 fill-none"
+            className="size-4 fill-none text-muted-foreground"
             icon={PauseIcon}
             slot="pause"
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         </MediaPlayButton>
       }
@@ -223,10 +223,10 @@ export const AudioPlayerSeekBackwardButton = ({
           {...props}
         >
           <HugeiconsIcon
-            className="size-4 fill-none"
+            className="size-4 fill-none text-muted-foreground"
             icon={seekBackwardIcons[seekOffset] ?? GoBackward10SecIcon}
             slot="icon"
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         </MediaSeekBackwardButton>
       }
@@ -258,10 +258,10 @@ export const AudioPlayerSeekForwardButton = ({
           {...props}
         >
           <HugeiconsIcon
-            className="size-4 fill-none"
+            className="size-4 fill-none text-muted-foreground"
             icon={seekForwardIcons[seekOffset] ?? GoForward10SecIcon}
             slot="icon"
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         </MediaSeekForwardButton>
       }
@@ -279,7 +279,7 @@ export const AudioPlayerTimeDisplay = ({
 }: AudioPlayerTimeDisplayProps) => (
   <InputGroupText>
     <MediaTimeDisplay
-      className={cn("bg-transparent tabular-nums", className)}
+      className={cn("bg-transparent tabular-nums text-muted-foreground pr-2", className)}
       data-slot="audio-player-time-display"
       {...props}
     />
@@ -309,7 +309,7 @@ export const AudioPlayerDurationDisplay = ({
 }: AudioPlayerDurationDisplayProps) => (
   <InputGroupText>
     <MediaDurationDisplay
-      className={cn("bg-transparent tabular-nums", className)}
+      className={cn("bg-transparent tabular-nums text-muted-foreground pr-1", className)}
       data-slot="audio-player-duration-display"
       {...props}
     />
@@ -338,28 +338,28 @@ export const AudioPlayerMuteButton = ({
           {...props}
         >
           <HugeiconsIcon
-            className="size-4 fill-none"
+            className="size-4 fill-none text-muted-foreground"
             icon={VolumeOffIcon}
             slot="off"
-            strokeWidth={2}
+            strokeWidth={1.5}   
           />
           <HugeiconsIcon
-            className="size-4 fill-none"
+            className="size-4 fill-none text-muted-foreground"
             icon={VolumeLowIcon}
             slot="low"
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
           <HugeiconsIcon
-            className="size-4 fill-none"
+            className="size-4 fill-none text-muted-foreground"
             icon={VolumeHighIcon}
             slot="medium"
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
           <HugeiconsIcon
-            className="size-4 fill-none"
+            className="size-4 fill-none text-muted-foreground"
             icon={VolumeHighIcon}
             slot="high"
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
         </MediaMuteButton>
       }
@@ -376,7 +376,7 @@ export const AudioPlayerVolumeRange = ({
   ...props
 }: AudioPlayerVolumeRangeProps) => (
   <MediaVolumeRange
-    className={cn("w-20 bg-transparent", className)}
+    className={cn("w-20 bg-transparent pr-2", className)}
     data-slot="audio-player-volume-range"
     {...props}
   />
