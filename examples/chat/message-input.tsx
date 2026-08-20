@@ -5,7 +5,7 @@ import {
   MessageInputField,
   MessageInputSubmit,
 } from "@/components/chat/message-input";
-import { AddMenuExample } from "@/examples/ellieui/add-menu";
+import { AddMenuExample } from "@/examples/chat/add-menu";
 import type { ChatStatus } from "ai";
 import { useEffect, useRef, useState } from "react";
 
