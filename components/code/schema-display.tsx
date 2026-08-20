@@ -6,9 +6,21 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { ChevronRightIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  Download01Icon,
+  InformationCircleIcon,
+  SlidersHorizontalIcon,
+  Upload01Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import type { ComponentProps, HTMLAttributes } from "react";
 import { createContext, useContext, useMemo } from "react";
 
@@ -126,16 +138,41 @@ export const SchemaDisplayDescription = ({
 
   return (
     <p
-      className={cn(
-        "border-b px-4 py-3 text-muted-foreground text-sm",
-        className
-      )}
+      className={cn("text-muted-foreground text-xs pl-1", className)}
       {...props}
     >
       {children ?? description}
     </p>
   );
 };
+
+export type SchemaDisplayMessageProps = ComponentProps<
+  typeof PopoverTrigger
+> & {
+  icon?: IconSvgElement;
+};
+
+export const SchemaDisplayMessage = ({
+  icon = InformationCircleIcon,
+  className,
+  children,
+  ...props
+}: SchemaDisplayMessageProps) => (
+  <Popover>
+    <PopoverTrigger
+      className={cn(
+        "ml-auto flex size-5 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground transition-opacity hover:opacity-80",
+        className
+      )}
+      {...props}
+    >
+      <HugeiconsIcon icon={icon} className="size-3.5" />
+    </PopoverTrigger>
+    <PopoverContent align="end" className="w-auto max-w-72">
+      {children}
+    </PopoverContent>
+  </Popover>
+);
 
 export type SchemaDisplayContentProps = HTMLAttributes<HTMLDivElement>;
 
@@ -161,9 +198,17 @@ export const SchemaDisplayParameter = ({
   className,
   ...props
 }: SchemaDisplayParameterProps) => (
-  <div className={cn("px-4 py-3 pl-10", className)} {...props}>
-    <div className="flex items-center gap-2">
-      <span className="font-mono text-sm">{name}</span>
+  <div
+    className={cn("flex min-w-0 items-center gap-2 px-4 py-3 pl-10", className)}
+    {...props}
+  >
+    <span className="shrink-0 font-mono text-sm">{name}</span>
+    {description && (
+      <span className="min-w-0 truncate text-muted-foreground text-sm">
+        {description}
+      </span>
+    )}
+    <span className="ml-auto flex shrink-0 items-center gap-2">
       <Badge className="text-xs" variant="outline">
         {type}
       </Badge>
@@ -180,10 +225,7 @@ export const SchemaDisplayParameter = ({
           required
         </Badge>
       )}
-    </div>
-    {description && (
-      <p className="mt-1 text-muted-foreground text-sm">{description}</p>
-    )}
+    </span>
   </div>
 );
 
@@ -199,11 +241,22 @@ export const SchemaDisplayParameters = ({
   return (
     <Collapsible className={cn(className)} /*defaultOpen*/ {...props}>
       <CollapsibleTrigger className="group flex w-full items-center gap-2 px-4 py-3 text-left transition-colors hover:bg-muted/50">
-        <HugeiconsIcon icon={ChevronRightIcon} className="size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90" />
-        <span className="font-medium text-sm">Parameters</span>
+        <HugeiconsIcon
+          icon={SlidersHorizontalIcon}
+          className="size-4 shrink-0 text-muted-foreground"
+        />
+        <span className="font-normal text-sm">Parameters</span>
         <Badge className="ml-auto text-xs" variant="secondary">
           {parameters?.length}
         </Badge>
+        <HugeiconsIcon
+          icon={ChevronRightIcon}
+          className="size-4 shrink-0 text-muted-foreground group-data-[panel-open]:hidden"
+        />
+        <HugeiconsIcon
+          icon={ChevronDownIcon}
+          className="hidden size-4 shrink-0 text-muted-foreground group-data-[panel-open]:block"
+        />
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className="divide-y border-t">
@@ -241,33 +294,39 @@ export const SchemaDisplayProperty = ({
       <Collapsible /*defaultOpen={depth < 2}*/>
         <CollapsibleTrigger
           className={cn(
-            "group flex w-full items-center gap-2 py-3 text-left transition-colors hover:bg-muted/50",
+            "group flex min-w-0 w-full items-center gap-2 py-3 pr-4 text-left transition-colors hover:bg-muted/50",
             className
           )}
           style={{ paddingLeft }}
         >
-          <HugeiconsIcon icon={ChevronRightIcon}   className="size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90" />
-          <span className="font-mono text-sm">{name}</span>
-          <Badge className="text-xs" variant="outline">
-            {type}
-          </Badge>
-          {required && (
-            <Badge
-              className="bg-red-500/5 text-red-500 text-xs dark:bg-red-900/30 dark:text-red-400"
-              variant="secondary"
-            >
-              required
-            </Badge>
+          <HugeiconsIcon
+            icon={ChevronRightIcon}
+            className="size-4 shrink-0 text-muted-foreground group-data-[panel-open]:hidden"
+          />
+          <HugeiconsIcon
+            icon={ChevronDownIcon}
+            className="hidden size-4 shrink-0 text-muted-foreground group-data-[panel-open]:block"
+          />
+          <span className="shrink-0 font-mono text-sm">{name}</span>
+          {description && (
+            <span className="min-w-0 truncate text-muted-foreground text-sm">
+              {description}
+            </span>
           )}
+          <span className="ml-auto flex shrink-0 items-center gap-2">
+            <Badge className="text-xs" variant="outline">
+              {type}
+            </Badge>
+            {required && (
+              <Badge
+                className="bg-red-500/5 text-red-500 text-xs dark:bg-red-900/30 dark:text-red-400"
+                variant="secondary"
+              >
+                required
+              </Badge>
+            )}
+          </span>
         </CollapsibleTrigger>
-        {description && (
-          <p
-            className="pb-2 text-muted-foreground text-sm"
-            style={{ paddingLeft: paddingLeft + 24 }}
-          >
-            {description}
-          </p>
-        )}
         <CollapsibleContent>
           <div className="divide-y border-t">
             {properties?.map((prop) => (
@@ -292,14 +351,19 @@ export const SchemaDisplayProperty = ({
 
   return (
     <div
-      className={cn("py-3 pr-4", className)}
+      className={cn("flex min-w-0 items-center gap-2 py-3 pr-4", className)}
       style={{ paddingLeft }}
       {...props}
     >
-      <div className="flex items-center gap-2">
-        {/* Spacer for alignment */}
-        <span className="size-4" />
-        <span className="font-mono text-sm">{name}</span>
+      {/* Spacer for alignment */}
+      <span className="size-4 shrink-0" />
+      <span className="shrink-0 font-mono text-sm">{name}</span>
+      {description && (
+        <span className="min-w-0 truncate text-muted-foreground text-sm">
+          {description}
+        </span>
+      )}
+      <span className="ml-auto flex shrink-0 items-center gap-2">
         <Badge className="text-xs" variant="outline">
           {type}
         </Badge>
@@ -311,10 +375,7 @@ export const SchemaDisplayProperty = ({
             required
           </Badge>
         )}
-      </div>
-      {description && (
-        <p className="mt-1 pl-6 text-muted-foreground text-sm">{description}</p>
-      )}
+      </span>
     </div>
   );
 };
@@ -331,8 +392,22 @@ export const SchemaDisplayRequest = ({
   return (
     <Collapsible className={cn(className)} /*defaultOpen*/ {...props}>
       <CollapsibleTrigger className="group flex w-full items-center gap-2 px-4 py-3 text-left transition-colors hover:bg-muted/50">
-        <HugeiconsIcon icon={ChevronRightIcon} className="size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90" />
-        <span className="font-medium text-sm">Request Body</span>
+        <HugeiconsIcon
+          icon={Upload01Icon}
+          className="size-4 shrink-0 text-muted-foreground"
+        />
+        <span className="font-normal text-sm">Request Body</span>
+        <Badge className="ml-auto text-xs" variant="secondary">
+          {requestBody?.length}
+        </Badge>
+        <HugeiconsIcon
+          icon={ChevronRightIcon}
+          className="size-4 shrink-0 text-muted-foreground group-data-[panel-open]:hidden"
+        />
+        <HugeiconsIcon
+          icon={ChevronDownIcon}
+          className="hidden size-4 shrink-0 text-muted-foreground group-data-[panel-open]:block"
+        />
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className="border-t">
@@ -358,8 +433,22 @@ export const SchemaDisplayResponse = ({
   return (
     <Collapsible className={cn(className)} /*defaultOpen*/ {...props}>
       <CollapsibleTrigger className="group flex w-full items-center gap-2 px-4 py-3 text-left transition-colors hover:bg-muted/50">
-        <HugeiconsIcon icon={ChevronRightIcon} className="size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-90" />
-        <span className="font-medium text-sm">Response</span>
+        <HugeiconsIcon
+          icon={Download01Icon}
+          className="size-4 shrink-0 text-muted-foreground"
+        />
+        <span className="font-normal text-sm">Response</span>
+        <Badge className="ml-auto text-xs" variant="secondary">
+          {responseBody?.length}
+        </Badge>
+        <HugeiconsIcon
+          icon={ChevronRightIcon}
+          className="size-4 shrink-0 text-muted-foreground group-data-[panel-open]:hidden"
+        />
+        <HugeiconsIcon
+          icon={ChevronDownIcon}
+          className="hidden size-4 shrink-0 text-muted-foreground group-data-[panel-open]:block"
+        />
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className="border-t">
@@ -417,12 +506,14 @@ export const SchemaDisplay = ({
         {children ?? (
           <>
             <SchemaDisplayHeader>
-              <div className="flex items-center gap-3">
-                <SchemaDisplayMethod />
-                <SchemaDisplayPath />
+              <div className="flex flex-1 flex-col gap-1">
+                <div className="flex items-center gap-3">
+                  <SchemaDisplayMethod />
+                  <SchemaDisplayPath />
+                </div>
+                {description && <SchemaDisplayDescription />}
               </div>
             </SchemaDisplayHeader>
-            {description && <SchemaDisplayDescription />}
             <SchemaDisplayContent>
               {parameters && parameters.length > 0 && (
                 <SchemaDisplayParameters />

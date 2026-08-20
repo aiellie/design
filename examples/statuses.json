@@ -94,5 +94,7 @@
   "approval-menu":"shipped",
   "web-preview":"shipped",
   "orb":"shipped",
-  "queue":"shipped"
+  "queue":"shipped",
+  "model-selector":"shipped",
+  "audio-player":"shipped"
 }

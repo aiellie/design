@@ -270,17 +270,23 @@ export function exampleFilePath(slug: string): string {
   if (slug === "colors") return "examples/styles/colors.tsx"
   if (slug === "typeset") return "examples/styles/typeset.tsx"
   if (slug === "icons") return "examples/icons/icons.tsx"
+  if (slug === "audio-player" || slug === "mic-selector" || slug === "orb")
+    return `examples/audio/${slug}.tsx`
+  if (slug === "login-form") return `examples/auth/${slug}.tsx`
   if (
     slug === "artifact" ||
     slug === "code-block" ||
     slug === "code-language-selector" ||
+    slug === "commit" ||
     slug === "environment-variables" ||
     slug === "file-tree" ||
     slug === "jsx-preview" ||
     slug === "package-info" ||
+    slug === "schema-display" ||
     slug === "snippet" ||
     slug === "stack-trace" ||
-    slug === "terminal"
+    slug === "terminal" ||
+    slug === "test-results"
   )
     return `examples/code/${slug}.tsx`
   if (
@@ -291,6 +297,7 @@ export function exampleFilePath(slug: string): string {
     return `examples/color/${slug}.tsx`
   if (
     slug === "countries-select" ||
+    slug === "date-picker" ||
     slug === "language-selector" ||
     slug === "time-picker"
   )

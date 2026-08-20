@@ -5,17 +5,19 @@ import {
   SchemaDisplayContent,
   SchemaDisplayDescription,
   SchemaDisplayHeader,
+  SchemaDisplayMessage,
   SchemaDisplayMethod,
   SchemaDisplayParameters,
   SchemaDisplayPath,
   SchemaDisplayRequest,
   SchemaDisplayResponse,
 } from "@/components/code/schema-display";
+import { LockKeyIcon } from "@hugeicons/core-free-icons";
 
 export function SchemaDisplayExample() {
   return (
     <SchemaDisplay
-    description="Create a new post for a specific user. Requires authentication."
+    description="Create a new post for a specific user."
     method="POST"
     parameters={[
       {
@@ -94,12 +96,20 @@ export function SchemaDisplayExample() {
     ]}
   >
     <SchemaDisplayHeader>
-      <div className="flex items-center gap-3">
-        <SchemaDisplayMethod />
-        <SchemaDisplayPath />
+      <div className="flex flex-1 flex-col gap-1">
+        <div className="flex items-center gap-3">
+          <SchemaDisplayMethod />
+          <SchemaDisplayPath />
+        </div>
+        <SchemaDisplayDescription />
       </div>
+      <SchemaDisplayMessage
+        className="bg-amber-500/5 text-amber-500"
+        icon={LockKeyIcon}
+      >
+        Requires authentication.
+      </SchemaDisplayMessage>
     </SchemaDisplayHeader>
-    <SchemaDisplayDescription />
     <SchemaDisplayContent>
       <SchemaDisplayParameters />
       <SchemaDisplayRequest />
