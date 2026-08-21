@@ -204,6 +204,7 @@ import { QueueExample } from "./chat/queue"
 import ConfirmationExample from "./chat/confirmation"
 import ToolExample from "./chat/tool"
 import StatusExample from "./ellieui/status"
+import AgentExample from "./models/agent"
 export type { ExampleStatus }
 
 /** One demo inside an example — a tab in the viewer when there's more than one. */
@@ -1139,6 +1140,12 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Model Picker",
         component: ModelPickerExample,
         icon: CpuIcon,
+      },
+      {
+        slug: "agent",
+        name: "Agent",
+        component: AgentExample,
+        icon: Brain01Icon,
       },
     ],
   },
