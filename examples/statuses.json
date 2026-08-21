@@ -98,5 +98,8 @@
   "model-selector":"shipped",
   "model-picker":"shipped",
   "audio-player":"shipped",
-  "package-info":"shipped"
+  "package-info":"shipped",
+  "status":"shipped",
+  "tool":"shipped",
+  "confirmation":"shipped"
 }

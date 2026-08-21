@@ -158,6 +158,8 @@ import {
   UserCircleIcon,
   QueueIcon,
   AddIcon,
+  CheckmarkCircle02Icon,
+  Wrench01Icon,
 } from "@hugeicons/core-free-icons"
 import { ArtifactExample } from "@/examples/code/artifact"
 import { CodeBlockExample } from "@/examples/code/code-block"
@@ -199,6 +201,9 @@ import { ApprovalMenuExample } from "./chat/approval-menu"
 import { MessageInputExample } from "./chat/message-input"
 import { PromptInputExample } from "./chat/prompt-input"
 import { QueueExample } from "./chat/queue"
+import ConfirmationExample from "./chat/confirmation"
+import ToolExample from "./chat/tool"
+import StatusExample from "./ellieui/status"
 export type { ExampleStatus }
 
 /** One demo inside an example — a tab in the viewer when there's more than one. */
@@ -676,6 +681,12 @@ export const exampleCategories: ExampleCategory[] = [
     type: "ui",
     examples: [
       {
+        slug: "status",
+        name: "Status",
+        component: StatusExample,
+        icon: AlertCircleIcon,
+      },
+      {
         slug: "alert",
         name: "Alert",
         component: AlertExample,
@@ -890,6 +901,12 @@ export const exampleCategories: ExampleCategory[] = [
         icon: HandIcon,
       },
       {
+        slug: "confirmation",
+        name: "Confirmation",
+        component: ConfirmationExample,
+        icon: CheckmarkCircle02Icon,
+      },
+      {
         slug: "queue",
         name: "Queue",
         component: QueueExample,
@@ -900,6 +917,12 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Add Menu",
         component: AddMenuExample,
         icon: AddIcon,
+      },
+      {
+        slug: "tool", 
+        name: "Tool",
+        component: ToolExample,
+        icon: Wrench01Icon,
       },
           /*   {
         slug: "prompt-input",
