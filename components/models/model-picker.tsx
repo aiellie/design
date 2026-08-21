@@ -40,9 +40,13 @@ import {
   type ReasoningLevel,
 } from "@/lib/models";
 import { cn } from "@/lib/utils";
-import { Brain02Icon, CpuIcon, ZapIcon } from "@hugeicons/core-free-icons";
+import {
+  CpuIcon,
+  Search01Icon,
+  ZapIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useState, type ComponentProps } from "react";
+import { useState, type ComponentProps, type KeyboardEvent } from "react";
 
 const effortLabel = (effort: ReasoningLevel) =>
   effort.charAt(0).toUpperCase() + effort.slice(1);
@@ -70,6 +74,15 @@ function ChefIcon({ slug, className }: { slug: string; className?: string }) {
 }
 
 const EFFORT_BAR_HEIGHTS = ["h-1", "h-1.5", "h-2", "h-2.5", "h-3", "h-3.5"];
+/** Pixel-tight ramp for the avatar badge. */
+const EFFORT_BAR_HEIGHTS_COMPACT = [
+  "h-[2px]",
+  "h-[3px]",
+  "h-[4px]",
+  "h-[5px]",
+  "h-[6px]",
+  "h-[7px]",
+];
 
 /** Bars lit per level — a linear ramp over the 6-bar meter (low=1, max=6). */
 const effortBarCounts: Record<ReasoningLevel, number> = {
@@ -84,23 +97,42 @@ function EffortBars({
   effort,
   chef,
   className,
+  compact = false,
+  inverse = false,
 }: {
   effort: ReasoningLevel;
   chef?: Chef;
   className?: string;
+  /** Thinner, shorter bars that fit inside an avatar badge. */
+  compact?: boolean;
+  /** Draw bars in the current text color (for use on a colored surface). */
+  inverse?: boolean;
 }) {
   const filled = effortBarCounts[effort];
+  const heights = compact ? EFFORT_BAR_HEIGHTS_COMPACT : EFFORT_BAR_HEIGHTS;
   return (
-    <span aria-hidden className={cn("flex items-end gap-[2px]", className)}>
-      {EFFORT_BAR_HEIGHTS.map((height, index) => (
+    <span
+      aria-hidden
+      className={cn(
+        "flex items-end",
+        compact ? "gap-px" : "gap-[2px]",
+        className
+      )}
+    >
+      {heights.map((height, index) => (
         <span
           key={height}
           className={cn(
-            "w-[3px] rounded-full",
+            "rounded-full",
+            compact ? "w-px" : "w-[3px]",
             height,
             index < filled
-              ? (chef?.colorClass ?? "bg-foreground")
-              : (chef?.colorMutedClass ?? "bg-foreground/20")
+              ? inverse
+                ? "bg-current"
+                : (chef?.colorClass ?? "bg-foreground")
+              : inverse
+                ? "bg-current/30"
+                : (chef?.colorMutedClass ?? "bg-foreground/20")
           )}
         />
       ))}
@@ -121,8 +153,6 @@ export type ModelPickerProps = Omit<
   onEffortChange?: (effort: ReasoningLevel) => void;
   defaultFastMode?: boolean;
   onFastModeChange?: (fastMode: boolean) => void;
-  defaultThinking?: boolean;
-  onThinkingChange?: (thinking: boolean) => void;
 };
 
 export const ModelPicker = ({
@@ -133,19 +163,25 @@ export const ModelPicker = ({
   onEffortChange,
   defaultFastMode = false,
   onFastModeChange,
-  defaultThinking = true,
-  onThinkingChange,
   className,
   ...props
 }: ModelPickerProps) => {
   const [model, setModel] = useState(defaultModel ?? models[0]?.id ?? "");
   const [effort, setEffort] = useState<ReasoningLevel>(defaultEffort);
   const [fastMode, setFastMode] = useState(defaultFastMode);
-  const [thinking, setThinking] = useState(defaultThinking);
+  const [search, setSearch] = useState("");
 
   const selected = models.find((entry) => entry.id === model);
   const chef = getChef(selected?.chefSlug);
-  const chefNames = [...new Set(models.map((entry) => entry.chef))];
+  const query = search.trim().toLowerCase();
+  const visibleModels = query
+    ? models.filter((entry) =>
+        [entry.name, entry.chef, entry.id].some((field) =>
+          field.toLowerCase().includes(query)
+        )
+      )
+    : models;
+  const chefNames = [...new Set(visibleModels.map((entry) => entry.chef))];
   const availableEfforts = selected?.reasoning ?? REASONING_LEVELS;
 
   const handleModelChange = (id: string) => {
@@ -161,15 +197,23 @@ export const ModelPicker = ({
     }
   };
 
+  /**
+   * Keep typing inside the search box: the menu's typeahead and list
+   * navigation listen on the popup, so only let arrows/Escape/Enter bubble.
+   */
+  const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    const passthrough = ["ArrowDown", "ArrowUp", "Escape", "Enter", "Tab"];
+    if (!passthrough.includes(event.key)) event.stopPropagation();
+  };
+
   const summary = [
     selected?.name ?? "Model",
     `${effortLabel(effort)} effort`,
     ...(fastMode ? ["Fast Mode"] : []),
-    ...(thinking ? ["Thinking"] : []),
   ].join(" · ");
 
   return (
-    <DropdownMenu>
+    <DropdownMenu onOpenChange={(open) => !open && setSearch("")}>
       <Tooltip>
         <TooltipTrigger
           render={
@@ -191,28 +235,25 @@ export const ModelPicker = ({
                         />
                       )}
                     </AvatarFallback>
+                    <AvatarBadge
+                      className={cn(
+                        "right-auto left-0 w-auto! px-[3px] text-white",
+                        chef?.colorClass
+                      )}
+                    >
+                      <EffortBars effort={effort} chef={chef} compact inverse />
+                    </AvatarBadge>
                     {fastMode && (
                       <AvatarBadge
-                        className={cn(
-                          "text-white",
-                          chef?.colorClass,
-                          // Sit next to the thinking badge when both are shown.
-                          thinking && "right-2"
-                        )}
+                        className={cn("text-white", chef?.colorClass)}
                       >
+                        {/* Paths carry their own stroke attribute, so make them
+                            inherit — fill-* and stroke-* utilities on the icon
+                            then both apply. */}
                         <HugeiconsIcon
                           icon={ZapIcon}
                           strokeWidth={2}
-                          className="fill-current"
-                        />
-                      </AvatarBadge>
-                    )}
-                    {thinking && (
-                      <AvatarBadge>
-                        <HugeiconsIcon
-                          icon={Brain02Icon}
-                          strokeWidth={2}
-                          className="fill-current"
+                          className="fill-current stroke-current [&_path]:stroke-inherit"
                         />
                       </AvatarBadge>
                     )}
@@ -234,6 +275,28 @@ export const ModelPicker = ({
             </span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="w-64">
+            <div className="sticky -top-1 z-10 -mx-1 -mt-1 mb-1 flex items-center gap-2 border-b border-foreground/5 bg-popover/70 px-3 py-1.5 backdrop-blur-2xl">
+              <HugeiconsIcon
+                icon={Search01Icon}
+                strokeWidth={2}
+                className="size-3.5 shrink-0 text-muted-foreground"
+              />
+              <input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                placeholder="Search models…"
+                aria-label="Search models"
+                autoComplete="off"
+                spellCheck={false}
+                className="h-6 w-full min-w-0 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+              />
+            </div>
+            {visibleModels.length === 0 && (
+              <div className="px-2 py-4 text-center text-xs text-muted-foreground">
+                No models found
+              </div>
+            )}
             <DropdownMenuRadioGroup
               value={model}
               onValueChange={(value) => handleModelChange(value as string)}
@@ -241,7 +304,7 @@ export const ModelPicker = ({
               {chefNames.map((chefName) => (
                 <DropdownMenuGroup key={chefName}>
                   <DropdownMenuLabel>{chefName}</DropdownMenuLabel>
-                  {models
+                  {visibleModels
                     .filter((entry) => entry.chef === chefName)
                     .map((entry) => (
                       <DropdownMenuRadioItem key={entry.id} value={entry.id}>
@@ -311,21 +374,6 @@ export const ModelPicker = ({
               className={cn("size-3.5", fastMode && chef?.fastClass)}
             />
             Fast Mode
-          </DropdownMenuCheckboxItem>
-          <DropdownMenuCheckboxItem
-            checked={thinking}
-            closeOnClick={false}
-            onCheckedChange={(checked) => {
-              setThinking(checked === true);
-              onThinkingChange?.(checked === true);
-            }}
-          >
-            <HugeiconsIcon
-              icon={Brain02Icon}
-              strokeWidth={2}
-              className={cn("size-3.5", thinking && "fill-current")}
-            />
-            Thinking
           </DropdownMenuCheckboxItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

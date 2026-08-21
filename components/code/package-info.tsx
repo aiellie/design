@@ -1,30 +1,37 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { toast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import {
-  ArrowDown01Icon,
   ArrowRight01Icon,
-  ArrowUp01Icon,
-  ArrowUpDoubleIcon,
-  BandageIcon,
   Copy01Icon,
-  MinusSignIcon,
   PackageIcon,
-  PlusSignIcon,
   Tick02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import type { ComponentProps, HTMLAttributes } from "react";
+import type { ComponentProps, HTMLAttributes, ReactNode } from "react";
 import {
-  Children,
   createContext,
   useCallback,
   useContext,
@@ -41,171 +48,83 @@ interface PackageInfoContextType {
   currentVersion?: string;
   newVersion?: string;
   changeType?: ChangeType;
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
 }
 
-// Default noop for context default value
-// oxlint-disable-next-line eslint(no-empty-function)
-const noop = () => {};
-
 const PackageInfoContext = createContext<PackageInfoContextType>({
-  isOpen: false,
   name: "",
-  setIsOpen: noop,
 });
 
-export type PackageInfoProps = ComponentProps<typeof Collapsible> & {
+export type PackageInfoProps = ComponentProps<typeof Item> & {
   name: string;
   currentVersion?: string;
   newVersion?: string;
   changeType?: ChangeType;
-  open?: boolean;
-  defaultOpen?: boolean;
-  onOpenChange?: (open: boolean) => void;
 };
 
+/** A single package row — an outlined `Item` carrying its mark, name, and version. */
 export const PackageInfo = ({
   name,
   currentVersion,
   newVersion,
   changeType,
-  open: controlledOpen,
-  defaultOpen = false,
-  onOpenChange,
-  className,
+  variant = "outline",
   children,
   ...props
 }: PackageInfoProps) => {
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const isOpen = controlledOpen ?? internalOpen;
-
-  const setIsOpen = useCallback(
-    (next: boolean) => {
-      setInternalOpen(next);
-      onOpenChange?.(next);
-    },
-    [onOpenChange]
-  );
-
   const contextValue = useMemo(
-    () => ({ changeType, currentVersion, isOpen, name, newVersion, setIsOpen }),
-    [changeType, currentVersion, isOpen, name, newVersion, setIsOpen]
+    () => ({ changeType, currentVersion, name, newVersion }),
+    [changeType, currentVersion, name, newVersion]
   );
 
   return (
     <PackageInfoContext.Provider value={contextValue}>
-      <Collapsible
-        className={cn("rounded-xl border bg-background", className)}
-        onOpenChange={setIsOpen}
-        open={isOpen}
-        {...props}
-      >
+      <Item variant={variant} {...props}>
         {children ?? (
-          <PackageInfoHeader>
+          <>
             <PackageInfoIcon />
             <PackageInfoInfo>
               <PackageInfoName />
-              {/* The change type badge already carries the versions. */}
-              {!changeType && <PackageInfoVersion />}
             </PackageInfoInfo>
-            <PackageInfoChangeType />
-          </PackageInfoHeader>
+            <PackageInfoVersion />
+          </>
         )}
-      </Collapsible>
+      </Item>
     </PackageInfoContext.Provider>
   );
 };
 
-export type PackageInfoHeaderProps = ComponentProps<typeof CollapsibleTrigger>;
+export type PackageInfoIconProps = ComponentProps<typeof ItemMedia>;
 
-export const PackageInfoHeader = ({
-  className,
-  children,
-  ...props
-}: PackageInfoHeaderProps) => (
-  <CollapsibleTrigger
-    nativeButton={false}
-    {...props}
-    render={
-      <div
-        className={cn(
-          "group flex items-center gap-3 p-3 text-start transition-colors",
-          "not-data-disabled:cursor-pointer not-data-disabled:hover:opacity-80",
-          // Overrides the base `[role="button"]` pointer — a div is never `:disabled`.
-          "data-disabled:cursor-default",
-          className
-        )}
-      />
-    }
-  >
-    {children}
-  </CollapsibleTrigger>
-);
-
-export type PackageInfoExpandButtonProps = HTMLAttributes<HTMLDivElement>;
-
-export const PackageInfoExpandButton = ({
-  className,
-  ...props
-}: PackageInfoExpandButtonProps) => {
-  const { isOpen } = useContext(PackageInfoContext);
-
-  return (
-    <div
-      className={cn(
-        "flex size-8 shrink-0 items-center justify-center",
-        className
-      )}
-      {...props}
-    >
-      <HugeiconsIcon
-        className={cn(
-          "size-4 text-muted-foreground transition-transform",
-          isOpen ? "rotate-180" : "rotate-0"
-        )}
-        icon={ArrowDown01Icon}
-        strokeWidth={2}
-      />
-    </div>
-  );
-};
-
-export type PackageInfoIconProps = HTMLAttributes<HTMLDivElement>;
-
-/** Square tile for the package's mark; defaults to a package glyph. */
+/** Leading media for the package's mark; defaults to a package glyph. */
 export const PackageInfoIcon = ({
   className,
   children,
   ...props
 }: PackageInfoIconProps) => (
-  <div
+  <ItemMedia
     className={cn(
-      "flex size-8 shrink-0 items-center justify-center rounded-lg border bg-muted/50 text-muted-foreground [&_svg]:size-4",
+      "size-8 rounded-md bg-muted/50 text-muted-foreground [&_svg]:size-4",
       className
     )}
     {...props}
   >
-    {children ?? <HugeiconsIcon icon={PackageIcon} strokeWidth={2} />}
-  </div>
+    {children ?? <HugeiconsIcon icon={PackageIcon} strokeWidth={1.5} />}
+  </ItemMedia>
 );
 
-export type PackageInfoInfoProps = HTMLAttributes<HTMLDivElement>;
+export type PackageInfoInfoProps = ComponentProps<typeof ItemContent>;
 
 export const PackageInfoInfo = ({
   className,
   children,
   ...props
 }: PackageInfoInfoProps) => (
-  <div
-    className={cn("flex min-w-0 flex-1 flex-col gap-0.5", className)}
-    {...props}
-  >
+  <ItemContent className={cn("min-w-0 gap-0", className)} {...props}>
     {children}
-  </div>
+  </ItemContent>
 );
 
-export type PackageInfoNameProps = HTMLAttributes<HTMLDivElement>;
+export type PackageInfoNameProps = ComponentProps<typeof ItemTitle>;
 
 export const PackageInfoName = ({
   className,
@@ -215,20 +134,50 @@ export const PackageInfoName = ({
   const { name } = useContext(PackageInfoContext);
 
   return (
-    <div
+    <ItemTitle className={cn("font-mono font-normal", className)} {...props}>
+      {children ?? name}
+    </ItemTitle>
+  );
+};
+
+const changeTypeDots: Record<ChangeType, string> = {
+  added: "bg-blue-500",
+  major: "bg-red-500",
+  minor: "bg-amber-500",
+  patch: "bg-emerald-500",
+  removed: "bg-muted-foreground/40",
+};
+
+export type PackageInfoChangeTypeProps = HTMLAttributes<HTMLSpanElement>;
+
+/** A small status dot colored by the change type. */
+export const PackageInfoChangeType = ({
+  className,
+  ...props
+}: PackageInfoChangeTypeProps) => {
+  const { changeType } = useContext(PackageInfoContext);
+
+  if (!changeType) {
+    return null;
+  }
+
+  return (
+    <span
+      aria-label={changeType}
       className={cn(
-        "truncate font-medium font-mono text-foreground text-sm leading-tight",
+        "size-1.5 shrink-0 rounded-full",
+        changeTypeDots[changeType],
         className
       )}
+      role="img"
       {...props}
-    >
-      {children ?? name}
-    </div>
+    />
   );
 };
 
 export type PackageInfoVersionProps = HTMLAttributes<HTMLDivElement>;
 
+/** `current → new` in mono, led by the change type dot when one is set. */
 export const PackageInfoVersion = ({
   className,
   children,
@@ -237,18 +186,19 @@ export const PackageInfoVersion = ({
   const { currentVersion, newVersion, changeType } =
     useContext(PackageInfoContext);
 
-  if (!(currentVersion || newVersion)) {
+  if (!(currentVersion || newVersion || changeType)) {
     return null;
   }
 
   return (
     <div
       className={cn(
-        "flex items-center gap-1.5 font-mono text-muted-foreground text-xs",
+        "flex shrink-0 items-center gap-1.5 font-mono text-muted-foreground text-xs tabular-nums",
         className
       )}
       {...props}
     >
+      <PackageInfoChangeType />
       {children ?? (
         <>
           {currentVersion && (
@@ -262,11 +212,12 @@ export const PackageInfoVersion = ({
             <HugeiconsIcon
               className="size-3 shrink-0 rtl:rotate-180"
               icon={ArrowRight01Icon}
-              strokeWidth={2}
+              strokeWidth={1.5}
             />
           )}
-          {newVersion && (
-            <span className="font-medium text-foreground">{newVersion}</span>
+          {newVersion && <span className="text-foreground">{newVersion}</span>}
+          {!(currentVersion || newVersion) && (
+            <span className="capitalize">{changeType}</span>
           )}
         </>
       )}
@@ -274,107 +225,16 @@ export const PackageInfoVersion = ({
   );
 };
 
-const changeTypeStyles: Record<ChangeType, string> = {
-  added: "bg-blue-500/5 text-blue-600 dark:text-blue-400",
-  major: "bg-red-500/5 text-red-600 dark:text-red-400",
-  minor: "bg-yellow-500/5 text-yellow-600 dark:text-yellow-400",
-  patch: "bg-green-500/5 text-green-600 dark:text-green-400",
-  removed: "bg-muted text-muted-foreground",
-};
-
-// One glyph per change type: the jump size for version bumps, +/− for
-// presence changes, a bandage for patches.
-const changeTypeIcons = {
-  added: PlusSignIcon,
-  major: ArrowUpDoubleIcon,
-  minor: ArrowUp01Icon,
-  patch: BandageIcon,
-  removed: MinusSignIcon,
-} satisfies Record<ChangeType, typeof PackageIcon>;
-
-export type PackageInfoChangeTypeProps = HTMLAttributes<HTMLDivElement>;
-
-export const PackageInfoChangeType = ({
-  className,
-  children,
-  ...props
-}: PackageInfoChangeTypeProps) => {
-  const { changeType, currentVersion, newVersion } =
-    useContext(PackageInfoContext);
-
-  if (!changeType) {
-    return null;
-  }
-
-  // The change type colors and glyphs the badge; the versions are its label,
-  // falling back to the type's name when neither version is known.
-  const hasVersions = Boolean(currentVersion || newVersion);
-
-  return (
-    <Badge
-      className={cn(
-        "shrink-0",
-        hasVersions ? "font-mono" : "capitalize",
-        changeTypeStyles[changeType],
-        className
-      )}
-      variant="secondary"
-      {...props}
-    >
-      {/* `inline-start` tightens the badge's leading padding around the icon. */}
-      <HugeiconsIcon
-        data-icon="inline-start"
-        icon={changeTypeIcons[changeType]}
-        strokeWidth={2}
-      />
-      {children ??
-        (hasVersions ? (
-          <>
-            {currentVersion && (
-              <span
-                className={cn(
-                  "opacity-70",
-                  changeType === "removed" && "line-through"
-                )}
-              >
-                {currentVersion}
-              </span>
-            )}
-            {currentVersion && newVersion && (
-              <HugeiconsIcon
-                className="shrink-0 rtl:rotate-180"
-                icon={ArrowRight01Icon}
-                strokeWidth={2}
-              />
-            )}
-            {newVersion && <span>{newVersion}</span>}
-          </>
-        ) : (
-          changeType
-        ))}
-    </Badge>
-  );
-};
-
-export type PackageInfoActionsProps = HTMLAttributes<HTMLDivElement>;
-
-const handleActionsClick = (e: React.MouseEvent) => e.stopPropagation();
-const handleActionsKeyDown = (e: React.KeyboardEvent) => e.stopPropagation();
+export type PackageInfoActionsProps = ComponentProps<typeof ItemActions>;
 
 export const PackageInfoActions = ({
   className,
   children,
   ...props
 }: PackageInfoActionsProps) => (
-  <div
-    className={cn("flex shrink-0 items-center gap-1", className)}
-    onClick={handleActionsClick}
-    onKeyDown={handleActionsKeyDown}
-    role="group"
-    {...props}
-  >
+  <ItemActions className={cn("shrink-0 gap-1.5", className)} {...props}>
     {children}
-  </div>
+  </ItemActions>
 );
 
 export type PackageInfoCopyButtonProps = ComponentProps<typeof Button> & {
@@ -461,95 +321,173 @@ export const PackageInfoCopyButton = ({
       {children ?? (
         <HugeiconsIcon
           icon={isCopied ? Tick02Icon : Copy01Icon}
-          strokeWidth={2}
+          strokeWidth={1.5}
         />
       )}
     </Button>
   );
 };
 
-/** Belongs in the header's `PackageInfoInfo` column, or in `PackageInfoContent`. */
-export type PackageInfoDescriptionProps = HTMLAttributes<HTMLParagraphElement>;
+export type PackageInfoDescriptionProps = ComponentProps<typeof ItemDescription>;
 
+/** Belongs in the header's `PackageInfoInfo` column, or in `PackageInfoContent`. */
 export const PackageInfoDescription = ({
   className,
   children,
   ...props
 }: PackageInfoDescriptionProps) => (
-  <p className={cn("text-muted-foreground text-xs", className)} {...props}>
+  <ItemDescription className={cn("text-xs", className)} {...props}>
     {children}
-  </p>
+  </ItemDescription>
 );
 
-export type PackageInfoContentProps = ComponentProps<typeof CollapsibleContent>;
-
-export const PackageInfoContent = ({
-  className,
-  children,
-  ...props
-}: PackageInfoContentProps) => (
-  <CollapsibleContent className={cn("border-t p-3", className)} {...props}>
-    {children}
-  </CollapsibleContent>
-);
-
-export type PackageInfoDependenciesProps = HTMLAttributes<HTMLDivElement> & {
-  /** Overrides the row count shown next to the label. */
-  count?: number;
+export type PackageDependency = {
+  name: string;
+  version?: string;
+  /** Avatar image for the dependency's mark. */
+  src?: string;
+  /** Inline mark (e.g. an icon component) shown instead of the initial. */
+  icon?: ReactNode;
 };
 
+const dependencyInitial = (name: string) =>
+  name.replace(/^@/, "").charAt(0).toUpperCase();
+
+export type PackageInfoDependencyAvatarProps = ComponentProps<typeof Avatar> & {
+  dependency: PackageDependency;
+};
+
+/** Small avatar for a dependency: image, inline mark, or its initial. */
+export const PackageInfoDependencyAvatar = ({
+  dependency,
+  className,
+  size = "sm",
+  ...props
+}: PackageInfoDependencyAvatarProps) => (
+  <Avatar className={className} size={size} {...props}>
+    {dependency.src && (
+      <AvatarImage alt={dependency.name} src={dependency.src} />
+    )}
+    <AvatarFallback className="font-medium text-[10px] [&_svg]:size-3">
+      {dependency.icon ?? dependencyInitial(dependency.name)}
+    </AvatarFallback>
+  </Avatar>
+);
+
+export type PackageInfoDependenciesProps = Omit<
+  ComponentProps<typeof PopoverTrigger>,
+  "children"
+> & {
+  dependencies: PackageDependency[];
+  /** Avatars shown before collapsing the rest into a count. */
+  max?: number;
+  /** Popover placement. */
+  align?: ComponentProps<typeof PopoverContent>["align"];
+  /** Replaces the default dependency list inside the popover. */
+  children?: ReactNode;
+};
+
+/**
+ * Dependencies as an avatar (or avatar group) that opens a popover listing
+ * them. Renders nothing when there are no dependencies.
+ */
 export const PackageInfoDependencies = ({
-  count,
+  dependencies,
+  max = 3,
+  align = "end",
   className,
   children,
   ...props
 }: PackageInfoDependenciesProps) => {
-  const dependencyCount = count ?? Children.count(children);
+  const count = dependencies.length;
+
+  if (count === 0) {
+    return null;
+  }
+
+  const visible = dependencies.slice(0, max);
+  const hidden = count - visible.length;
+  const label = `${count} ${count === 1 ? "dependency" : "dependencies"}`;
 
   return (
-    <div className={cn("space-y-1", className)} {...props}>
-      <div className="flex items-center gap-1.5 px-2">
-        <span className="font-medium text-muted-foreground text-xs">
-          Dependencies
-        </span>
-        {dependencyCount > 0 && (
-          <span className="font-mono text-[10px] text-muted-foreground/70">
-            {dependencyCount}
-          </span>
+    <Popover>
+      <PopoverTrigger
+        aria-label={label}
+        className={cn(
+          "flex shrink-0 cursor-pointer rounded-full outline-none transition-opacity hover:opacity-80 focus-visible:ring-[3px] focus-visible:ring-ring/50",
+          className
         )}
-      </div>
-      <div className="space-y-1">{children}</div>
-    </div>
+        {...props}
+      >
+        {count === 1 ? (
+          <PackageInfoDependencyAvatar dependency={dependencies[0]} />
+        ) : (
+          <AvatarGroup>
+            {visible.map((dependency) => (
+              <PackageInfoDependencyAvatar
+                dependency={dependency}
+                key={dependency.name}
+              />
+            ))}
+            {hidden > 0 && (
+              <AvatarGroupCount className="font-mono text-xs">
+                +{hidden}
+              </AvatarGroupCount>
+            )}
+          </AvatarGroup>
+        )}
+      </PopoverTrigger>
+      <PopoverContent align={align} className="w-64 gap-1 p-1.5">
+        <div className="flex items-center gap-1.5 px-2 py-1">
+          <span className="font-medium text-muted-foreground text-xs">
+            Dependencies
+          </span>
+          <span className="font-mono text-[10px] text-muted-foreground/70">
+            {count}
+          </span>
+        </div>
+        {children ?? (
+          <div className="flex flex-col gap-0.5">
+            {dependencies.map((dependency) => (
+              <PackageInfoDependency
+                dependency={dependency}
+                key={dependency.name}
+              />
+            ))}
+          </div>
+        )}
+      </PopoverContent>
+    </Popover>
   );
 };
 
 export type PackageInfoDependencyProps = HTMLAttributes<HTMLDivElement> & {
-  name: string;
-  version?: string;
+  dependency: PackageDependency;
 };
 
+/** One row in the dependencies popover. */
 export const PackageInfoDependency = ({
-  name,
-  version,
+  dependency,
   className,
   children,
   ...props
 }: PackageInfoDependencyProps) => (
   <div
     className={cn(
-      "flex items-center justify-between gap-2 rounded-lg px-2 py-1 hover:bg-muted/50",
+      "flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted/50",
       className
     )}
     {...props}
   >
     {children ?? (
       <>
-        <span className="truncate font-mono text-muted-foreground text-xs">
-          {name}
+        <PackageInfoDependencyAvatar dependency={dependency} />
+        <span className="min-w-0 flex-1 truncate font-mono text-muted-foreground text-xs">
+          {dependency.name}
         </span>
-        {version && (
+        {dependency.version && (
           <span className="shrink-0 rounded-md bg-muted/50 px-1.5 py-0.5 font-mono text-xs">
-            {version}
+            {dependency.version}
           </span>
         )}
       </>

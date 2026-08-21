@@ -4,26 +4,18 @@ import type { ReactNode } from "react"
 import { CodeIcons, ColorIcons } from "@/icons/icons"
 import {
   type ChangeType,
+  type PackageDependency,
   PackageInfo,
   PackageInfoActions,
-  PackageInfoChangeType,
-  PackageInfoContent,
   PackageInfoCopyButton,
   PackageInfoDependencies,
-  PackageInfoDependency,
   PackageInfoDescription,
-  PackageInfoExpandButton,
-  PackageInfoHeader,
   PackageInfoIcon,
   PackageInfoInfo,
   PackageInfoName,
+  PackageInfoVersion,
 } from "@/components/code/package-info"
-import { Button } from "@/components/ui/button"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { ItemGroup } from "@/components/ui/item"
 import {
   Tooltip,
   TooltipContent,
@@ -34,8 +26,8 @@ type Package = {
   changeType: ChangeType
   command: string
   currentVersion?: string
-  dependencies?: { name: string; version: string }[]
-  description?: string
+  dependencies?: PackageDependency[]
+  description: string
   icon?: ReactNode
   name: string
   newVersion?: string
@@ -49,9 +41,10 @@ const packages = [
     dependencies: [
       { name: "react", version: "^19.2.0" },
       { name: "react-dom", version: "^19.2.0" },
+      { name: "@swc/helpers", version: "0.5.15" },
+      { name: "postcss", version: "8.4.31" },
     ],
-    description:
-      "Turbopack is now the default bundler, so the dev server no longer reads webpack config.",
+    description: "Turbopack is default dev bundler.",
     icon: <CodeIcons.next />,
     name: "next",
     newVersion: "16.0.1",
@@ -60,6 +53,7 @@ const packages = [
     changeType: "minor",
     command: "pnpm add tailwindcss@4.2.0",
     currentVersion: "4.1.11",
+    description: "Faster incremental builds and new variants.",
     icon: <ColorIcons.tailwind />,
     name: "tailwindcss",
     newVersion: "4.2.0",
@@ -68,6 +62,11 @@ const packages = [
     changeType: "patch",
     command: "pnpm add @base-ui/react@1.0.3",
     currentVersion: "1.0.2",
+    dependencies: [
+      { name: "@floating-ui/react-dom", version: "^2.1.6" },
+      { name: "use-sync-external-store", version: "^1.5.0" },
+    ],
+    description: "Fixes focus handling in nested dialogs.",
     icon: <CodeIcons.baseui />,
     name: "@base-ui/react",
     newVersion: "1.0.3",
@@ -75,7 +74,10 @@ const packages = [
   {
     changeType: "added",
     command: "pnpm add @hugeicons/react@1.1.4",
-    dependencies: [{ name: "@hugeicons/core-free-icons", version: "^1.0.16" }],
+    dependencies: [
+      { name: "@hugeicons/core-free-icons", version: "^1.0.16" },
+    ],
+    description: "Icon set used across the UI.",
     icon: <CodeIcons.hugeicons />,
     name: "@hugeicons/react",
     newVersion: "1.1.4",
@@ -84,6 +86,7 @@ const packages = [
     changeType: "removed",
     command: "pnpm remove lucide-react",
     currentVersion: "0.469.0",
+    description: "Replaced by @hugeicons/react.",
     icon: <CodeIcons.lucide />,
     name: "lucide-react",
   },
@@ -98,93 +101,53 @@ const handleCopyError = () => {
 }
 
 function PackageInfoCard({ pkg }: { pkg: Package }) {
-  // The version badge leaves the header too narrow for prose, so the
-  // description drops into the collapsible body alongside the dependencies.
-  const hasContent = Boolean(pkg.description || pkg.dependencies)
-
   return (
     <PackageInfo
       changeType={pkg.changeType}
-      className="border-none bg-transparent"
       currentVersion={pkg.currentVersion}
-      defaultOpen={hasContent}
-      disabled={!hasContent}
       name={pkg.name}
       newVersion={pkg.newVersion}
     >
-      <PackageInfoHeader>
-        <PackageInfoIcon>{pkg.icon}</PackageInfoIcon>
-        <PackageInfoInfo>
-          <PackageInfoName />
-        </PackageInfoInfo>
-        <PackageInfoChangeType />
-        <PackageInfoActions>
+      <PackageInfoIcon>{pkg.icon}</PackageInfoIcon>
+      <PackageInfoInfo>
+        <PackageInfoName />
+        <PackageInfoDescription>{pkg.description}</PackageInfoDescription>
+      </PackageInfoInfo>
+      <PackageInfoActions>
+        {pkg.dependencies && (
           <Tooltip>
             <TooltipTrigger
-              render={
-                <PackageInfoCopyButton
-                  command={pkg.command}
-                  onCopy={handleCopy}
-                  onError={handleCopyError}
-                />
-              }
+              render={<PackageInfoDependencies dependencies={pkg.dependencies} />}
             />
-            <TooltipContent>Copy command</TooltipContent>
+            <TooltipContent>Dependencies</TooltipContent>
           </Tooltip>
-        </PackageInfoActions>
-        {hasContent && <PackageInfoExpandButton />}
-      </PackageInfoHeader>
-      {hasContent && (
-        <PackageInfoContent className="space-y-3">
-          {pkg.description && (
-            <PackageInfoDescription>{pkg.description}</PackageInfoDescription>
-          )}
-          {pkg.dependencies && (
-            <PackageInfoDependencies>
-              {pkg.dependencies.map((dependency) => (
-                <PackageInfoDependency
-                  key={dependency.name}
-                  name={dependency.name}
-                  version={dependency.version}
-                />
-              ))}
-            </PackageInfoDependencies>
-          )}
-        </PackageInfoContent>
-      )}
+        )}
+        <PackageInfoVersion />
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <PackageInfoCopyButton
+                // Revealed on hover for pointer devices; always shown on touch.
+                className=" pointer-fine:group-hover/item:opacity-100 pointer-fine:focus-visible:opacity-100 pointer-fine:data-popup-open:opacity-100"
+                command={pkg.command}
+                onCopy={handleCopy}
+                onError={handleCopyError}
+              />
+            }
+          />
+          <TooltipContent>Copy command</TooltipContent>
+        </Tooltip>
+      </PackageInfoActions>
     </PackageInfo>
   )
 }
 
 export function PackageInfoExample() {
   return (
-      <div className="flex items-center gap-2 mx-auto justify-center">
-        {packages.map((pkg) => (
-          <Popover key={pkg.name}>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <PopoverTrigger
-                    render={
-                      <Button
-                        aria-label={pkg.name}
-                        size="icon-sm"
-                        variant="outline"
-                        className="rounded-full"
-                      >
-                        {pkg.icon}
-                      </Button>
-                    }
-                  />
-                }
-              />
-              <TooltipContent>{pkg.name}</TooltipContent>
-            </Tooltip>
-            <PopoverContent align="center" className="w-96 overflow-hidden p-0">
-              <PackageInfoCard pkg={pkg} />
-            </PopoverContent>
-          </Popover>
-        ))}
-      </div>
+    <ItemGroup aria-label="Package changes" className="mx-auto w-full max-w-lg gap-2">
+      {packages.map((pkg) => (
+        <PackageInfoCard key={pkg.name} pkg={pkg} />
+      ))}
+    </ItemGroup>
   )
 }

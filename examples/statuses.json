@@ -96,5 +96,7 @@
   "orb":"shipped",
   "queue":"shipped",
   "model-selector":"shipped",
-  "audio-player":"shipped"
+  "model-picker":"shipped",
+  "audio-player":"shipped",
+  "package-info":"shipped"
 }
