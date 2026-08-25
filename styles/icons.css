@@ -1,0 +1,42 @@
+/* Icons: defaults for <Icon> (components/icons/icon.tsx). Override per-use with utilities (size-*, stroke-*). */
+
+:root {
+    --icon-size: 1rem; /* 16px */
+    --icon-stroke-width: 1.65;
+    --icon-stroke: var(--color-muted-foreground); /* hugeicons are stroked; SVG brand icons ignore this */
+  }
+  
+  @layer components {
+    [data-slot="icon"] {
+      width: var(--icon-size);
+      height: var(--icon-size);
+      flex-shrink: 0;
+      color: var(--icon-stroke);
+    }
+    /* Hugeicons set stroke-width="1.5" on each <path>; a presentation attribute
+       beats an inherited value, so the stroke must be set on the paths themselves. */
+    [data-slot="icon"] :is(path, circle, rect, line, polyline, polygon, ellipse) {
+      stroke-width: var(--icon-stroke-width);
+    }
+    /* Inside buttons the icon takes the button's text color, not --icon-stroke. */
+    [data-slot="button"] [data-slot="icon"] {
+      color: currentColor;
+    }
+  }
+  
+  /* Size presets: <Icon className="icon-sm" /> */
+  @utility icon-xs {
+    --icon-size: 0.75rem;
+  }
+  @utility icon-sm {
+    --icon-size: 0.875rem;
+  }
+  @utility icon-md {
+    --icon-size: 1rem;
+  }
+  @utility icon-lg {
+    --icon-size: 1.25rem;
+  }
+  @utility icon-xl {
+    --icon-size: 1.5rem;
+  }

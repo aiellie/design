@@ -1,0 +1,18 @@
+/* Font families: maps next/font CSS variables to Tailwind font-* utilities. */
+
+@theme inline {
+    --font-sans: var(--font-sans);
+    --font-heading: var(--font-sans);
+    --font-mono: var(--font-mono);
+    --font-serif: var(--font-serif);
+    }
+/* Two-tier type weights: normal text is 350, anything heavier is 450. */
+@theme {
+  --font-weight-normal: 350;
+  --font-weight-medium: 450;
+  --font-weight-semibold: 450;
+  --font-weight-bold: 450;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+}

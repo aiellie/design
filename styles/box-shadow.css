@@ -1,0 +1,44 @@
+/* Box shadow: the house elevation scale. Overrides Tailwind's stock --shadow-* keys, so the
+   shadow-sm / shadow-md / shadow-lg already sprinkled through the shadcn components pick this
+   up without touching a single className — see tailwindcss.com/docs/box-shadow.
+   Tailwind mints a utility from every --shadow-* / --inset-shadow-* key it finds, which is why
+   the semantic steps below need no @utility rules of their own. */
+
+/* Ink, not geometry, is what changes between themes: on a near-black surface a 6%-black
+   shadow is invisible, so the dark values are several times heavier. Keeping the alpha in
+   these three vars means the scale itself is written once. */
+:root {
+  --shadow-ink-1: oklch(0 0 0 / 4%); /* ambient — the wide, soft layer */
+  --shadow-ink-2: oklch(0 0 0 / 6%); /* key — the tight contact layer */
+  --shadow-ink-3: oklch(0 0 0 / 10%); /* deep — large offsets only */
+}
+
+.dark {
+  --shadow-ink-1: oklch(0 0 0 / 24%);
+  --shadow-ink-2: oklch(0 0 0 / 36%);
+  --shadow-ink-3: oklch(0 0 0 / 56%);
+}
+
+@theme inline {
+  /* Two layers per step past xs: a tight contact shadow to seat the element, a wider ambient
+     one to lift it. Negative spread keeps the blur from bleeding out sideways. */
+  --shadow-2xs: 0 1px 1px var(--shadow-ink-1);
+  --shadow-xs: 0 1px 2px -1px var(--shadow-ink-2);
+  --shadow-sm: 0 1px 2px -1px var(--shadow-ink-2), 0 2px 4px -2px var(--shadow-ink-1);
+  --shadow-md: 0 2px 4px -2px var(--shadow-ink-2), 0 6px 12px -4px var(--shadow-ink-2);
+  --shadow-lg: 0 4px 8px -4px var(--shadow-ink-2), 0 12px 24px -8px var(--shadow-ink-3);
+  --shadow-xl: 0 8px 16px -8px var(--shadow-ink-2), 0 24px 40px -12px var(--shadow-ink-3);
+  --shadow-2xl: 0 32px 64px -16px var(--shadow-ink-3);
+
+  /* Named elevations, so a menu and a dialog stay in step with each other instead of each
+     component picking its own point on the t-shirt scale: shadow-popover, shadow-overlay. */
+  --shadow-popover: 0 4px 8px -4px var(--shadow-ink-2), 0 12px 28px -8px var(--shadow-ink-3);
+  --shadow-overlay: 0 8px 16px -8px var(--shadow-ink-2), 0 32px 64px -16px var(--shadow-ink-3);
+
+  /* Insets. bevel is the top highlight that makes a raised surface read as lit from above —
+     white in light mode is nearly free, so it only earns its keep on dark surfaces. */
+  --inset-shadow-2xs: inset 0 1px var(--shadow-ink-1);
+  --inset-shadow-xs: inset 0 1px 1px var(--shadow-ink-1);
+  --inset-shadow-sm: inset 0 2px 4px var(--shadow-ink-2);
+  --inset-shadow-bevel: inset 0 1px 0 oklch(1 0 0 / 8%);
+}

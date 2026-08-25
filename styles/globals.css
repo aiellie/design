@@ -5,7 +5,7 @@
 @import "./uishadcn.css";
 /* Design tokens for :root and .dark live here. */
 @import "./themes.css";
-
+@import "./sidebar.css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

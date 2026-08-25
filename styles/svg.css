@@ -1,0 +1,130 @@
+/* SVG: utilities for hand-authored artwork (components/layout/logo.tsx, dashboard/components/pixel-pattern.tsx).
+   Tailwind already ships fill-* / stroke-* (paint) and stroke-<integer> (width) — see
+   tailwindcss.com/docs/fill, /stroke and /stroke-width. This file only fills the gaps:
+   fractional widths, the stroke geometry properties Tailwind has no utilities for, and an
+   opt-in cascade that pushes paint past presentation attributes on child shapes. */
+
+:root {
+  --svg-stroke: var(--color-muted-foreground)!important;
+  --svg-stroke-width: 1.75;
+}
+
+@layer components {
+  /* Wrapper convention for inline artwork: <svg data-slot="svg" ...>, mirroring
+     [data-slot="icon"] in icons.css. */
+  [data-slot="svg"] {
+    display: block;
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+  /* House defaults. These sit in the components layer, so any fill-*, stroke-*, stroke-<width>
+     or text-* utility on the element wins — @layer theme, base, components, utilities. */
+  [data-slot="svg"],
+  .svg-cascade {
+    color: var(--svg-stroke);
+    stroke-width: var(--svg-stroke-width);
+  }
+  /* svg-cascade is line art by default: without this the root's initial fill is black and
+     its initial stroke is none, which is what the cascade below would hand the children. */
+  .svg-cascade {
+    fill: none;
+    stroke: currentColor;
+  }
+}
+
+/* Same trap as hugeicons (see icons.css): fill="…" / stroke-width="…" on a child <path> is a
+   presentation attribute, and that beats a value inherited from the <svg>. So fill-*, stroke-*
+   and stroke-<width> on the root are ignored by any shape that sets its own attribute.
+   svg-cascade re-points the children at the root's computed value, which puts the Tailwind
+   utilities back in charge: <svg className="svg-cascade fill-none stroke-border stroke-1.5">. */
+@utility svg-cascade {
+  & :is(path, circle, ellipse, rect, line, polyline, polygon, g, use, text) {
+    fill: inherit;
+    stroke: inherit;
+    /* inherit, not a literal 1.75 — the root already computes to --svg-stroke-width, so
+       plain svg-cascade still lands on 1.75, and stroke-2 on the root retargets the lot. */
+    stroke-width: inherit;
+  }
+}
+
+/* Fractional widths — Tailwind's bare stroke-<n> is integers only, so 1.5 or 1.75 would
+   otherwise need stroke-[1.75]. stroke-1.75 restates the default after an override;
+   stroke-(length:--svg-stroke-width) does the same by token. */
+@utility stroke-0.5 {
+  stroke-width: 0.5;
+}
+@utility stroke-1 {
+  stroke-width: 1;
+}
+@utility stroke-1.5 {
+  stroke-width: 1.5;
+}
+@utility stroke-1.75 {
+  stroke-width: 1.75;
+}
+@utility stroke-2 {
+  stroke-width: 2;
+}
+@utility stroke-2.5 {
+  stroke-width: 2.5;
+}
+@utility stroke-3.5 {
+  stroke-width: 3.5;
+}
+
+/* Keep stroke width in user units while the SVG scales — the line stays 1px-ish
+   on a viewBox that is stretched by width/height utilities. */
+@utility stroke-fixed {
+  vector-effect: non-scaling-stroke;
+}
+
+/* stroke-linecap */
+@utility stroke-cap-butt {
+  stroke-linecap: butt;
+}
+@utility stroke-cap-round {
+  stroke-linecap: round;
+}
+@utility stroke-cap-square {
+  stroke-linecap: square;
+}
+
+/* stroke-linejoin */
+@utility stroke-join-miter {
+  stroke-linejoin: miter;
+}
+@utility stroke-join-round {
+  stroke-linejoin: round;
+}
+@utility stroke-join-bevel {
+  stroke-linejoin: bevel;
+}
+
+/* Dashes: stroke-dash-4, stroke-dash-[4_2], stroke-dashoffset-8, stroke-dashoffset-[-6].
+   Values are user units, so they follow the viewBox rather than the rendered size. */
+@utility stroke-dash-none {
+  stroke-dasharray: none;
+}
+@utility stroke-dash-* {
+  stroke-dasharray: --value(number, [*]);
+}
+@utility stroke-dashoffset-* {
+  stroke-dashoffset: --value(number, [*]);
+}
+
+/* Which side of a self-intersecting path counts as inside. */
+@utility fill-rule-nonzero {
+  fill-rule: nonzero;
+}
+@utility fill-rule-evenodd {
+  fill-rule: evenodd;
+}
+
+/* Stroke under fill, so a stroked glyph or shape keeps its shape instead of
+   having the outline eat half the interior. */
+@utility paint-order-fill {
+  paint-order: fill stroke markers;
+}
+@utility paint-order-stroke {
+  paint-order: stroke fill markers;
+}

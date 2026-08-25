@@ -1,0 +1,13 @@
+/* Custom utilities & global tweaks. */
+
+@utility bg-dotted {
+    background-image: radial-gradient(
+      color-mix(in oklch, var(--border) 70%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 16px 16px;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }

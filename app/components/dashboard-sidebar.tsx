@@ -42,7 +42,13 @@ import {
 } from "@/examples"
 import { exampleStatuses, type ExampleStatus } from "@/examples/status"
 import { Icon, type IconData } from "@/icons/icons"
-import { ArrowDown01Icon, ArrowRight01Icon, GridViewIcon, HomeIcon } from "@/icons/huge-icons"
+import {
+  ArrowDown01Icon,
+  ArrowRight01Icon,
+  DashboardSquare01Icon,
+  GridViewIcon,
+  HomeIcon,
+} from "@/icons/huge-icons"
 import * as React from "react"
 
 /** One rendered nav section after grouping, filtering, and sorting. */
@@ -148,11 +154,9 @@ function buildNavGroups(
 
 const defaultSortBy: NavSortBy = "default"
 const defaultGroupBy: NavGroupBy = "category"
-// The default status filter leaves finished (shipped) work unchecked.
+// Every status is on by default, including shipped work.
 const defaultVisibleStatuses = () =>
-  exampleStatuses
-    .filter((status) => status.id !== "shipped")
-    .map((status) => status.id)
+  exampleStatuses.map((status) => status.id)
 
 /** A group is completed when every example in it has shipped. */
 const isGroupCompleted = (group: NavGroup, statuses: StatusMap) =>
@@ -160,22 +164,8 @@ const isGroupCompleted = (group: NavGroup, statuses: StatusMap) =>
     (example) => statusOf(statuses, example.slug) === "shipped"
   )
 
-/**
- * Completed groups start collapsed. Computed over every status — not the
- * default filter, which hides shipped work entirely — so finished groups
- * arrive folded the moment the user shows shipped work again.
- */
-const defaultCollapsedKeys = (statuses: StatusMap) =>
-  new Set(
-    buildNavGroups(
-      defaultSortBy,
-      defaultGroupBy,
-      exampleStatuses.map((status) => status.id),
-      statuses
-    )
-      .filter((group) => isGroupCompleted(group, statuses))
-      .map((group) => group.key)
-  )
+/** Groups start expanded. Collapse is a filter-menu choice, not a default. */
+const defaultCollapsedKeys = () => new Set<string>()
 
 const setEquals = <T,>(a: ReadonlySet<T>, b: ReadonlySet<T>) =>
   a.size === b.size && [...a].every((item) => b.has(item))
@@ -197,8 +187,8 @@ export function DashboardSidebar({
   >(defaultVisibleStatuses)
   // Group open state lives here (keyed by group key) so the filter menu's
   // collapse preset and the per-group toggles drive the same state.
-  const [collapsedKeys, setCollapsedKeys] = React.useState<Set<string>>(() =>
-    defaultCollapsedKeys(statuses)
+  const [collapsedKeys, setCollapsedKeys] = React.useState<Set<string>>(
+    defaultCollapsedKeys
   )
 
   // Initial load is handled by the inline script below, before first paint.
@@ -256,7 +246,7 @@ export function DashboardSidebar({
       new Set(visibleStatuses),
       new Set(defaultVisibleStatuses())
     ) ||
-    !setEquals(collapsedKeys, defaultCollapsedKeys(statuses))
+    !setEquals(collapsedKeys, defaultCollapsedKeys())
 
   function setGroupOpen(key: string, open: boolean) {
     setCollapsedKeys((prev) => {
@@ -288,21 +278,31 @@ export function DashboardSidebar({
     setSortBy(defaultSortBy)
     setGroupBy(defaultGroupBy)
     setVisibleStatuses(defaultVisibleStatuses())
-    setCollapsedKeys(defaultCollapsedKeys(statuses))
+    setCollapsedKeys(defaultCollapsedKeys())
   }
 
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex flex-col gap-2 px-2 pt-2">
-          <div>
-            <div className="text-sm font-semibold">Design System</div>
-            <div className="text-xs text-muted-foreground">
-              {shipped} of {total} shipped
-            </div>
-          </div>
-          <Progress value={completion} aria-label="Overall completion" />
-        </div>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <Icon
+                  icon={DashboardSquare01Icon}
+                  className="size-4 text-sidebar-primary-foreground hover:text-sidebar-primary-foreground"
+                />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium">Design System</span>
+                <span className="truncate text-xs">
+                  {shipped} of {total} shipped
+                </span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+        <Progress value={completion} aria-label="Overall completion" />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

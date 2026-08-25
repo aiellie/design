@@ -133,6 +133,7 @@ export function DashboardHeader({
   const isFavorite = selected
     ? (favorites[selected.slug] ?? selected.favorite ?? false)
     : false
+  const currentItem: NavItem = selected ?? homeItem
 
   return (
     <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b bg-background/70 px-4 backdrop-blur-md">
@@ -141,69 +142,65 @@ export function DashboardHeader({
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <Breadcrumb>
           <BreadcrumbList className="flex-nowrap">
-            {selected ? (
-              <>
-                <BreadcrumbItem>
-                  <Combobox
-                    items={navGroups}
-                    value={selected}
-                    onValueChange={(item: NavItem | null) => {
-                      onSelect(item?.slug ?? null)
-                    }}
-                    itemToStringLabel={(item: NavItem) => item.name}
-                    isItemEqualToValue={(item: NavItem, value: NavItem) =>
-                      item.slug === value.slug
-                    }
+            <BreadcrumbItem>
+              <Combobox
+                items={navGroups}
+                value={currentItem}
+                onValueChange={(item: NavItem | null) => {
+                  onSelect(item?.slug ?? null)
+                }}
+                itemToStringLabel={(item: NavItem) => item.name}
+                isItemEqualToValue={(item: NavItem, value: NavItem) =>
+                  item.slug === value.slug
+                }
+              >
+                <ComboboxTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      aria-label={`${currentItem.name} — switch page`}
+                      className="gap-2 whitespace-nowrap text-sm font-normal text-foreground"
+                    >
+                      <Icon icon={currentItem.icon} className="size-4" />
+                      {currentItem.name}
+                      <Icon
+                        icon={ChevronDownIcon}
+                        className="size-3.5 text-muted-foreground"
+                      />
+                    </Button>
+                  }
+                />
+                <ComboboxContent className="w-64">
+                  <ComboboxInput
+                    showClear={true}
+                    showTrigger={false}
+                    placeholder="Search pages and examples"
                   >
-                    <ComboboxTrigger
-                      render={
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          aria-label={`${selected.name} — switch example`}
-                          className="gap-2 whitespace-nowrap text-sm font-normal text-foreground"
-                        >
-                          <Icon icon={selected.icon} className="size-4" />
-                          {selected.name}
-                          <Icon
-                            icon={ChevronDownIcon}
-                            className="size-3.5 text-muted-foreground"
-                          />
-                        </Button>
-                      }
-                    />
-                    <ComboboxContent className="w-64">
-                      <ComboboxInput
-                        showClear={true}
-                        showTrigger={false}
-                        placeholder="Search pages and examples"
-                      >
-                        <InputGroupAddon>
-                          <Icon
-                            icon={Search01Icon}
-                            strokeWidth={2}
-                            className="size-3.5"
-                          />
-                        </InputGroupAddon>
-                      </ComboboxInput>
-                      <ComboboxEmpty>No pages found.</ComboboxEmpty>
-                      <ComboboxList>{renderNavGroup}</ComboboxList>
-                    </ComboboxContent>
-                  </Combobox>
-                  {isFavorite ? <FavoriteBadge /> : null}
-                </BreadcrumbItem>
-              </>
-            ) : null}
+                    <InputGroupAddon>
+                      <Icon
+                        icon={Search01Icon}
+                        strokeWidth={2}
+                        className="size-3.5"
+                      />
+                    </InputGroupAddon>
+                  </ComboboxInput>
+                  <ComboboxEmpty>No pages found.</ComboboxEmpty>
+                  <ComboboxList>{renderNavGroup}</ComboboxList>
+                </ComboboxContent>
+              </Combobox>
+              {isFavorite ? <FavoriteBadge /> : null}
+            </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      {selected ? (
-        <div className="flex shrink-0 items-center gap-3">
-          {/*  <StatusSelect slug={selected.slug} />
+      <div className="flex shrink-0 items-center gap-3">
+        {/*  <StatusSelect slug={selected.slug} />
         <span className="hidden font-mono text-xs text-muted-foreground sm:inline">
             {index + 1} / {total}
           </span> */}
-          <SearchCommand onSelect={onSelect} />
+        <SearchCommand onSelect={onSelect} />
+        {selected ? (
           <ItemActions
             slug={selected.slug}
             name={selected.name}
@@ -215,8 +212,8 @@ export function DashboardHeader({
               }))
             }
           />
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </header>
   )
 }

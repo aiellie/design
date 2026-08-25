@@ -1,0 +1,30 @@
+[data-slot="sidebar-menu-button"] {
+    @apply text-muted-foreground hover:text-foreground transition-colors duration-200 data-active:text-sidebar-accent-foreground;
+  }
+  [data-slot="sidebar-menu-item"] {
+    @apply text-muted-foreground hover:text-foreground transition-colors duration-200 data-active:text-sidebar-accent-foreground;
+  }
+  [data-slot="sidebar-menu-sub-button"] {
+    @apply text-muted-foreground hover:text-foreground transition-colors duration-200 data-active:text-sidebar-accent-foreground [&_svg]:text-current;
+  }
+
+[data-sidebar="menu-action"] svg {
+  @apply text-muted-foreground;
+}
+
+/*
+ * showOnHover only applies `md:opacity-0`, so actions stay visible in the
+ * mobile sheet. SheetContent's `data-slot="sheet-content"` is also overwritten
+ * by Sidebar's `data-slot="sidebar"` — target `data-mobile` instead.
+ */
+[data-mobile="true"] [data-sidebar="menu-action"] {
+  opacity: 0;
+}
+
+[data-mobile="true"] [data-sidebar="menu-item"]:hover [data-sidebar="menu-action"],
+[data-mobile="true"] [data-sidebar="menu-item"]:focus-within [data-sidebar="menu-action"],
+[data-mobile="true"] [data-sidebar="menu-sub-item"]:hover [data-sidebar="menu-action"],
+[data-mobile="true"] [data-sidebar="menu-sub-item"]:focus-within [data-sidebar="menu-action"],
+[data-mobile="true"] [data-sidebar="menu-action"][aria-expanded="true"] {
+  opacity: 1;
+}

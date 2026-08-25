@@ -1,0 +1,19 @@
+/* Base element styles. */
+
+@layer base {
+    * {
+      @apply border-border outline-ring/50;
+    }
+    body {
+      @apply bg-background text-foreground;
+    }
+    html {
+      @apply overscroll-y-none;
+      }
+      ::selection {
+        @apply bg-selection text-selection-foreground;
+      }
+      * {
+        scrollbar-color: var(--border) transparent;
+      }
+    }
