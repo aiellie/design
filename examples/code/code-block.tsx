@@ -10,16 +10,9 @@ import {
   CodeBlockDownloadButton,
   CodeBlockFilename,
   CodeBlockHeader,
-  CodeBlockLanguageIcon,
   CodeBlockTitle,
 } from "@/components/code/code-block"
-import {
-  CodeBlockLanguageSelector,
-  CodeBlockLanguageSelectorContent,
-  CodeBlockLanguageSelectorItem,
-  CodeBlockLanguageSelectorList,
-  CodeBlockLanguageSelectorTrigger,
-} from "@/components/code/code-language-selector"
+import { CodeLanguageSelector } from "@/components/code/code-language-selector"
 import {
   Tooltip,
   TooltipContent,
@@ -112,35 +105,16 @@ export function CodeBlockExample() {
       >
         <CodeBlockHeader>
           <CodeBlockTitle>
-            <CodeBlockLanguageSelector
-              items={languages}
+            <CodeLanguageSelector
+              className="-ms-2"
+              languages={languages}
               value={language}
               onValueChange={(value) => {
-                if (typeof value === "string") {
+                if (value) {
                   setLanguage(value)
                 }
               }}
-            >
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <CodeBlockLanguageSelectorTrigger className="-ms-2 px-1.5">
-                      <CodeBlockLanguageIcon language={language} />
-                    </CodeBlockLanguageSelectorTrigger>
-                  }
-                />
-                <TooltipContent>Change language</TooltipContent>
-              </Tooltip>
-              <CodeBlockLanguageSelectorContent align="start">
-                <CodeBlockLanguageSelectorList>
-                  {(item: string) => (
-                    <CodeBlockLanguageSelectorItem key={item} value={item}>
-                      {item}
-                    </CodeBlockLanguageSelectorItem>
-                  )}
-                </CodeBlockLanguageSelectorList>
-              </CodeBlockLanguageSelectorContent>
-            </CodeBlockLanguageSelector>
+            />
             <CodeBlockFilename>{sample.filename}</CodeBlockFilename>
           </CodeBlockTitle>
           <CodeBlockActions>

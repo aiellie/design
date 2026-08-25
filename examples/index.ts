@@ -3,6 +3,21 @@ import type * as React from "react"
 import { IconsExample } from "@/examples/icons/icons"
 import { AssetsExample } from "@/examples/styles/assets"
 import { ColorsExample } from "@/examples/styles/colors"
+import {
+  AnimationsExample,
+  BaseExample,
+  BoxShadowExample,
+  ColorsCssExample,
+  GlobalsExample,
+  IconStylesExample,
+  RadiusExample,
+  SidebarStylesExample,
+  SvgExample,
+  ThemesExample,
+  TypographyExample,
+  UiShadcnExample,
+  UtilitiesExample,
+} from "@/examples/styles/sheets"
 import { TypesetExample } from "@/examples/styles/typeset"
 import { AccordionExample } from "@/examples/ui/accordion"
 import { AlertExample } from "@/examples/ui/alert"
@@ -111,6 +126,7 @@ import {
   DropdownFieldTypeIcon,
   DropperIcon,
   Edit02Icon,
+  File02Icon,
   Flag01Icon,
   Folder01Icon,
   FormIcon,
@@ -170,6 +186,7 @@ import {
   SmileIcon,
   SolidLine01Icon,
   Sorting01Icon,
+  SparklesIcon,
   SquareLock01Icon,
   SwipeDown01Icon,
   Table01Icon,
@@ -221,6 +238,7 @@ import { ModelPickerExample } from "./models/model-picker"
 import { ModelSelectorExample } from "./models/model-selector"
 import { CpuIcon } from "@hugeicons/core-free-icons"
 import { AddMenuExample } from "@/examples/chat/add-menu"
+import { ChatExample } from "@/examples/chat/chat"
 import { AutocompleteExample } from "@/examples/ellieui/autocomplete"
 import { ContextExample } from "./chat/context"
 import { ApprovalMenuExample } from "./chat/approval-menu"
@@ -298,7 +316,24 @@ export function exampleDemos(example: ComponentExample): ExampleDemo[] {
 }
 
 /** Repo-relative source path for an example slug. */
+const styleSheetFiles: Record<string, string> = {
+  globals: "globals.css",
+  themes: "themes.css",
+  "color-map": "colors.css",
+  typography: "typography.css",
+  utilities: "utilities.css",
+  base: "base.css",
+  "icon-styles": "icons.css",
+  "sidebar-styles": "sidebar.css",
+  animations: "animations.css",
+  radius: "radius.css",
+  svg: "svg.css",
+  "box-shadow": "box-shadow.css",
+  uishadcn: "uishadcn.css",
+}
+
 export function exampleFilePath(slug: string): string {
+  if (styleSheetFiles[slug]) return `styles/${styleSheetFiles[slug]}`
   if (slug === "assets" || slug === "colors" || slug === "typeset")
     return `examples/styles/${slug}.tsx`
   if (slug === "icons") return "examples/icons/icons.tsx"
@@ -343,6 +378,7 @@ export function exampleFilePath(slug: string): string {
   )
     return `examples/models/${slug}.tsx`
   if (
+    slug === "chat" ||
     slug === "open-in-chat" ||
     slug === "context" ||
     slug === "prompt-input" ||
@@ -365,10 +401,89 @@ export const exampleCategories: ExampleCategory[] = [
     type: "style",
     examples: [
       {
+        slug: "globals",
+        name: "Globals",
+        component: GlobalsExample,
+        icon: File02Icon,
+      },
+      {
+        slug: "themes",
+        name: "Themes",
+        component: ThemesExample,
+        icon: DarkModeIcon,
+      },
+      {
         slug: "colors",
         name: "Colors",
         component: ColorsExample,
         icon: ColorsIcon,
+      },
+      {
+        slug: "color-map",
+        name: "Color Map",
+        component: ColorsCssExample,
+        icon: ColorsIcon,
+      },
+      {
+        slug: "typography",
+        name: "Typography",
+        component: TypographyExample,
+        icon: TextFontIcon,
+      },
+      {
+        slug: "typeset",
+        name: "Typeset",
+        component: TypesetExample,
+        icon: TextIcon,
+      },
+      {
+        slug: "radius",
+        name: "Radius",
+        component: RadiusExample,
+        icon: CropIcon,
+      },
+      {
+        slug: "box-shadow",
+        name: "Box Shadow",
+        component: BoxShadowExample,
+        icon: BlurIcon,
+      },
+     
+      {
+        slug: "animations",
+        name: "Animations",
+        component: AnimationsExample,
+        icon: SparklesIcon,
+      },
+      {
+        slug: "utilities",
+        name: "Utilities",
+        component: UtilitiesExample,
+        icon: CursorPointer01Icon,
+      },
+      {
+        slug: "base",
+        name: "Base",
+        component: BaseExample,
+        icon: Layers01Icon,
+      },
+      {
+        slug: "sidebar-styles",
+        name: "Sidebar Styles",
+        component: SidebarStylesExample,
+        icon: SidebarLeft01Icon,
+      },
+      {
+        slug: "uishadcn",
+        name: "UI",
+        component: UiShadcnExample,
+        icon: PaintBrush01Icon,
+      },
+      {
+        slug: "assets",
+        name: "Assets",
+        component: AssetsExample,
+        icon: Image01Icon,
       },
       {
         slug: "color-picker",
@@ -388,18 +503,6 @@ export const exampleCategories: ExampleCategory[] = [
         component: TailwindColorPickerExample,
         icon: PaintBoardIcon,
       },
-      {
-        slug: "typeset",
-        name: "Typeset",
-        component: TypesetExample,
-        icon: TextIcon,
-      },
-      {
-        slug: "assets",
-        name: "Assets",
-        component: AssetsExample,
-        icon: Image01Icon,
-      },
     ],
   },
   {
@@ -415,6 +518,18 @@ export const exampleCategories: ExampleCategory[] = [
         name: "Icons",
         component: IconsExample,
         icon: GridViewIcon,
+      },
+      {
+        slug: "icon-styles",
+        name: "Icon Styles",
+        component: IconStylesExample,
+        icon: SmileIcon,
+      },
+      {
+        slug: "svg",
+        name: "SVG",
+        component: SvgExample,
+        icon: CodeIcon,
       },
     ],
   },
@@ -870,6 +985,12 @@ export const exampleCategories: ExampleCategory[] = [
     borderColor: "border-pink-200/10",
     type: "ui",
         examples: [
+      {
+        slug: "chat",
+        name: "Chat",
+        component: ChatExample,
+        icon: Chatting01Icon,
+      },
       {
         slug: "attachment",
         name: "Attachment",

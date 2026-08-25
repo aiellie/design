@@ -2,6 +2,7 @@
 
 import {
   Agent,
+  AgentBanner,
   AgentContent,
   AgentHeader,
   AgentInstructions,
@@ -9,6 +10,7 @@ import {
   AgentTool,
   AgentTools,
 } from "@/components/models/agent";
+import { LinkIcon, SearchIcon, TextIcon } from "@hugeicons/core-free-icons";
 import { z } from "zod";
 
 const webSearchTool = {
@@ -41,6 +43,7 @@ const outputSchema = `z.object({
 
 const AgentExample = () => (
   <Agent>
+    <AgentBanner src="https://images.aiellie.app/research.png?mode=image&aspect=16%3A9&radius=0" />
     <AgentHeader model="openai/gpt-5.2-pro" name="Research Assistant" />
     <AgentContent>
       <AgentInstructions>
@@ -48,10 +51,10 @@ const AgentExample = () => (
         information and summarize findings for the user. Always cite your
         sources and provide accurate, up-to-date information.
       </AgentInstructions>
-      <AgentTools >
-        <AgentTool tool={webSearchTool} value="web_search" />
-        <AgentTool tool={readUrlTool} value="read_url" />
-        <AgentTool tool={summarizeTool} value="summarize" />
+      <AgentTools>
+        <AgentTool icon={SearchIcon} tool={webSearchTool} value="web_search" />
+        <AgentTool icon={LinkIcon} tool={readUrlTool} value="read_url" />
+        <AgentTool icon={TextIcon} tool={summarizeTool} value="summarize" />
       </AgentTools>
       <AgentOutput schema={outputSchema} />
     </AgentContent>

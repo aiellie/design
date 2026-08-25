@@ -53,7 +53,7 @@
     "ChartContainer": "components/ui/chart.tsx",
     "Checkbox": "components/ui/checkbox.tsx",
     "CodeBlock": "components/code/code-block.tsx",
-    "CodeBlockLanguageSelector": "components/code/code-language-selector.tsx",
+    "CodeLanguageSelector": "components/code/code-language-selector.tsx",
     "Collapsible": "components/ui/collapsible.tsx",
     "ColorFormatSelector": "components/color/color-format-selector.tsx",
     "ColorRow": "components/color/color-picker.tsx",

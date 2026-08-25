@@ -32,11 +32,15 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as HugeIcons from "@/icons/huge-icons"
 import {
+  AgentIcons,
   BrandIcons,
   CodeIcons,
   ColorIcons,
   Icon,
+  IntegrationIcons,
+  McpIcons,
   packageIcons,
+  ProviderIcons,
   type IconData,
 } from "@/icons/icons"
 import { cn } from "@/lib/utils"
@@ -85,7 +89,10 @@ const codeIconLabels: Partial<Record<keyof typeof CodeIcons, string>> = {
   recharts: "Recharts",
 }
 
-const codeIconCategories: { label: string; names: (keyof typeof CodeIcons)[] }[] = [
+const codeIconCategories: {
+  label: string
+  names: (keyof typeof CodeIcons)[]
+}[] = [
   {
     label: "Languages",
     names: ["js", "ts", "tsx", "css", "python", "go", "rust", "bash"],
@@ -151,7 +158,83 @@ const brandIconLabels: Record<keyof typeof BrandIcons, string> = {
   claude: "Claude",
   cursor: "Cursor",
   scira: "Scira",
-  v0: "v0"
+  v0: "v0",
+}
+
+/**
+ * Labels the camelCased agent / provider / MCP / integration keys can't
+ * derive on their own — brand casing, acronyms, dotted names.
+ */
+const catalogIconLabels: Record<string, string> = {
+  // Agents
+  githubCopilot: "GitHub Copilot",
+  kilo: "Kilo Code",
+  kiroCli: "Kiro CLI",
+  openclaw: "OpenClaw",
+  opencode: "opencode",
+  roo: "Roo Code",
+  vscode: "VS Code",
+  // Providers
+  aihubmix: "AiHubMix",
+  arceeAi: "Arcee AI",
+  assemblyai: "AssemblyAI",
+  bedrock: "Amazon Bedrock",
+  bfl: "Black Forest Labs",
+  bytedance: "ByteDance",
+  claudeaws: "Claude on AWS",
+  cloudflareWorkersAi: "Cloudflare Workers AI",
+  deepinfra: "DeepInfra",
+  deepseek: "DeepSeek",
+  digitalocean: "DigitalOcean",
+  elevenlabs: "ElevenLabs",
+  fal: "fal",
+  fastrouter: "FastRouter",
+  friendli: "FriendliAI",
+  githubModels: "GitHub Models",
+  huggingface: "Hugging Face",
+  inference: "Inference.net",
+  klingai: "Kling AI",
+  lmstudio: "LM Studio",
+  minimax: "MiniMax",
+  modelscope: "ModelScope",
+  moonshotai: "Moonshot AI",
+  nvidia: "NVIDIA",
+  openai: "OpenAI",
+  openrouter: "OpenRouter",
+  poolside: "poolside",
+  runinfra: "RunInfra",
+  sambanova: "SambaNova",
+  stepfun: "StepFun",
+  streamlake: "StreamLake",
+  submodel: "SubModel",
+  thinkingmachines: "Thinking Machines",
+  togetherai: "Together AI",
+  vertex: "Vertex AI",
+  voyage: "Voyage AI",
+  wandb: "W&B",
+  xai: "xAI",
+  zai: "Z.ai",
+  zenmux: "ZenMux",
+  zhipuai: "Zhipu AI",
+  // MCP servers
+  browserChrome: "Chrome DevTools",
+  clickup: "ClickUp",
+  github: "GitHub",
+  gitlab: "GitLab",
+  hubspot: "HubSpot",
+  mongodb: "MongoDB",
+  nextjs: "Next.js",
+  paypal: "PayPal",
+  v0: "v0",
+  // Integrations
+  coderabbit: "CodeRabbit",
+  newrelic: "New Relic",
+}
+
+/** "claudeCode" → "Claude Code"; brand casing comes from `catalogIconLabels`. */
+function labelFromKey(key: string) {
+  const spaced = key.replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+  return spaced.charAt(0).toUpperCase() + spaced.slice(1)
 }
 
 /** Lowercased, punctuation-free haystack so "arrow up" matches `ArrowUp01Icon`. */
@@ -176,18 +259,37 @@ type IconSection = {
 const mutedTileClass =
   "*:[svg]:size-4 text-muted-foreground hover:text-foreground transition-colors"
 
+/** Agent marks are opaque brand tiles, not `currentColor` glyphs. */
+const agentTileClass = "*:[svg]:size-4 *:[svg]:rounded-xs"
+
 function svgTile(
   name: string,
   label: string,
-  IconComponent: React.ComponentType<React.HTMLAttributes<SVGElement>>
+  IconComponent: React.ComponentType<React.HTMLAttributes<SVGElement>>,
+  className: string = mutedTileClass,
 ): IconTileData {
   return {
     key: name,
     label,
     search: normalize(`${name} ${label}`),
-    className: mutedTileClass,
+    className,
     node: <IconComponent />,
   }
+}
+
+/** Tiles for a whole icon record, labeled via `catalogIconLabels`. */
+function catalogTiles(
+  record: Record<string, React.ComponentType<React.HTMLAttributes<SVGElement>>>,
+  className?: string,
+): IconTileData[] {
+  return Object.entries(record).map(([name, IconComponent]) =>
+    svgTile(
+      name,
+      catalogIconLabels[name] ?? labelFromKey(name),
+      IconComponent,
+      className,
+    ),
+  )
 }
 
 const hugeIconTiles: IconTileData[] = hugeIconEntries.map(([name, icon]) => ({
@@ -202,9 +304,9 @@ const codeIconSections: IconSection[] = codeIconCategories.map(
   ({ label, names }) => ({
     label,
     tiles: names.map((name) =>
-      svgTile(name, codeIconLabels[name] ?? name, CodeIcons[name])
+      svgTile(name, codeIconLabels[name] ?? name, CodeIcons[name]),
     ),
-  })
+  }),
 )
 
 const colorIconTiles: IconTileData[] = (
@@ -215,13 +317,13 @@ const brandIconSections: IconSection[] = [
   {
     label: "Brands",
     tiles: (Object.keys(BrandIcons) as (keyof typeof BrandIcons)[]).map(
-      (name) => svgTile(name, brandIconLabels[name], BrandIcons[name])
+      (name) => svgTile(name, brandIconLabels[name], BrandIcons[name]),
     ),
   },
   {
     label: "Packages",
     tiles: Object.entries(packageIcons).map(([name, IconComponent]) =>
-      svgTile(name, name, IconComponent)
+      svgTile(name, name, IconComponent),
     ),
   },
 ]
@@ -235,6 +337,10 @@ const iconSections: IconSection[] = [
   })),
   { label: "Color", tiles: colorIconTiles },
   ...brandIconSections,
+  { label: "Agents", tiles: catalogTiles(AgentIcons, agentTileClass) },
+  { label: "Providers", tiles: catalogTiles(ProviderIcons) },
+  { label: "MCP servers", tiles: catalogTiles(McpIcons) },
+  { label: "Integrations", tiles: catalogTiles(IntegrationIcons) },
 ]
 
 function IconTile({ label, className, node }: Omit<IconTileData, "key">) {
@@ -245,7 +351,7 @@ function IconTile({ label, className, node }: Omit<IconTileData, "key">) {
           <Card
             className={cn(
               "flex size-8 items-center justify-center p-0 hover:shadow-sm transition-shadow duration-300 ease-out cursor-pointer",
-              className
+              className,
             )}
           >
             {node}
@@ -292,7 +398,7 @@ export function IconsExample() {
       .map((section) => ({
         ...section,
         tiles: section.tiles.filter((tile) =>
-          terms.every((term) => tile.search.includes(term))
+          terms.every((term) => tile.search.includes(term)),
         ),
       }))
       .filter((section) => section.tiles.length > 0)
@@ -306,7 +412,8 @@ export function IconsExample() {
       <CardHeader>
         <CardTitle>Icons</CardTitle>
         <CardDescription>
-          Hugeicons, code, color, and brand glyphs.
+          Hugeicons, code, color, and brand glyphs, plus agent, provider, MCP,
+          and integration marks.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
@@ -339,10 +446,7 @@ export function IconsExample() {
           <Empty className="border">
             <EmptyHeader>
               <EmptyMedia variant="icon">
-                <HugeiconsIcon
-                  icon={HugeIcons.Search01Icon}
-                  strokeWidth={2}
-                />
+                <HugeiconsIcon icon={HugeIcons.Search01Icon} strokeWidth={2} />
               </EmptyMedia>
               <EmptyTitle>No icons found</EmptyTitle>
               <EmptyDescription>

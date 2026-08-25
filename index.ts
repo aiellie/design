@@ -86,7 +86,7 @@ export { Questionnaire } from "./components/ui/questionnaire"
 
 // Code
 export { CodeBlock } from "./components/code/code-block"
-export { CodeBlockLanguageSelector } from "./components/code/code-language-selector"
+export { CodeLanguageSelector } from "./components/code/code-language-selector"
 
 // Color
 export { ColorFormatSelector } from "./components/color/color-format-selector"
